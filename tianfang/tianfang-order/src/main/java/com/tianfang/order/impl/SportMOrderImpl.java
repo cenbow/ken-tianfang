@@ -182,6 +182,20 @@ public class SportMOrderImpl implements ISportMOrderService{
 		return BeanUtils.createBeanByTarget(order, SportMOrderDto.class);
 	}
 	
+	/*public SportMOrderDto findOrderById(String orderId,String orderNo) {
+		SportMOrderDto sportMOrderDto = sportMOrderDao.findOrderById(orderId, orderNo);
+		if (StringUtils.isNotBlank(sportMOrderDto.getUserId())) {
+			SportUser sportUser = sportUserDao.selectByPrimaryKey(sportMOrderDto.getUserId()); 
+			if (StringUtils.isNotBlank(sportUser.getMobile())) {
+				sportMOrderDto.setUname(sportUser.getMobile());
+			} 
+			if (StringUtils.isBlank(sportUser.getMobile()) && StringUtils.isNotBlank(sportUser.getEmail())) {
+				sportMOrderDto.setUname(sportUser.getEmail());
+			}
+		}
+		return sportMOrderDto;
+	}*/
+	
 	public SportMOrderDto findOrderById(String orderId,String orderNo) {
 		SportMOrderDto sportMOrderDto = sportMOrderDao.findOrderById(orderId, orderNo);
 		if (StringUtils.isNotBlank(sportMOrderDto.getUserId())) {
@@ -193,6 +207,14 @@ public class SportMOrderImpl implements ISportMOrderService{
 				sportMOrderDto.setUname(sportUser.getEmail());
 			}
 		}
+		SportMOrderInfoDto sportMOrderInfoDto = new SportMOrderInfoDto();
+		sportMOrderInfoDto.setOrderId(sportMOrderDto.getId());
+		List<SportMOrderInfo> sportMOrderInfos = sportMOrderInfoDao.selectOrderInfo(sportMOrderInfoDto, null);
+		SportMProductSku sportMProductSku = sportMProductSkuDao.selectByPrimaryKey(sportMOrderInfos.get(0).getProductSkuId());
+		SportMProductSpu sportMProductSpu = sportMProductSpuDao.selectByPrimaryKey(sportMProductSku.getProductId());
+		if (null != sportMProductSpu && StringUtils.isNotBlank(sportMProductSpu.getProductName())) {
+			sportMOrderDto.setAname(sportMProductSpu.getProductName());
+		}		
 		return sportMOrderDto;
 	}
 	
