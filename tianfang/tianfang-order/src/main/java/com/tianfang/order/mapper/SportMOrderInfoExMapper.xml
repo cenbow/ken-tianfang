@@ -4,13 +4,11 @@
 	<select id="findOrderInfo" parameterType="com.tianfang.order.dto.SportMOrderInfoDto" resultType="com.tianfang.order.dto.SportMOrderInfoDto">
 		select 
 			orderInfo.id , orderInfo.order_info_no as orderInfoNo ,orderInfo.order_id as orderId, 	orderInfo.order_status as orderStatus ,
- 			orderInfo.product_sku_id as productSkuId, orderInfo.number as number, proSku.product_name as skuName, proSku.product_price as skuProductPrice, orderInfo.create_time as createTime,
-  			orderInfo.last_update_time as lastUpdateTime, morder.order_no as orderNo
+ 			orderInfo.product_sku_id as productSkuId, orderInfo.number as number, proSku.product_price as skuProductPrice, orderInfo.create_time as createTime,
+  			orderInfo.last_update_time as lastUpdateTime, morder.order_no as orderNo ,orderInfo.sku_name as skuName
  		from sport_m_order_info orderInfo inner join sport_m_product_sku  proSku on (orderInfo.product_sku_id = proSku.id) inner join sport_m_order morder on(orderInfo.order_id = morder.id )
 		where orderInfo.stat = '1' and morder.stat = '1' and proSku.stat = '1'
-		<if test="orderInfoDto.orderInfoNo != null and orderInfoDto.orderInfoNo !='' ">
-			and orderInfo.order_info_no = #{orderInfoDto.orderInfoNo} 
-		</if>
+		and orderInfo.order_id = #{orderInfoDto.orderId} 
 		order by orderInfo.create_time desc
 		limit  #{page.startNum}, #{page.pageSize}
 	</select>
@@ -20,9 +18,7 @@
 			count(*)
  		from sport_m_order_info orderInfo inner join sport_m_product_sku  proSku on (orderInfo.product_sku_id = proSku.id) inner join sport_m_order morder on(orderInfo.order_id = morder.id )
 		where orderInfo.stat = '1' and morder.stat = '1' and proSku.stat = '1'
-		<if test="orderInfoDto.orderInfoNo != null and orderInfoDto.orderInfoNo !='' ">
-			and orderInfo.order_info_no = #{orderInfoDto.orderInfoNo} 
-		</if>
+		and orderInfo.order_id = #{orderInfoDto.orderId} 
 		order by orderInfo.create_time desc
 	</select>
 </mapper>

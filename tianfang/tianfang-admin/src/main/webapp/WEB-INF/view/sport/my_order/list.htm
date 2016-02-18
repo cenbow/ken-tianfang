@@ -112,7 +112,7 @@
 									<td class='hidden-phone'>${(page.createTime)?string("yyyy-MM-dd")}</td>
 									<td>
 										<div id="operation" class='hidden-phone visible-desktop btn-group'>		
-											<a id='previewObj' data-obj-id="${(page.orderNo)!}" class='btn btn-mini label-info' title="预览"><i class=''></i>订单详情</a>
+											<a id='previewObj' data-obj-id="${(page.id)!}" class='btn btn-mini label-info' title="预览"><i class=''></i>订单详情</a>
 										</div>
 									</td>
 								</tr>
@@ -242,7 +242,7 @@
 				    area: ['1000px', '800px'],
 				    fix: true, //不固定
 				    maxmin: false,
-				    content: '${base}/m/orderInfo/selectOrderInfo.do?orderNo='+id
+				    content: '${base}/m/orderInfo/selectOrderInfo.do?orderId='+id
 				});				
 			});
 			$("#operation #editRights").on('click',function(){
