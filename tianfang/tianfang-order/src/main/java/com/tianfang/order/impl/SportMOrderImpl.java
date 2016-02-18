@@ -212,7 +212,7 @@ public class SportMOrderImpl implements ISportMOrderService{
 		List<SportMOrderInfo> sportMOrderInfos = sportMOrderInfoDao.selectOrderInfo(sportMOrderInfoDto, null);
 		SportMProductSku sportMProductSku = sportMProductSkuDao.selectByPrimaryKey(sportMOrderInfos.get(0).getProductSkuId());
 		SportMProductSpu sportMProductSpu = sportMProductSpuDao.selectByPrimaryKey(sportMProductSku.getProductId());
-		if (null != sportMProductSpu && StringUtils.isNotBlank(sportMProductSpu.getProductName())) {
+		if (null != sportMProductSpu && StringUtils.isNotBlank(sportMProductSpu.getProductName())) { 
 			sportMOrderDto.setAname(sportMProductSpu.getProductName());
 		}		
 		return sportMOrderDto;
