@@ -1,6 +1,7 @@
 package com.tianfang.home.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
@@ -19,6 +20,8 @@ import com.tianfang.common.util.StringUtils;
 import com.tianfang.home.dto.PayDto;
 import com.tianfang.home.util.SessionUtil;
 import com.tianfang.order.dto.SportMOrderDto;
+import com.tianfang.order.dto.SportMOrderInfoDto;
+import com.tianfang.order.service.ISportMOrderInfoService;
 import com.tianfang.order.service.ISportMOrderService;
 import com.tianfang.user.dto.LoginUserDto;
 
@@ -35,7 +38,10 @@ import com.tianfang.user.dto.LoginUserDto;
 public class PayController {
 	
 	@Autowired
-	private ISportMOrderService iSportMOrderService;
+	private ISportMOrderService iSportMOrderService; 
+	
+	@Autowired
+	private ISportMOrderInfoService iSportMOrderInfoService;
 	
 	/**
 	 * 进行支付处理
@@ -64,13 +70,24 @@ public class PayController {
 		String out_trade_no = new String(payDto.getOut_trade_no());
 		
 		SportMOrderDto orderDto = iSportMOrderService.findOrderById(null, out_trade_no);
-		
+		List<SportMOrderInfoDto> lis_oInfo = iSportMOrderInfoService.findOrderInfoById(orderDto.getId());
+		Double totalPrice = 0d;
+		//计算订单的总价
+		if(lis_oInfo !=null && lis_oInfo.size()>0){
+			for (SportMOrderInfoDto oInfo : lis_oInfo) {
+				totalPrice += Double.valueOf(oInfo.getNumber()) * Double.valueOf(oInfo.getSkuProductPrice());
+			}
+		}
+		//计算后的总价与页面总价对比
+		if(totalPrice != Double.valueOf(payDto.getTotal_fee()).doubleValue()){
+			totalPrice=null;
+		}
 		// 商户网站订单系统中唯一订单号，必填
 		// 订单名称
 		String subject = new String(payDto.getSubject());
 		// 必填
 		// 付款金额
-		String total_fee = String.valueOf(orderDto.getTotalPrice());
+		String total_fee = String.valueOf(totalPrice);
 		// 必填
 		// 订单描述
 		String body = new String("");
