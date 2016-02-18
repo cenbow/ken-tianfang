@@ -29,7 +29,7 @@ import com.tianfang.common.model.Response;
  * @author Administrator	
  * @date 2015年11月21日 下午4:40:05	
  * @version 1.0
- * <p>修改人：Administrator</p>
+ * <p>修改人：Administrator Yin Jam</p>
  * <p>修改时间：2015年11月21日 下午4:40:05</p>
  * <p>修改备注：</p>
  */
