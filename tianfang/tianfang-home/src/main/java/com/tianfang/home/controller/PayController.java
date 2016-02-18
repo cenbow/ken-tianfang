@@ -31,7 +31,7 @@ import com.tianfang.user.dto.LoginUserDto;
  * @version: 2015年4月21日 下午1:37:19
  */
 @Controller
-@RequestMapping(value = "/pay")  
+@RequestMapping(value = "/pay")
 public class PayController {
 	
 	@Autowired
