@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<#include "/common/head.htm"/>
+<body>
+<#include "/common/topbar.htm"/>
+		<!-- <script src="static/js/header.js"></script> -->
+		<script src="/static/js/AjaxUpload.js"></script>
+		<link href="/static/css/competition.css" rel="stylesheet" />
+		<script src="/static/js/datepicker-zh.js"></script>
+		<script src="/static/js/jquery-ui.min.js"></script> 
+		<link href="/static/css/jquery-ui.min.css" rel="stylesheet" />
+		<div class="wrapper">
+			<div class="content">
+				<h2><i class="ico-creat"></i><p>创建球队</p><span></span></h2>
+			<form id="formSub" action="">
+				<div class="creat-info">
+					<h2>必填项目<b>*</b></h2>
+					<input id ="logo" name="logo" />
+					<div class="must-fill">
+						<ul class="fill-ul">
+							<li>
+								<label>所在地区</label>
+								<select id="dic" name="province" class="area province" onchange="doDistrict();" >
+									<#if result?? >
+										<#list result as page>
+											<option value="${(page.id)?replace(",","")}">${(page.name)!}</option>
+										</#list>
+									</#if>
+								</select>
+								<select class="area city" id="area" name="distruct">
+									<!-- <option selected>上海市</option>
+									<option>北京市</option> -->
+								</select>
+							</li>
+							<li>
+								<label>球队名称</label>
+								<input class="creat" type="text" id="" value="" name="name" />
+							</li>
+							<li class="creat-contact-li">
+								<label>联系方式</label>
+								<input class="creat" id="" type="text" name="contact" value="" placeholder="手机">
+								<!-- <input class="creat qq" id="" type="text" name="" value="" placeholder="QQ">
+								<span>(二者任选其一)</span> -->
+							</li>
+							<li>
+								<label>验证码</label>
+								<input class="ver" id="picCaptcha" type="text" name="picStr" value="">
+								<img src="/userMan/drawRandom.htm" id="pic" border="0" onclick="phonerefreshImage();"/>
+								<!-- <span class="ver-span">看不清？换一张</span> -->
+							</li>
+						</ul>
+					</div>
+					<h2>选填项目</h2>
+					<div class="choose-fill">
+						<ul class="fill-ul">
+							<li>
+								<label>球队主场</label>
+								<input class="creat" type="text" id="" value="" name="homeCourt"/>
+							</li>
+							<li>
+								<label>成立时间</label>
+								<input type="text" class="datepicker" name="setUpTimeStr" readonly="readonly" >
+							</li>
+							<li class="creat-member-no-li">
+								<label>成员人数</label>
+								<input class="" id="" type="text" name="members" value="" >
+								<i>人</i>
+							</li>
+							<li class="team-flag-li">
+								<label>队徽</label>
+								<div class="preview">
+									<label class="browse" for="team-flag"><img id="imgShow" src="/static/img/preview.png" border="0"/></label>
+									<input id="team-flag" type="button" value="浏览图片"><input type="hidden" id="hidImgName" /> 
+								</div>
+							</li>
+							<li class="team-introduce-li">
+								<label>团队简介</label>
+								<textarea class="team-create-introduce" name="teamIntroduce" rows="10" cols="50"></textarea>
+								<p class="count">还可以输入<i class="no">500</i>字</p>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="creat-bts">
+					<a class="creat-submit creat-bt"><p id="sub">提交</p></a>
+					<a class="creat-cancle creat-bt" href="/userMan/userInfo.htm">取消</a>
+				</div>
+			</form>
+			</div>
+		</div>
+			<#include "/common/footer.htm"/>
+	</body>
+	<script type="text/javascript" src="/static/js/teamcreate.js"></script>
+	<script src="/static/js/competition.js"></script>
+	<script type="text/javascript">
+	$(function() {
+		$(".team-create-introduce").on("keyup", function() {
+			var no = 500 - parseInt($(this).val().length, 10);
+			if (no < 0) {
+				$(this).val($(this).val().substr(0, 500));
+				no=0;
+			}
+			$(".team-introduce-li").find(".no")[0].innerHTML = no;
+		});
+		$(".datepicker").datepicker({ //添加日期选择功能  
+			numberOfMonths: 1, //显示几个月  
+			showButtonPanel: false, //是否显示按钮面板  
+			changeMonth: true,
+			changeYear: true,
+			dateFormat: 'yy-mm-dd', //日期格式  
+			clearText: "清除", //清除日期的按钮名称  
+			closeText: "关闭", //关闭选择框的按钮名称  
+			yearSuffix: '年', //年的后缀  
+			monthSuffix: 'yue ', //年的后缀  
+			showMonthAfterYear: true, //是否把月放在年的后面  
+//			gotoCurrent :true,
+//			defaultDate: '1969-9-9', //默认日期  
+//			minDate: '1900-03-05', //最小日期  
+//			maxDate: '2011-03-20', //最大日期  
+			monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+			dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+			dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+			dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+//			onSelect: function(selectedDate) { //选择日期后执行的操作  
+//				//						alert(selectedDate);
+//			}
+		});
+	})
+		</script>
+</html>

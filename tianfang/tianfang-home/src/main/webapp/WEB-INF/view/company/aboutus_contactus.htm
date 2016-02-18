@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<#include "/common/head.htm"/>
+<body>
+	<#include "/common/topbar.htm"/>
+	<div class="aboutus_banner"><img src="/static/img/aboutus.jpg" border="0"></div>
+	<div class="aboutus_box">
+		<div class="aboutus_menu">
+			<a href="/company/synopsis.htm">公司简介</a>
+			<a href="/company/event.htm">大事纪要</a>
+			<a href="/company/recruit.htm">诚聘英才</a>
+			<a class="cur" href="/company/contactus.htm">联系我们</a>
+		</div>
+		<div class="aboutus_main">
+			<h1>联系我们</h1>
+			<div class="title">${(data.title)!}<br></div>
+			<div class="text">
+				${(data.content)!}
+			</div>
+		</div>
+	</div>
+	<#include "/common/footer.htm"/>
+</body>
+</html>

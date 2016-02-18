@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<#include "/common/head.htm"/>
+<body>
+	<#include "/common/topbar.htm"/>
+	<div class="wrapper">
+		<div class="reg_box">
+			<h2><i class="password"></i><p>找回密码</p><span>忘记您的账号密码？</span></h2>
+			<div class="tabbar">
+				<span class="mail cur" tag="mail">邮箱用户找回密码</span><i class="clum"> | </i><span class="iphone" tag="iphone">手机用户找回密码</span>
+			</div>
+			<div class="forms">
+				<ul id="mail_box" class="show">
+					<li><label>邮箱账号</label><input id="mail" type="text" name="" value=""><span>请输入邮箱账号</span></li>
+					<li><label>邮箱验证</label><input class="mes" id="emailcaptcha" type="text" name="" value=""><input type="button" value="点击获取" onclick="emailtime(this)"><span>免费获取邮件验证码</span></li>		
+					<li><label>新密码</label><input id="mail_password" type="password" name="" value=""><span>输入新密码</span></li>
+					<li><label>确认新密码</label><input id="mail_con_password" type="password" name="" value=""><span>新密码，6-16位，英文（区分大小写）、数字或常用符号</span></li>
+				</ul>				
+				<ul id="iphone_box">
+					<li><label>手机号码</label><input id="tel" type="text" name="" value=""><span>请输入手机账号</span></li>
+					<li><label>新密码</label><input id="old_password" type="password" name="" value=""><span>输入新密码</span></li>
+					<li><label>确认新密码</label><input id="password" type="password" name="" value=""><span>新密码，6-16位，英文（区分大小写）、数字或常用符号</span></li>
+					<li><label>验证码</label><input class="ver" id="picCaptcha" type="text" name="" value="" onblur="myFunction()"><img id="checkcode"  src="/forget/password/drawRandom.htm"  onclick="refreshImage();"   border="0"><span>看不清？点击图片换一张</span></li>
+					<li><label>短信验证</label><input class="mes" id="telcaptcha" type="text" name="" value=""><input type="button" value="点击获取" onclick="time(this)"><span>免费获取短信验证码</span></li>					
+				</ul>
+				<input type="button" class="submit" value="提交">
+			</div>
+		</div>
+	</div>
+		
+	<#include "/common/footer.htm"/>
+</body>
+
+<script>
+	var imgCodeResult = 0;
+	//图片验证码
+	function refreshImage(){		
+	    var imageUrl = '/forget/password/drawRandom.htm'; 
+		$("#checkcode").attr("src",imageUrl + '?' + Math.random());
+	};
+	function myFunction(){		
+	/* var x=document.getElementById("picCaptcha");
+	x.value=x.value.toUpperCase(); */
+		var imgCode = $("#picCaptcha").val();
+		$.ajax({
+			url:"/forget/password/authImageCode.htm",
+			type:"post",
+			dataType:"json",
+			data:{imgCode:imgCode},
+			async: false,
+			success:function(data){
+				if(data.status == 200){
+					imgCodeResult=1;
+				}
+				if(data.status == 500){
+					layer.msg(data.message);
+				}
+			}
+		});
+	}
+	
+	$(function(){
+		//表单切换
+		var b = $('.tabbar')
+		var f = $('.forms')
+		var s = $('.submit')
+
+		b.on('click', 'span', function(){
+			if(!$(this).hasClass('cur')){
+				$(this).addClass('cur').siblings().removeClass('cur')
+				var t = $(this).attr('tag')
+				f.find('#'+ t +'_box').addClass('show').siblings('ul').removeClass('show')
+			}
+		})
+		//提交
+		s.on('click', function(){
+			check_form()
+		})
+		
+		//取消错误提示
+		$('input[type=text], input[type=password]').keyup(function(){
+			$(this).siblings('span').html('').removeClass('warning')
+		})
+	});
+	
+	//发送验证码按钮 倒数90秒方法
+	var waitemail=90,
+		timeemail = false,
+		ecountdown = false; 	
+	function emailtime(sendObj) {
+		//邮箱
+		var mail = $.trim($("#mail").val());
+		var mail_reg = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/; 
+        	if (!mail_reg.test(mail)) {
+			alert_redtext('mail','邮箱地址不正确')
+            return false;
+        }
+		if (timeemail == false) {
+			$.ajax({
+				url:"/forget/password/email/send.htm",
+				type:"post", 
+				dataType:"json",
+				data:{email:mail},
+				async: false,
+				success:function(data){		
+					timeemail = true;
+					if(data.status == -1){
+						alert_redtext('mail','此邮箱未注册过请先注册！');
+						timeemail = false;
+						return false;
+					}
+					if(data.status == 200){
+						layer.msg("邮件成功发出请留意您的邮箱，如一直没收到请留意查看是否在垃圾邮箱里~");		
+						ecountdown = true;							
+					}
+					if(data.status == 500){
+						layer.msg(data.message);
+						timeemail = false;
+						return;
+					}
+				}
+			});			
+		}	
+		if (ecountdown) {
+			if (waitemail == 0) {
+				//sendObj.attr("disabled",false);
+				//sendObj.val("获取验证码");
+				sendObj.removeAttribute("disabled");         
+				sendObj.value="获取验证码"; 
+				waitemail = 90; 
+				timeemail = false;
+				ecountdown = false; 	
+			} else {
+				//sendObj.attr("disabled",true);
+				//sendObj.val("请等待"+wait+"秒");			
+				sendObj.setAttribute("disabled", true); 
+				sendObj.value="请等待"+waitemail+"秒"; 
+				waitemail--; 
+				setTimeout(function() { 
+					emailtime(sendObj) 
+				}, 1000) 
+			}
+		}
+	} 
+	//发送验证码按钮 倒数90秒方法
+	var wait=90; 
+	 	timeB = false,
+		scountdown = false; 
+	function time(sendObj) {
+		if (null == $("#picCaptcha").val() || '' == $("#picCaptcha").val()) {
+			layer.msg("请输验证码");
+			return;
+		}
+		if (imgCodeResult == 0) {
+			layer.msg("请输入正确的验证码");
+			return;
+		}
+		/* var telephone = $("#tel").val();
+		if (null == telephone || '' == telephone) {
+			alert("请输入手机号码");
+			return;
+		} */
+		var tel = $.trim($("#tel").val());
+		var phone_reg = /^(((13[0-9]{1})|147|(15[0-3]{1})|(15[5-9]{1})|(18[0-3]{1})|(18[5-9]{1}))+\d{8})$/;
+        	if (!phone_reg.test(tel)) {
+			alert_redtext('tel','手机格式不正确')
+            return false;
+         }
+        	var picCaptcha = $("#picCaptcha").val();
+       	if (timeB == false) {
+       		$.ajax({
+    			url:"/forget/password/SMS/send.htm",
+    			type:"post", 
+    			dataType:"json",
+    			data:{mobilePhone:tel,picCaptcha:picCaptcha},
+    			async: false,
+    			success:function(data){		
+    				timeB = true;
+    				if(data.status == -1){
+    					alert_redtext('tel','此号码未注册过请先注册！');
+    					timeB = false;
+    					return false;
+    				}
+    				if(data.status == 200){
+    					layer.msg("短信成功发出请留意您的手机短信~");		
+    					scountdown = true;    					
+    				}
+    				if(data.status == 500){
+    					layer.msg(data.message);
+    					timeB = false;
+    					return;
+    				}
+    			}
+    		});	
+   		}	
+       	if (scountdown) {
+       		if (wait == 0) {
+       			//sendObj.attr("disabled",false);
+       			//sendObj.val("获取验证码");
+       			sendObj.removeAttribute("disabled");         
+       			sendObj.value="获取验证码"; 
+       			wait = 90; 
+       			timeB = false;
+       			scountdown = false;
+       		} else {
+       			//sendObj.attr("disabled",true);
+       			//sendObj.val("请等待"+wait+"秒");			
+       			sendObj.setAttribute("disabled", true); 
+       			sendObj.value="请等待"+wait+"秒"; 
+       			wait--; 
+       			setTimeout(function() { 
+       				time(sendObj) 
+       			}, 1000) 
+       		}    		
+       	}       	
+	} 
+	//验证表单
+	function check_form(){
+		if($("#iphone_box").hasClass('show')){
+			//手机
+			var tel = $.trim($("#tel").val());
+			var phone_reg = /^(((13[0-9]{1})|147|(15[0-3]{1})|(15[5-9]{1})|(18[0-3]{1})|(18[5-9]{1}))+\d{8})$/;
+	        	if (!phone_reg.test(tel)) {
+				alert_redtext('tel','手机格式不正确')
+	            return false;
+	         }
+			
+			//新密码
+        	var PassWord = $.trim($("#password").val());
+			if (PassWord.length < 6 || PassWord.length > 16) {
+			alert_redtext('password','新密码应为6-16位，英文、数字或常用符号')
+            	return false;
+        	}
+			//确认新密码
+        	var OldPassWord = $.trim($("#old_password").val());
+			if (OldPassWord.length < 6 || OldPassWord.length > 16) {
+			alert_redtext('old_password','原密码应为6-16位，英文、数字或常用符号')
+            	return false;
+        	}
+			if (OldPassWord != PassWord) {
+				alert_redtext('password','新密码和确认新密码不一致')
+            	return false;
+			}
+			 //图片验证码
+	         var picCaptcha = $.trim($("#picCaptcha").val());
+			    if (picCaptcha.length <= 0 || imgCodeResult == 0) {
+				alert_redtext('picCaptcha','图片验证码不正确')
+	            	return false;
+	        	}
+			 //手机验证码
+	        	var TelCaptcha = $.trim($("#telcaptcha").val());
+				if (TelCaptcha.length <= 0) {
+				alert_redtext('telcaptcha','手机验证码不正确')
+	            	return false;
+	        	}
+				$.ajax({
+					url:"/forget/password/mobliephone.htm",
+					type:"post",
+					dataType:"json",
+					data:{validateCode:TelCaptcha,mobilePhone:tel,password:PassWord},
+					async: false,
+					success:function(data){
+						if(data.status == 200){
+							layer.msg('成功找回密码,正在跳转至首页,请重新登录~', {
+								shade: [0.9, '#000'],
+							    icon: 6,
+							    time: 2000 //2秒关闭（如果不配置，默认是3秒）
+							}, function(){
+//								window.location.href = "/userMan/userInfo.htm";
+								window.location.href = "/index.htm";
+							});
+							return;
+						}
+						if(data.status == 500){
+							layer.msg(data.message);
+						}
+					}
+				});
+				
+				
+		}else{
+			//邮箱
+			 var mail = $.trim($("#mail").val());
+			var mail_reg = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/; 
+	        	if (!mail_reg.test(mail)) {
+				alert_redtext('mail','邮箱地址不正确')
+	            return false;
+	         }
+			
+			//新密码
+			var PassWord = $.trim($("#mail_password").val());
+			if (PassWord.length < 6 || PassWord.length > 16) {
+				alert_redtext('mail_password','新密码应为6-16位，英文、数字或常用符号')
+				return false;
+			}
+			//确认新密码
+			var OldPassWord = $.trim($("#mail_con_password").val());
+			if (OldPassWord.length < 6 || OldPassWord.length > 16) {
+				alert_redtext('mail_con_password','原密码应为6-16位，英文、数字或常用符号')
+				return false;
+			}
+			if (OldPassWord != PassWord) {
+				alert_redtext('mail_password','新密码和确认新密码不一致')
+				return false;
+			}
+			//邮箱验证码
+        	var emailcaptcha = $.trim($("#emailcaptcha").val());
+			if (emailcaptcha.length <= 0) {
+			 	alert_redtext('emailcaptcha','邮箱验证码不正确')
+            	return false;
+        	} 
+			$.ajax({
+				url:"/forget/password/email.htm",
+				type:"post",
+				dataType:"json",
+				data:{validateCode:emailcaptcha,email:mail,password:PassWord},
+				async: false,
+				success:function(data){
+					if(data.status == 200){
+						layer.msg('成功找回密码,正在跳转至首页,请重新登录~', {
+							shade: [0.9, '#000'],
+						    icon: 6,
+						    time: 2000 //2秒关闭（如果不配置，默认是3秒）
+						}, function(){
+//							window.location.href = "/userMan/userInfo.htm";
+							window.location.href = "/index.htm";
+						});
+						return;
+					}
+					if(data.status == 500){
+						layer.msg(data.message);
+					}
+				}
+			});
+		}
+	}
+		
+		//验证表单错误提示
+		function alert_redtext(d,t){
+			$('#' +d).focus().siblings('span').html(t).addClass('warning')
+		}
+
+</script>
+</html>

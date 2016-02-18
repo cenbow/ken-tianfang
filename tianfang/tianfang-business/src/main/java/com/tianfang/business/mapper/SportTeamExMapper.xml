@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianfang.business.mapper.SportTeamExMapper">
+
+	<sql id="Column_List">
+		id, name, game_id as gameId, logo, contact, distruct, members, creater, home_court as homeCourt, set_up_time as setUpTime, 
+   		grade, win, drew, lost, last_update_time as lastUpdateTime, create_time as createTime, stat, team_type as teamType
+	</sql>
+	
+	<sql id="select_Column_List">
+		team.id, team.name, team.game_id as gameId, team.logo, team.contact, team.distruct, team.members, team.creater, team.home_court as homeCourt, team.set_up_time as setUpTime, 
+   		team.grade, team.win, team.drew, team.lost, team.last_update_time as lastUpdateTime, team.create_time as createTime, team.stat, team.team_type as teamType,
+   		address.name as distructStr ,game.title as gameStr,tType.type_name as teamTypeStr from
+		sport_team as team 
+		left join sport_addresses as address on team.distruct = address.id 
+		left join sport_team_type as tType on team.team_type = tType.type_id 
+		left join sport_game as game on team.game_id = game.id 
+	</sql>
+
+	<sql id="Where_Clause">
+		<where>
+			<if test="params.gameId != null">
+				and game_id = #{params.gameId} 
+			</if>
+			<if test="params.distruct!= null">
+				and distruct = #{params.distruct} 
+			</if>
+			<if test="params.grade != null">
+				and grade = #{params.grade}  
+			</if>
+			<if test="params.teamType != null">
+				and team_type = #{params.teamType}  
+			</if>
+		</where>
+	</sql>
+
+	<sql id="Order_Clause">
+		ORDER BY
+		(win - lost) DESC,
+		create_time DESC
+	</sql>
+
+	<select id="queryHotTeam" parameterType="java.util.Map"
+		resultType="com.tianfang.business.dto.SportTeamDto">
+		SELECT 
+		<include refid="Column_List" />
+		FROM sport_team
+		<include refid="Where_Clause" />
+		<include refid="Order_Clause" />
+		<if test="params.total != null and params.total > 0">
+			LIMIT 0,#{params.total}
+		</if>
+	</select>
+
+	<select id="selectTeam"  resultType="com.tianfang.business.dto.SportTeamDto">
+		SELECT 
+		<include refid="select_Column_List" />
+		<where>
+			team.stat = 1 and game.stat = 1 and tType.stat = 1 
+			<if test="params.gameId != null">
+				and team.game_id = #{params.gameId} 
+			</if>
+			<if test="params.name != null">
+				and team.name LIKE #{params.name} 
+			</if>
+			<if test="params.distruct!= null">
+				and team.distruct = #{params.distruct} 
+			</if>
+			<if test="params.grade != null">
+				and team.grade = #{params.grade}  
+			</if>
+			<if test="params.teamType != null">
+				and team.team_type = #{params.teamType}  
+			</if>
+		</where>
+		<if test="params.start != null and params.total > 0">
+			LIMIT #{params.start},#{params.total}
+		</if>
+	</select>
+</mapper>

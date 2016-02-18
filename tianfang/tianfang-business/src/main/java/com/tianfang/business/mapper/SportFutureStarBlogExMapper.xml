@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianfang.business.mapper.SportFutureStarBlogExMapper">
+
+	<update id="updateRead" parameterType="java.lang.String">
+		UPDATE sport_future_star_blog SET read_amount = read_amount + 1 WHERE id = #{id}
+	</update>
+
+	<update id="updateShare" parameterType="java.lang.String">
+		UPDATE sport_future_star_blog SET share_amount = share_amount + 1 WHERE id = #{id}
+	</update>
+	
+	<update id="updateLike" parameterType="java.lang.String">
+		UPDATE sport_future_star_blog SET like_amount = like_amount + 1 WHERE id = #{id}
+	</update>
+</mapper>

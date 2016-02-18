@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html>
+
+	<#include "/common/head.htm"/>
+	<link href="/static/css/competition.css" rel="stylesheet" />
+	<link href="/static/css/jquery-ui.min.css" rel="stylesheet" />
+	<script src="/static/js/jquery-ui.min.js"></script>
+	<script src="/static/js/datepicker-zh.js"></script>
+	<script src="/static/js/updateTeamLogo.js"></script>
+	<script src="/static/js/teamLogo.upload.js"></script>
+	
+<link href="/static/plugins/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/static/plugins/uploadify/swfobject.js"></script>
+<script type="text/javascript" src="/static/plugins/uploadify/jquery.uploadify.v2.1.4.min.js"></script>	
+	
+	<body>
+		<#include "/common/topbar.htm"/>
+		<div class="youth-bg">
+			<div class="wrapper">
+				<div class="youth-title">
+				<input type="hidden" name="id" value="${(sportTeamDto.id)!}" />
+					<!-- <h1><img src="${(sportTeamDto.logo)!}" class="youth-ico"></img>${(sportTeamDto.name)!}</h1> -->
+					<img class="youth-ico" src="${(sportTeamDto.logo)!}" />
+					<span class="youth-name">${(sportTeamDto.name)!}</span>
+					<div class="youth-banner">
+						<ul class="youth-banner-ul">
+							<li class="youth-banner-li index" to="/tc/index/${(sportTeamDto.id)!}.htm">球队首页</li>
+							<li class="youth-banner-li team-info cur" to="/tc/team/${(sportTeamDto.id)!}.htm">球队信息</li>
+							<li class="youth-banner-li pic" to="/tc/pic/${(sportTeamDto.id)!}.htm">相册</li>
+							<li class="youth-banner-li video" to="/tc/video/${(sportTeamDto.id)!}.htm">视频</li>
+							<li class="youth-banner-li herald" to="/tc/herald/${(sportTeamDto.id)!}.htm">比赛预告</li>
+							<li class="youth-banner-li history" to="/tc/history/${(sportTeamDto.id)!}.htm">历史战绩</li>
+							<li class="youth-banner-li honor" to="/tc/honor/${(sportTeamDto.id)!}.htm">荣誉</li>
+						</ul>
+					</div>
+				</div>
+				<div class="team-member-banner">
+					<a class="team-info-a cur" href="##">球队信息</a>
+					<a class="team-icon-a" href="##">球队队徽</a>
+					<a class="team-member-a" href="##">球队成员</a>
+				</div>
+
+				<div class="member-team-info">
+					<ul class="member-team-info-ul">
+						<li class="member-team-info-li">
+							<p class="info-detail"><i class="no">1</i>球队名称: <i class="detail-info">${(sportTeamDto.name)!}</i></p>
+							<a class="edit bt" href="###">[编辑]</a>
+							<a class="pack-up bt hide" href="###">收起  ∨</a>
+							<div class="edit-team-name hide">
+								<p>现球队名称:<i>${(sportTeamDto.name)!}</i><span class="team-level">等级：${(sportTeamDto.grade)!}级战队</span><span class="team-noedit">不可编辑</span></p>
+								<p>新球队名称
+									<input name="name" class="newTeam" type="text" />
+								</p>
+							</div>
+							<div class="bts hide">
+								<a class="save bt" obj-type="name" href="###">保存</a>
+								<a class="cancle bt" obj-type="name" href="###">取消</a>
+							</div>
+						</li>
+						<li class="member-team-info-li">
+							<p class="info-detail"><i class="no">2</i>地区: <i id="priOrDic" class="detail-info"></i></p>
+							<a class="edit bt" href="###">[编辑]</a>
+							<a class="pack-up bt hide" href="###">收起  ∨</a>
+							<div class="team-area hide">
+								<label class="place" for="">地区：</label>
+								<select id="dic" class="province" onchange="doDistrict();" name="province">
+									<!-- <option value="">省份</option> -->
+										<#if result?? >	
+											<#list result as page>
+												<option value="${(page.id)?replace(',','')}">${(page.name)!}</option>
+											</#list>
+										</#if>
+								</select>
+								<select id="area" class="city" name="distruct">
+									<option value="">北京</option>
+									<option value="">上海</option>
+								</select>
+							</div>
+							<div class="bts hide">
+								<a class="save bt" obj-type="province" href="###">保存</a>
+								<a class="cancle bt" obj-type="province" href="###">取消</a>
+							</div>
+						</li>
+						<li class="member-team-info-li">
+							<p class="info-detail"><i class="no">3</i>成员: <i class="detail-info">${(sportTeamDto.members)!}人</i></p>
+							<a class="edit bt" href="###">[编辑]</a>
+							<a class="pack-up bt hide" href="###">收起  ∨</a>
+							<div class="team-members hide">
+								<label class="place" for="">成员：</label>
+								<input type="text" name="members" id="" value="" />
+							</div>
+							<div class="bts hide">
+								<a class="save bt" obj-type="members" href="###">保存</a>
+								<a class="cancle bt" obj-type="members" href="###">取消</a>
+							</div>
+						</li>
+						<li class="member-team-info-li">
+							<p class="info-detail"><i class="no">4</i>创建人: <i class="detail-info">${(sportTeamDto.creater)!}</i></p>
+							<a class="edit bt" href="###">[编辑]</a>
+							<a class="pack-up bt hide" href="###">收起  ∨</a>
+							<div class="team-members hide">
+								<label class="place" for="">创建人：</label>
+								<input type="text" name="creater" id="" value="" />
+							</div>
+							<div class="bts hide">
+								<a class="save bt" obj-type="creater" href="###">保存</a>
+								<a class="cancle bt" obj-type="creater" href="###">取消</a>
+							</div>
+						</li>
+						<li class="member-team-info-li">
+							<p class="info-detail"><i class="no">5</i>成立时间: <i class="detail-info">${(sportTeamDto.setUpTime)?string("yyyy-MM-dd")}</i></p>
+							<a class="edit bt" href="###">[编辑]</a>
+							<a class="pack-up bt hide" href="###">收起  ∨</a>
+							<div class="team-members hide">
+								<label class="place" for="">成立时间：</label>
+								<input class="create-time" type="text" name="setUpTime" id="" readonly="readonly"  value="" />
+							</div>
+							<div class="bts hide">
+								<a class="save bt" obj-id="setUpTime" obj-type="setUpTime" href="###">保存</a>
+								<a class="cancle bt" obj-id="setUpTime" obj-type="setUpTime" href="###">取消</a>
+							</div>
+						</li>
+						<li class="member-team-info-li">
+							<p class="info-detail"><i class="no">6</i>主场: <i class="detail-info">${(sportTeamDto.homeCourt)!}</i></p>
+							<a class="edit bt" href="###">[编辑]</a>
+							<a class="pack-up bt hide" href="###">收起  ∨</a>
+							<div class="team-members hide">
+								<label class="place" for="">主场：</label>
+								<input type="text" name="homeCourt" id="" value="" />
+							</div>
+							<div class="bts hide">
+								<a class="save bt" obj-type="homeCourt" href="###">保存</a>
+								<a class="cancle bt" obj-type="homeCourt" href="###">取消</a>
+							</div>
+						</li>
+						<li class="member-team-info-li">
+							<p class="info-detail summary"><i class="no">7</i>球队简介: ${(sportTeamDto.teamIntroduce)!}</p>
+							<a class="edit bt" href="###">[编辑]</a>
+							<a class="pack-up bt hide" href="###">收起  ∨</a>
+							<div class="team-intro hide">
+								<textarea name="teamIntroduce" rows="" cols="">${(sportTeamDto.teamIntroduce)!}</textarea>
+							</div>
+							<div class="bts hide">
+								<a class="save bt" obj-type="teamIntroduce" href="###">保存</a>
+								<a class="cancle bt" obj-type="teamIntroduce" href="###">取消</a>
+							</div>
+						</li>
+					</ul>
+
+				</div>
+
+				<div class="youth-team-member" style="display: none;">
+					<h1 class="youth team-edit">全部球队成员</h1>
+					<div class="operate">
+						<!-- <input type="checkbox" name="" id="" value="" /> -->
+						<a class="bt add" href="##">+新增联系人</a>
+						<a class="bt delete" href="##" onclick="t_delete_list();">删除</a>
+						<!-- <a class="bt refrash" href="##">刷新</a> -->
+					</div>
+					<ul class="team-member-ul-title">
+						<li class="team-member-li title">
+							<p class="col1"></p>
+							<p class="col2">头像</p>
+							<p class="col3">姓名</p>
+							<p class="col4">号码</p>
+							<p class="col5">位置</p>
+							<p class="col6">先发/替补</p>
+						</li>
+					</ul>
+					<div class="team-member team-edit">
+						<ul class="team-member-ul">
+							<#if members ??>
+								<#list members as mem>
+									<li id="${(mem.id)!}" class="team-member-li">
+										<p class="col1">
+											<input class="col_i" type="checkbox" <#if mem_index == 0>checked="checked"</#if> name="memberIds" value="${(mem.id)!}" />
+											<input class="col_first" type="hidden" value="${(mem.isFirst)!}" />
+											<input class="col_described" type="hidden" value="${(mem.described)!}" />
+										</p>
+										<p class="col2"><img class="member-pic" <#if mem.pic == null || mem.pic == ''>src="/static/img/topimg.jpg"<#else>src="${(mem.pic)!}"</#if> style="width:48px;height:48px;"/></p>
+										<p class="col3" style="overflow:hidden;text-overflow:ellipsis;">${(mem.name)!}</p>
+										<p class="col4" style="overflow:hidden;text-overflow:ellipsis;">${(mem.number)!}</p>
+										<p class="col5">${(playerPosition[mem.position])!}</p>
+										<#if mem.isFirst == 1>
+											<p class="col6"><i class="onplay"></i></p>
+										<#else>
+											<p class="col6"><i class="alternates"></i></p>
+										</#if>
+									</li>									
+								</#list>
+							</#if>
+						</ul>
+					</div>
+					<div class="member-info">
+						<form id="member_modify_form">
+							<div class="member-ico-div">
+								<input type="hidden" name="tid" value="${(sportTeamDto.id)!}"/><!--teamId-->
+								<input class="js-id" type="hidden" name="id" value=""/>
+								<input class="js-first" type="hidden" id="isFirst_modify" name="isFirst" value="1"/><!--teamId-->	
+								<img id="img_modify" class="js-member-pic member-ico" src="/static/img/topimg.jpg" alt="" />
+								<input class="js_pic" id="pic_modify" type="hidden" name="pic" />
+								<div class="change-icon">
+									<p id="uploadObj" style="text-align:center;">更换头像</p>
+									<input class="hide" type="file" name="" id="" value="" />
+								</div>
+							</div>
+							<label class="info-label" for="">姓名
+								<input class="js-name" type="text" name="name" id="" value="" />
+							</label>
+							<label class="info-label" for="">号码
+								<input class="js-no" type="text" name="number" id="" value="" />
+							</label>
+							<label class="info-label" for="">位置
+								<select class="js-position" name="position">
+									<#if playerPosition ??>
+										<#list playerPosition?keys as itemKey>
+											<option value="${(itemKey)!}">${playerPosition[itemKey]}</option>		
+										</#list>
+									</#if>
+								</select>
+							</label>
+							<span class="info-radio">
+								<input class="js-onplay" type="radio" name="member-type" id="id1" value="1" onclick="changeModifyFirst(this)"/>
+								<label for="id1" ><i class="onplay"></i>先发球员</label>
+								<input class="js-alternates" type="radio" name="member-type" id="id2" value="2" onclick="changeModifyFirst(this)"/>
+								<label for="id2"><i class="alternates"></i>替补球员</label>
+							</span>
+							<div class="member-note-div">
+								<label class="member-note-label" for="">备注</label>
+								<textarea id="js-described" class="member-note" name="described" rows="" cols=""></textarea>
+							</div>														
+							<div class="bts">
+								<a class="save bt" href="###" onclick="javascript:t_modify();">保存</a>
+								<!-- <a class="cancle bt" href="###">取消</a> -->
+							</div>
+						</form>
+						<p class="info-tip title">场上位置注释:</p>
+						<p class="info-tip">前场＝中锋(CF)＋边锋(LWF/RWF)＋前锋(FW)</p>
+						<p class="info-tip">中前场＝前腰(AMF)＋影前锋(OH) </p>
+						<p class="info-tip">中场＝边前卫(LMF/RMF)＋中卫(CMF)＋后腰(DMF)</p>
+						<p class="info-tip">后场＝中后卫(CB/SB/WB)＋边后卫(LB/RB)＋清道夫 (CWP)＋后卫(DF)</p>
+					</div>
+					<div class="member-serve-info">
+						<p class="info1">首发球员阵容</p>
+						<p class="info2">已选阵型：<i id="serve-key">${(sportTeamDto.lineup)!}</i></p>
+					</div>
+					<form id="line_form">
+						<input type="hidden" id="teamId" name="id" value="${(sportTeamDto.id)!}"/>
+						<input type="hidden" id="lineup" name="lineup" value="${(sportTeamDto.lineup)!}"/>
+					</form>
+					<div class="serve-info">
+						<div class="serve-info-img">
+							<#list formationMap?keys as itemKey>
+								<#if sportTeamDto.lineup == itemKey>
+									<img id="serve-info-img-src" src="/static/img/player/${formationMap[itemKey]}" alt="" />
+								</#if>
+							</#list>
+						</div>
+						<div class="serve-type">
+							<#if formationMap ??>
+								<#list formationMap?keys as itemKey>
+									<#if sportTeamDto.lineup == itemKey>
+										<input class="server-type-radio" data-key="${(itemKey)!}" data-src="/static/img/player/${formationMap[itemKey]}" onclick="changeServe(this)" type="radio" name="itemkey" id="id_${itemKey_index}" value="" checked="checked"/>
+										<label for="id_${itemKey_index}">${(itemKey)!}</label>								
+									<#else>
+										<input class="server-type-radio" data-key="${(itemKey)!}" data-src="/static/img/player/${formationMap[itemKey]}" onclick="changeServe(this)" type="radio" name="itemkey" id="id_${itemKey_index}" value=""/>
+										<label for="id_${itemKey_index}">${(itemKey)!}</label>																												
+									</#if>
+								</#list>
+							</#if>
+							<p class="serve-type-info">*更多阵型加入中</p>
+							<!-- <p class="serve-type-tip">注释： 系统根据默认输入上场球员与阵型自动生成左侧阵容图形， 如需修改某位置球员，直接点击场上位置球员，即可弹出球员目录选择调整</p> -->
+						</div>
+					</div>
+				</div>
+
+				<div class="member-add" style="display: none;">
+					<div class="member-info">
+						<form id="member_add_form">
+							<input type="hidden" name="tid" value="${(sportTeamDto.id)!}"/><!--teamId-->
+							<input type="hidden" id="isFirst" name="isFirst" value="1"/><!--teamId-->
+							<input type="hidden" id="pic_add" name="pic" value=""/>
+							<div class="bts">
+								<a class="save bt" href="###" onclick="javascript:t_save_add();">保存</a>
+								<a class="cancle bt" href="###">取消</a>
+							</div>
+							<div class="member-add-info-wrapper">
+								<div class="member-ico-div">
+									<img id="img_add" class="member-ico" src="/static/img/topimg.jpg" alt="" />
+									<div class="change-icon">
+										<p id="addUpload">上传头像</p>
+										<input class="hide" type="file" name="" id="" value="" />
+									</div>
+								</div>
+								<label class="info-label" for="">姓名
+									<input type="text" name="name" id="namesave" value="" />
+								</label>
+								<label class="info-label" for="">号码
+									<input type="text" name="number" id="" value="" />
+								</label>
+								<label class="info-label" for="">位置
+									<select class="js-position" name="position">
+										<#if playerPosition ??>
+											<#list playerPosition?keys as itemKey>
+												<option value="${(itemKey)!}">${playerPosition[itemKey]}</option>		
+											</#list>
+										</#if>
+									</select>
+								</label>
+								<span class="info-radio">
+									<input type="radio" id="id11" value="1" name="radio-people" checked="checked" onclick="changeFirst(this)"/>
+									<label for="id11" ><i class="onplay"></i>先发球员</label>
+									<input type="radio" id="id12" value="2" name="radio-people" onclick="changeFirst(this)"/>
+									<label for="id12"><i class="alternates"></i>替补球员</label>
+								</span>
+								<div class="member-note-div">
+									<label class="member-note-label" for="">备注</label>
+									<textarea class="member-note" name="described" rows="" cols=""></textarea>
+								</div>
+	
+								<p class="info-tip title">场上位置注释:</p>
+								<p class="info-tip">前场＝中锋(CF)＋边锋(LWF/RWF)＋前锋(FW)</p>
+								<p class="info-tip">中前场＝前腰(AMF)＋影前锋(OH) </p>
+								<p class="info-tip">中场＝边前卫(LMF/RMF)＋中卫(CMF)＋后腰(DMF)</p>
+								<p class="info-tip">后场＝中后卫(CB/SB/WB)＋边后卫(LB/RB)＋清道夫 (CWP)＋后卫(DF)</p>
+							</div>
+						</form>
+					</div>
+				</div>
+
+				<div class="team-icon-div" style="display: none;">
+					<!-- <div class="preview" id="phonepreview">
+						<input type="hidden" name="phone_pic" id="phoneHfThumbnail" value="" />
+						<img src="/static/img/preview.png" id="phoneUserImageS" alt="" border="0">
+						<label class="browse" for="phoneFile">浏览</label>
+						<input id="phoneFile" type="file" name="file">
+						<a id="phoneQuery" href="###" class="upload">浏览</a>
+					</div>  -->
+					<!-- <div class="icon-left" id="team_logo_preview">
+						<input type="hidden" name="team_logo" id="team_logo_hfThumbnail" value="" />
+						<a id="team_logo" class="bt upload " href="###">选择你要上传的图片</a>
+						<input class="hide" type="file" name="" id="team_logo_file" value="" />
+						<div class="team-icon-big">
+							<img src="/static/img/activity.jpg" alt="" id="team_logo_img"/>
+						</div>
+						<div class="bts">
+							<a id="save_teamLogo" class="uploadbt save bt" href="###">保存</a>
+							<a class="uploadbt cancle bt" href="###">取消</a>
+						</div>
+					</div> -->
+					<div class="icon-left">
+						<label class="bt upload" for="team_logo_file">请选择要上传的图片</label>
+						<div class="team_logo_preview" id="team_logo_preview">
+							<input type="hidden" name="phone_pic" id="team_logo_hfThumbnail" value="" />
+							<div class="team-icon-big">
+								<#if team ??>
+									<img id="team_logo_img" src="${(team.logo)!}" alt="" />
+								<#else>
+									<img id="team_logo_img" src="/static/img/preview.png" alt="" />
+								</#if>
+							</div>
+							<input id="team_logo_file" class="team_logo_file" type="file" name="file">
+							<a id="team_logo" href="###" class="upload">浏览</a>
+						</div> 
+						<div class="bts">
+							<a id="save_teamLogo" class="uploadbt save bt" href="###">保存</a>
+							<a id="cancel_teamLogo" class="uploadbt cancle bt" href="###">取消</a>
+						</div>
+					</div>
+					
+					<div class="icon-right">
+						<p>仅支持JPG,GIF,PNG图片文件，且文件小于2M</p>
+						<div class="team-icon-middle">
+						<#if team ??>
+							<img id="logo_img_general" src="${(team.logo)!}" alt="" />
+						<#else>
+							<img id="logo_img_general" src="/static/img/preview.png" alt="" />
+						</#if>
+						</div>
+						<p>中尺寸头像50*50像素（自动生成）</p>
+						<div class="team-icon-small">
+						<#if team ??>
+							<img id="logo_img_small" src="${(team.logo)!}" alt="" />
+						<#else>
+							<img id="logo_img_small" src="/static/img/preview.png" alt="" />
+						</#if>
+						</div>
+						<p>小尺寸头像30*30像素（自动生成）</p>
+						<p>您上传的图片会自动生成三种规格，请注意中小尺寸头像是否清晰！</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<#include "/common/footer.htm"/>
+		<script src="/static/js/competition.js"></script>
+		<script src="/static/js/team_member_mg.js"></script>
+		<script type="text/javascript">
+/* 			for (var i = 0; i < 10; i++) {
+				$(".team-member-ul").append($(".team-member-li:last").clone());
+			} */
+			$(function() {
+				//setNull();
+				//球队成员列表点击
+				$(".team-member-ul").on("click", ".team-member-li:not(.title)", function() {
+					var $this = $(this);
+					$(".team-member-li").removeClass("select");
+					$(".team-member-li").find("input").prop("checked", false);
+					$this.addClass("select").find("input").prop("checked", true);
+					//赋值
+					memberPic = $this.find(".member-pic").attr("src");					
+					$(".js-name").val($this.find(".col3").text());
+					$(".js-no").val($this.find(".col4").text());
+					$(".js-id").val($this.find(".col_i").val());					
+					if (memberPic == null || memberPic=='') {
+						$(".js-member-pic").attr("src","/static/img/topimg.jpg");
+						$(".js-pic").attr("src","/static/img/topimg.jpg");
+					}else {
+						$(".js-member-pic").attr("src", $this.find(".member-pic").attr("src"));
+						$(".js_pic").val($this.find(".member-pic").attr("src"));						
+					}					
+					$(".js-first").val($this.find(".col_first").val());
+					$("#js-described").val($this.find(".col_described").val());
+					var options = $(".js-position option");
+					var postion = $this.find(".col5").text();
+					for (var i = 0, len = options.length; i < len; i++) {
+						if (postion == options[i].innerText) {
+							$(".js-position").val(options[i].value);
+							break;
+						}
+					}
+					if ($this.find(".col6 i").hasClass("onplay")) {
+						$(".js-onplay").prop("checked", true);
+					} else {
+						$(".js-alternates").prop("checked", true);
+					}
+				});
+				//球队信息 编辑
+				$(".member-team-info-li").on("click", ".edit.bt", function() {
+					$(this).parent().find("div").removeClass("hide");
+					$(this).addClass("hide").next().removeClass("hide");
+				});
+				//球队信息 收起
+				$(".member-team-info-li").on("click", ".pack-up.bt", function() {
+					$(this).parent().find("div").addClass("hide");
+					$(this).addClass("hide").prev().removeClass("hide");
+				});
+				$(".create-time").datepicker();
+				//球队信息，球队成员，球队队徽切换
+				$(".team-member-banner").on("click", "a", function() {
+					$(".team-member-banner a").removeClass("cur");
+					$(this).addClass("cur");
+				});
+				//球队信息事件
+				$(".team-member-banner").on("click", ".team-info-a", function() {
+					//球队信息，球队成员，添加成员，球队图标
+					$(".member-team-info,.youth-team-member,.member-add,.team-icon-div").css("display", "none");
+					$(".member-team-info").css("display", "block");
+				});
+				//球队队徽事件
+				$(".team-member-banner").on("click", ".team-icon-a", function() {
+					//球队信息，球队成员，添加成员，球队图标
+					$(".member-team-info,.youth-team-member,.member-add,.team-icon-div").css("display", "none");
+					$(".team-icon-div").css("display", "block");
+				});
+				//球队成员事件
+				$(".team-member-banner").on("click", ".team-member-a", function() {
+					//球队信息，球队成员，添加成员，球队图标
+					$(".member-team-info,.youth-team-member,.member-add,.team-icon-div").css("display", "none");
+					$(".youth-team-member").css("display", "block");
+				});
+				//添加队员
+				$(".operate").on("click", ".bt.add", function() {
+					$(".youth-team-member").css("display", "none");
+					$(".member-add").css("display", "block");
+					$("#member_add_form [name=name]").val('');
+					$("#member_add_form [name=number]").val('');
+					$("#member_add_form [name=position]").val('');
+					var radio_oj = $("#member_add_form [name=radio-people]");
+					for(var i = 0; i < radio_oj.length; i++) {//循环
+				        if(radio_oj[i].value == 1){  //比较值
+				            radio_oj[i].checked=true; //修改选中状态
+				            break; //停止循环
+				        }
+				  	}
+					$("#member_add_form [name=described]").val('');
+					$("#img_add").attr('src','/static/img/topimg.jpg');
+					$("#pic_add").val('');
+				});
+				//添加队员确定
+				/* $(".member-add").on("click", ".bt.save", function() {
+					$(".youth-team-member").css("display", "block");
+					$(".member-add").css("display", "none");
+				}); */ 
+				//添加队员取消
+				$(".member-add").on("click", ".bt.cancle", function() {
+					$(".youth-team-member").css("display", "block");
+					$(".member-add").css("display", "none");
+				});
+				$(".change-icon").on("click", "p", function() {
+					$(this).next().trigger("click");
+				});
+				$(".bt.upload ").on("click", function() {
+					$(this).next().trigger("click");
+				});
+			})
+			
+			<!--  ---------------------------------------------- -->
+			window.onload = function() {
+			    document.getElementById('dic').value ="${(sportTeamDto.province)!}";
+			    doDistrict(); //获取省份下区域信息  
+			    document.getElementById('area').value="${(sportTeamDto.distruct)!}";  
+			    if("${(sportTeamDto.province)!}"!=null || "${(sportTeamDto.province)!}" !="" ||
+			    		"${(sportTeamDto.distruct)!}"!=null || "${(sportTeamDto.distruct)!}"!=""	){
+			    	 var dicText= document.getElementById('dic').options[document.getElementById('dic').selectedIndex].text;
+			    	 var areaText= document.getElementById('area').options[document.getElementById('area').selectedIndex].text;
+			    	 document.getElementById('priOrDic').innerHTML =dicText+"/"+areaText;
+			    }else{
+			    	document.getElementById('priOrDic').innerHTML ="";
+			    } 
+			   
+			} 
+			//省份 的区域加载 
+			function doDistrict(){
+				var id = $("#dic option:selected").val();			
+				var oSel = document.getElementById('area');
+				var oOp = oSel.children;        //获取select列表的所有子元素。
+				for(var i=0,len = oOp.length;i<len;i++)   
+				{
+					oSel.removeChild(oOp[0]);  
+				}
+				$.ajax({
+					url:'/team/byCreateriaAddress.htm',
+					data:{id:id},
+					dataType: 'json',
+					async:false,
+					type:'post',
+					success:function (data){
+						var result = data.data;
+						var area = document.getElementById("area");
+						//请空下拉框的值 
+						area.value ="";
+						for (var i = 0; i < result.length; i++) {
+							option =new Option(result[i].name,result[i].id);
+							area.options.add(option);
+						}					
+						//console.log("are--赋值完毕 ");
+					}
+				})
+			}
+			
+			
+			$('.member-team-info .save').on('click',function(){
+				var typeCon= $(this).attr('obj-type');
+				var id;
+				var name;
+				
+				var province;
+				var distruct;
+				
+				var members;
+				var creater;
+				
+				var setUpTime;
+				var homeCourt;
+				var teamIntroduce;
+				
+				id=$('[name=id]').val();
+				if(typeCon=='name'){
+					name= $('[name=name]').val();
+					if(name.length<3 || name.length>18){
+						layer.msg("球队名称是3-18个字符~~");
+						return;
+					}
+				}
+				
+				if(typeCon=='province'){
+					province=$('[name=province]').val();
+					distruct=$('[name=distruct]').val();
+				}
+				
+				if(typeCon=='members'){
+					members= $('[name=members]').val();
+					var reg = /^\+?[1-9]\d*$/;
+					if(!reg.test(members)){
+						layer.msg("完善球员人数信息,最少一人,成员只能是整数~~");
+						return;
+					}
+				}
+				
+				if(typeCon=='creater'){
+					creater= $('[name=creater]').val();
+				}
+				if(typeCon=='setUpTime'){
+					setUpTime= $('[name=setUpTime]').val();
+				}
+				if(typeCon=='homeCourt'){
+					homeCourt= $('[name=homeCourt]').val();
+					if(homeCourt.length<3 || homeCourt.length>18){
+						layer.msg("主场名称是3-18个字符~~");
+						return;
+					}
+				}
+				if(typeCon=='teamIntroduce'){
+					teamIntroduce= $('[name=teamIntroduce]').val();
+				}
+				//修改球队信息 
+				$.ajax({
+					url:'/team/edit.htm',
+					data:{id:id,name:name,province:province,distruct:distruct,members:members,creater:creater,setUpTimeStr:setUpTime,homeCourt:homeCourt,teamIntroduce:teamIntroduce},
+					dataType:'json',
+					type:'post',
+					success:function (data){
+						if(data.success == false){
+							layer.msg(data.msg);
+							return;
+						}
+						layer.msg(data.msg, {
+							shade: [0.9, '#000'],
+						    icon: 1,
+						    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+						}, function(){
+							location.reload();
+						}); 
+						
+					}
+				})
+			})
+			
+			$('.cancle.bt').on('click',function(){
+				var type= $(this).attr("obj-type");
+				if(type=='province'){
+					document.getElementById('area').innerHTML="";
+				}
+				$('[name='+type+']').val("");
+			})
+		</script>
+	</body>
+
+</html>

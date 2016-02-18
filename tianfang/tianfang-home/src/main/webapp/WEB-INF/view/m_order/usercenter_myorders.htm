@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<#include "/common/head.htm"/>
+	<meta charset="UTF-8">
+    <link rel="icon" type="image/gif" href="/static/img/favicon.ico">
+    <link href="/static/css/suggest.css" rel="stylesheet" />
+    <title>聚运动</title>
+</head>
+<body>
+	<#include "/common/topbar.htm"/>
+	<div class="site_nav"><a href="###">首页</a> > <a href="###">未来之星</a> > <a href="###">炫我足球范</a></div>
+	<div class="wrapper">
+		<#include "/common/usercentertop.htm"/>
+		<!-- <div class="usercenter_box">
+			<div class="menu">
+				<ul>
+					<li class="title">用户中心</li>
+					<li><a class="icon1" href="usercenter.html">个人信息</a></li>
+					<li><a class="icon2" href="###">账号安全</a></li>
+					<li><a class="icon3" href="###">我的球队</a></li>
+					<li><a class="icon4" href="###">我的学院</a></li>
+					<li><a class="icon5" href="###">报名支付</a></li>
+					<li><a class="icon6" href="###">我的消息</a></li>
+					<li><a class="icon7" href="usercenter_mypic.html">我的图片</a></li>
+					<li><a class="icon8" href="usercenter_myvid.html">我的视频</a></li>
+					<li><a class="icon9 cur" href="usercenter_myorders.html">我的订单</a></li>
+				</ul>
+			</div> -->
+			<div class="main_box">
+				<h5 id="info3"><span class="info3">我的订单</span><a class="edit" status="off" href="###"></a></h5>
+				<div class="row_order_info">
+					<ul>
+					<#if pageList.results??>
+						<#if (pageList.results?size>0)>
+							<#list pageList.results as page>
+								<#if page.sportMOrderInfoDtos??>								
+									<#if (page.sportMOrderInfoDtos?size>0)>
+										<li>
+											<div class="tit">
+												${(page.createTimeStr)!} 订单号：${(page.orderNo)!}
+												<!-- <a class="share" href="###"></a>
+												<a class="flag" href="###"></a> -->
+												<a class="del" data-order-id="${(page.id)!}" href="###"></a>
+											</div>
+											<ul>
+												<#list page.sportMOrderInfoDtos as info>								
+													<li>
+														<a href="###"><img src="${(info.thumbnail)!}" border="0"></a>
+														<span class="goods_name"><a href="###">${(info.skuName)!}</a></span>
+														<span class="price">￥${(info.skuProductPrice)!} </span>
+														<span class="amout">X${(info.productStock)!}</span>
+														<span class="complain" id="evaluatecomment" data-obj-id="${(info.productSkuId)!}"><br><a href="###" >追加评论</a></span>									
+													</li>
+												</#list>
+											</ul>
+											<div class="price_box"><p><span class="pr">${(page.totalPrice)!}</span><br><span class="dl">(含运费：0.00)</span><br></p></div>
+											<div class="status_box"><p><span class="rs"><#if page.orderStatus??>
+												<#if page.orderStatus == 0>
+													等待买家付款
+												<#elseif page.orderStatus == 1>
+													买家已付款
+												<#elseif page.orderStatus == 2>
+													交易完成
+												<#elseif page.orderStatus == 3>
+													订单等待
+												<#elseif page.orderStatus == -1>
+													买家关闭
+												<#elseif page.orderStatus == -2>
+													卖家关闭
+												<#elseif page.orderStatus == -3>
+													卖家退款
+												<#elseif page.orderStatus == -4>
+													订单失效
+												</#if>	
+											</#if></span><br><span><img src="/static/img/icon_ct.png" border="0"></span><br><a href="###">订单详情</a></p></div>
+											<div class="action_box"><p><span></span><br><!--<a href="###">再次购买</a>--><a href="###">
+											<#if page.orderStatus??>
+												<#if page.orderStatus == 0>
+														立即付款
+												</#if>
+											</#if>
+											</a></span></p></div>								
+									 	</li>
+									</#if>	
+								</#if>
+							</#list>
+						</#if>
+					</#if>
+					</ul>
+					<#include "/common/page.htm"/>
+				</div>				
+			</div>
+		</div>
+	</div>
+		
+	<#include "/common/footer.htm"/>
+	
+	<div class="comment_popup">
+		<div class="comment_box">
+			<input type='hidden' id='commentproductSkuId' name='commentproductSkuId' value="" >
+			<div class="title">发表评论<a class="close" href="###" onClick="close_popup()"></a></div>
+			<div class="count">
+				<div class="tis">商品性能</div>
+				<div class="cos">
+					<p>请为该商品的性能指数进行评价，您公正的评价会为他人更好的参考依据。</p>
+					<p>稳定性：
+						<label><input type="radio" name="RadioGroup1" value="3" id="RadioGroup1_0">不满意</label>
+						<label><input type="radio" name="RadioGroup1" value="2" id="RadioGroup1_1">一般</label>
+						<label><input type="radio" name="RadioGroup1" value="1" id="RadioGroup1_2">满意</label>
+						<br>
+					</p>
+				</div>
+				<div class="tis">商品评分</div>
+				<div class="cos">
+					<ul data="0">
+						<li>1分<br>非常不滿意</li>
+						<li>2分<br>不滿意</li>
+						<li>3分<br>一般</li>
+						<li>4分<br>滿意</li>
+						<li>5分<br>非常滿意</li>
+					</ul>
+				</div>
+				<div class="tis noma">评论内容</div>
+				<div class="cos">
+					<textarea id="costextarea"></textarea>
+				</div>
+				<div class="tcs">
+					<!-- <label for="">添加图片(非必填)</label> -->
+					<input type="button" id="uploadObj" />
+					<!-- <span class="tip">(此项非必填)</span> -->
+					<div id="pictureList" class="uploaded-pic-div"></div>
+				</div>
+				<span class="rules"><input name="rulescheckbox" type="checkbox" value="1">我接受聚运动网的<a href="###">评论规则</a></span>
+				<a href="###" class="submit">发表</a>
+			</div>
+		</div>
+	</div>
+</body>
+<link href="/static/plugins/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/static/plugins/uploadify/swfobject.js"></script>
+<script type="text/javascript" src="/static/plugins/uploadify/jquery.uploadify.v2.1.4.min.js"></script>	
+<script>
+	/* function comment_popup(){
+		var productSkuId = $(this).attr("data-obj-id"); 
+		alert(productSkuId);
+		$('#commentproductSkuId').val('');
+		$('#commentproductSkuId').val(productSkuId);
+		$('.comment_popup').addClass('open')		
+	} */
+	function close_popup(){
+		$('.comment_popup').removeClass('open')
+	}
+	$(function(){
+		setTable()
+		
+		$('.complain').on('click', function(){
+			var productSkuId = $(this).attr("data-obj-id");
+			$('#commentproductSkuId').val(productSkuId);
+			$('.comment_popup').addClass('open')
+		})
+		
+		$('.submit').on('click', function(){
+			var evaluateStatus = $("input[name='RadioGroup1']:checked").val();
+			var rulescheckbox = $("input[name='rulescheckbox']:checked").val();
+			var star = $(".cos ul").attr("data")
+			var evaluateContent = $("#costextarea").val();	
+			var userId = "${(userId)!}";;
+			var productSkuId = $('#commentproductSkuId').val();
+			var pic='';
+			$(".uploaded-pic").each(function(){
+				id = $(this).attr("data-obj-id")
+				if(id != '' && id != null && id != 'undefined' ) {
+					pic += id+",";
+				}				
+			});
+			if (evaluateStatus =='' || evaluateStatus == null || evaluateStatus == "undefined") {
+				layer.msg('请选择商品性能~', {
+					shade: [0.9, '#000'],
+					icon: 2,
+					time: 1000 //2秒关闭（如果不配置，默认是3秒）
+					}, function(){
+						return;
+					});	
+				return;
+			}
+			if (star =='' || star == null || star == 'undefined') {
+				layer.msg('请选择商品评分~', {
+					shade: [0.9, '#000'],
+					icon: 2,
+					time: 1000 //2秒关闭（如果不配置，默认是3秒）
+					}, function(){
+						return;
+					});		
+				return;
+			}
+			if (rulescheckbox =='' || rulescheckbox == null || rulescheckbox == 'undefined') {
+				layer.msg('请选择接受规则~', {
+					shade: [0.9, '#000'],
+					icon: 2,
+					time: 1000 //2秒关闭（如果不配置，默认是3秒）
+					}, function(){
+						return;
+					});		
+				return;
+			}
+			if (evaluateContent =='' || evaluateContent == null || evaluateContent == 'undefined') {
+				layer.msg('请写评论内容~', {
+					shade: [0.9, '#000'],
+					icon: 2,
+					time: 1000 //2秒关闭（如果不配置，默认是3秒）
+					}, function(){
+						return;
+					});
+				return;
+			}
+			$.ajax({
+					url:"/estore/detail/saveEvaluate.htm",
+					type:"post",
+					dataType:"json",
+					data:{evaluateStatus:evaluateStatus,star:star,
+						evaluateContent:evaluateContent,pic:pic,
+						productSkuId:productSkuId,userId:userId},
+					async: false,
+					success:function(data){
+						if(data.success){
+							layer.msg(data.msg, {
+	            				shade: [0.9, '#000'],
+	            			    icon: 1,
+	            			    time: 1000 //2秒关闭（如果不配置，默认是3秒）
+	            			}, function(){
+	            			    //do something
+	            				$('.comment_popup').removeClass('open')
+	            				window.location.reload();
+	            			});	
+							
+						}else {
+							layer.msg(data.msg, {
+	            				shade: [0.9, '#000'],
+	            			    icon: 3,
+	            			    time: 1000 //2秒关闭（如果不配置，默认是3秒）
+	            			},function(){
+	            			});
+						}							
+					}
+				});
+		}) 
+		$('.row_order_info ul').on('click','li .del',function(){
+			//$(this).closest('li').remove()
+			layer.confirm('确定要删除此订单信息吗？', {icon: 3}, function(index){
+				id = $(".del").attr("data-order-id")
+				 $.ajax({
+						url:"/order/user/delete.htm",
+						type:"post",
+						dataType:"json",
+						data:{orderId:id},
+						async: false,
+						success:function(data){
+							if(data.success){
+								layer.msg(data.msg, {
+		            				shade: [0.9, '#000'],
+		            			    icon: 1,
+		            			    time: 1 //2秒关闭（如果不配置，默认是3秒）
+		            			}, function(){
+		            			    //do something
+		            				window.location.reload;
+		            			});	
+								
+							}else {
+								layer.msg(data.msg, {
+		            				shade: [0.9, '#000'],
+		            			    icon: 1,
+		            			    time: 1 //2秒关闭（如果不配置，默认是3秒）
+		            			},function(){
+		            				return;
+		            			});
+							}							
+						}
+					});
+			});
+		})
+		$('.cos ul').on('click','li',function(){
+			$('.cos ul li').removeClass('cur')
+			$(this).prevAll().andSelf().addClass('cur')
+			$(this).parent().attr('data', $(this).index() + 1)
+		})
+		$("#uploadObj").uploadify({
+            'uploader': '/static/plugins/uploadify/uploadify.swf',
+            'script':"/file/upload.htm",
+            'cancelImg': '/static/plugins/uploadify/cancel.png',
+            'queueID': 'fileQueue',
+            'auto': true,
+            'multi':true,
+            'buttonText': 'select',
+            'buttonImg':'/static/plugins/uploadify/picture.png',
+            'simUploadLimit' : 4,
+            'queueSizeLimit' : 4,
+            'sizeLimit':1024*1024*10,
+            'fileExt': '*.gif;*.png;*.jpg',
+            'fileDesc':'请选择gif,png,jpg文件',
+            onComplete: function(event, queueID, fileObj, response, data) {
+                var dataObj = eval("("+response+")");
+                if(dataObj.status == 200){
+                	parent.layer.msg('图片上传成功', {
+						shade: [0.9, '#000'],
+					    icon: 1,
+					    time: 800 //2秒关闭（如果不配置，默认是3秒）
+					}, function(){
+						$("<div><img class='uploaded-pic' style='width:50px;height:50px;' data-obj-id="+dataObj.filePath+" src='"+dataObj.filePath+"' alt=''/><a href='##'></a></div>").appendTo($(".uploaded-pic-div"));							
+						$("<input type='hidden' name='sfPicture' value="+dataObj.filePath+">").appendTo($("#pictureList"));
+					});                
+					$("#microPic").val(dataObj.filePath);
+                }else{
+                	layer.alert("对不起," + fileObj.name + "上传失败!<br/>请选择小于10M的正确格式的图片", {
+	    				shade: [0.9, '#000'],
+	    			    icon: 3,
+	    			    time: 4000 //2秒关闭（如果不配置，默认是3秒）
+	    			});
+                }
+            },
+            onSelect:function(){
+            },
+            onError: function(event, queueID, fileObj) {
+            	layer.alert("对不起," + fileObj.name + "上传失败!<br/>请选择小于10M的图片", {
+    				shade: [0.9, '#000'],
+    			    icon: 3,
+    			    time: 3000 //2秒关闭（如果不配置，默认是3秒）
+    			});
+            }
+        });
+	});
+	
+	function setTable(){
+		var li = $('.row_order_info > ul > li')
+		for(var i=0;i<li.length;i++){
+			li.eq(i).find('ul li:last').css('border','0')
+			var _countHeight = li.eq(i).find('ul').height()
+			var _pbHeight = li.eq(i).find('.price_box p').height()
+			var _sbHeight = li.eq(i).find('.status_box p').height()
+			var _abHeight = li.eq(i).find('.action_box p').height()
+			li.eq(i).find('.price_box, .status_box, .action_box').css('height', _countHeight)
+			li.eq(i).find('.price_box p').css('top',(_countHeight - _pbHeight)/2)
+			li.eq(i).find('.status_box p').css('top',(_countHeight - _sbHeight)/2)
+			li.eq(i).find('.action_box p').css('top',(_countHeight - _abHeight)/2)
+		}
+	}
+	
+	
+	
+	//页码跳转 
+	function gotoPage(page){
+		var userId = "${(userId)!}";
+		var show_num = 7;
+		$.ajax({
+			url:'/estore/detail/findUserOrderByPage.htm',
+			data:{userId:userId,page:page},
+			type:'post',
+			datatype:'json',
+			success:function(data){
+				var result = data.data.results;
+				$('#info3').remove();
+				$('.row_order_info').remove();
+				var textAll = "";
+				textAll += "<h5 id=\"info3\"><span class=\"info3\">我的订单</span><a class=\"edit\" status=\"off\" href=\"###\"></a></h5>";
+				textAll += "<div class=row_order_info>"
+				textAll += "<ul>"
+				for (var i = 0; i < result.length; i++) {					
+					textAll += "<li>";
+					textAll += "<div class=tit>";
+					textAll += ""+result[i].createTimeStr+" 订单号："+result[i].orderNo+"";
+					textAll += "<a class=del data-order-id=\""+result[i].id+"\" href=###></a>";
+					textAll += "</div>";
+					textAll += "<ul>";
+					var sportMOrderInfoDtos = result[i].sportMOrderInfoDtos;
+					for (var j = 0; j < sportMOrderInfoDtos.length; j++) {
+						textAll += "<li>"
+						textAll += "<a href=###><img src=\""+sportMOrderInfoDtos[j].thumbnail+"\" border=0></a>";
+						textAll += "<span class=goods_name><a href=###>"+sportMOrderInfoDtos[j].skuName+"</a></span>";
+						textAll += "<span class=price>￥"+sportMOrderInfoDtos[j].skuProductPrice+"</span>";
+						textAll += "<span class=amout>X"+sportMOrderInfoDtos[j].productStock+"</span>";
+						textAll += "<span class=complain><br><a href=### onClick=\"comment_popup()\">追加评论</a></span>";
+						textAll += "</li>";
+					}
+					textAll += "</ul>"
+					textAll += "<div class=\"price_box\"><p><span class=\"pr\">1198.00</span><br><span class=\"dl\">(含运费：0.00)</span><br><span class=\"st\">手机订单</span></p></div>";
+					textAll += "<div class=\"status_box\"><p><span class=\"rs\">交易成功</span><br><span><img src=\"/static/img/icon_ct.png\" border=0></span><br><a href=###>订单详情</a></p></div>";
+					textAll += "<div class=\"action_box\"><p><span></span><br><!--<a href=\"###\">再次购买</a>--><a href=\"###\">立即付款</a></span></p></div>";					
+					textAll += "</li>";
+				}			
+				textAll += "</ul>"
+			    var	results = data.data;
+				var show_num = 7;
+				if(results!= null && results.total>0){
+					textAll += "<div class=\"pagenav herald\">";
+					if(results.currPage>1){
+						textAll += "<a href=\"javascript:gotoPage("+1+")\">首页</a>";
+					}else{
+						textAll += "<a href=\"javascript:;\">首页</a>";
+					}
+				 	if((results.currPage - 1) >0){
+						textAll += "<a href=\"javascript:gotoPage("+(results.currPage - 1)+")\">上一页</a>";
+					}else{
+						textAll += "<a href=\"javascript:;\">上一页</a>";
+					}
+					//小于7
+					if(results.totalPage < show_num){
+						for (var i = 0; i < results.totalPage; i++) {
+							if((i+1)==results.currPage){
+								textAll +="<a class=\"cur\" href=\"javascript:gotoPage("+(i+1)+")\">"+(i+1)+"</a>"
+							}else{
+								textAll +="<a href=\"javascript:gotoPage("+(i+1)+")\">"+(i+1)+"</a>"
+							}
+						}	
+					}else{
+					 if(results.currPage<=((show_num+1)/2)){
+							for (var i = 0; i < (results.currPage-1); i++) {
+								textAll +="<a href=\"javascript:gotoPage("+(i+1)+")\">"+(i+1)+"</a>"
+							}
+							textAll +="<a class=\"cur\" href=\"javascript:gotoPage("+results.currPage+")\">"+results.currPage+"</a>"
+							for (var i = 0; i < (show_num-results.currPage); i++) {
+								textAll +="<a href=\"javascript:gotoPage("+(results.currPage+(i+1))+")\">"+(results.currPage+(i+1))+"</a>"
+							}
+						}else{
+							if((results.totalPage-results.currPage) < ((show_num-1)/2)){
+								for (var i = (results.totalPage-show_num+1); i <= results.totalPage; i++) {
+									if(i == results.currPage){
+										textAll +="<a class=\"cur\">"+i+"</a>"
+									}else{
+										textAll +="<a href=\"javascript:gotoPage("+i+")\">"+i+"</a>"
+									}
+								}
+							}else{
+								for (var i =((show_num-1)/2); i >0 ; i--) {
+									textAll +="<a href=\"javascript:gotoPage("+(results.currPage - i)+")\">"+(results.currPage - i)+"</a>"
+								}
+								textAll +="<a class=\"cur\">"+results.currPage+"</a>";
+							    for (var i = 1; i <= ((show_num-1)/2); i++) {
+									textAll +="<a href=\"javascript:gotoPage("+(results.currPage + i)+")\">"+(results.currPage + i)+"</a>"
+								} 
+							}
+						} 
+					}
+					
+					if((results.currPage + 1) <= results.totalPage){
+						textAll +="<a href=\"javascript:gotoPage("+(results.currPage + 1)+")\">下一页</a>";
+					}else{
+						textAll +="<a href=\"javascript:;\">下一页</a>"
+					}
+					if(results.currPage<=results.totalPage){
+						textAll +="<a href=\"javascript:gotoPage("+results.totalPage+")\">末页</a>";
+					}else{
+						textAll +="<a href=\"javascript:;\">末页</a>"
+					}
+				} 
+				textAll += "</div>";
+				$('.main_box').append(textAll);
+				setTable();
+			}
+		})
+	}
+
+</script>
+</html>

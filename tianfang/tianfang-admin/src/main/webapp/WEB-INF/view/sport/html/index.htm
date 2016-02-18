@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Tables - Ace Admin</title>
+		<meta name="description" content="Static & Dynamic Tables" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<#include "../../admin/head.htm"/>
+	</head>
+	<body>
+		<!-- tophead start-->
+			<#include "../../admin/topHead.htm"/>	
+		<!-- tophead end-->
+		<div class="container-fluid" id="main-container">
+			<a href="#" id="menu-toggler"><span></span></a><!-- menu toggler -->
+			<!-- left menu  start -->
+
+			<#include "../../admin/left.htm"/>
+
+			<!-- left menu  end -->
+			<div id="main-content" class="clearfix">
+					<div id="breadcrumbs">
+						<ul class="breadcrumb">
+						</ul>
+					</div>
+					<div id="page-content" class="clearfix">
+						<div class="row-fluid">
+							<!-- PAGE CONTENT BEGINS HERE -->
+							<div class="row-fluid">
+								<p>	
+									<button class="btn btn-info" id="bootbox-index">生成首页HTML</button>
+								</p>
+								<p>
+									<button class="btn btn-info" id="bootbox-news">生成新闻资讯HTML</button>
+								</p>
+							</div>
+							<!-- PAGE CONTENT ENDS HERE -->
+						</div><!--/row-->
+					</div><!--/#page-content-->
+			</div><!-- #main-content -->
+		</div><!--/.fluid-container#main-container-->
+		<a href="#" id="btn-scroll-up" class="btn btn-small btn-inverse">
+			<i class="icon-double-angle-up icon-only"></i>
+		</a>
+		
+		<!-- basic scripts -->
+		<script src="${base}/static/1.9.1/jquery.min.js"></script>
+		<script type="text/javascript">
+		window.jQuery || document.write("<script src='${base}/static/js/jquery-1.9.1.min.js'>\x3C/script>");
+		</script>		
+		<script src="${base}/static/js/bootstrap.min.js"></script>
+		<!-- page specific plugin scripts -->
+		
+		<script type="text/javascript" src="${base}/static/js/jquery.dataTables.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/jquery.dataTables.bootstrap.js"></script>
+		<!-- ace scripts -->
+		<script src="${base}/static/js/ace-elements.min.js"></script>
+		<script src="${base}/static/js/ace.min.js"></script>
+		<!-- inline scripts related to this page -->				
+		
+		<script type="text/javascript" src="${base}/plugins/layer2.0/layer.js"></script>
+		
+		<script type="text/javascript">
+			$(function() {
+				$("#bootbox-index").on("click",function(){
+					$.ajax({
+			             type: "POST",
+			             url: "${base}/html/index.do",
+			             dataType: "json",
+			             //beforeSend:loading,//执行ajax前执行loading函数.直到success 
+			             success: function(data){
+			        			layer.msg('首页生成成功', {
+			        				shade: [0.9, '#000'],
+			        			    icon: 6,
+			        			    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+			        			}, function(){
+			        			    //do something
+			        				//reload_page();
+			        			});
+			             }
+			         });					
+				});
+				
+				$("#bootbox-news").on("click",function(){
+        			layer.msg('新闻资讯生成成功', {
+        				shade: [0.9, '#000'],
+        			    icon: 6,
+        			    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+        			}, function(){
+        			    //do something
+        				//reload_page();
+        			});	
+				})					
+				
+			})
+		</script>
+	</body>
+</html>

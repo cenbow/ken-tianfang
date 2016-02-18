@@ -1,0 +1,47 @@
+<!-- 
+document.writeln('<div class="footer">')
+document.writeln('<div class="quicklink"><a href="###">用户中心</a>  |  <a href="###">联系方式</a>  |  <a href="###">关于我们</a>  |  <a href="###">青训对战</a>  |  <a href="###">活动</a>  |  <a href="###">未来之星</a></div>')
+document.writeln('<div>CopyRight©2015 上海聚运动文化传播有限公司     All Rigths Reserved 沪ICP备15015551号-1</div>')
+document.writeln('</div>') 
+-->
+<#if partnerList ??>
+	<div class="cooperate">
+	<h1>合作俱乐部与伙伴<br><span>Cooperative Partner</span></h1>
+	<ul>
+	<#if partnerList??>
+		<#list partnerList as pater>
+			<#if pater.type ==8>
+				<#if pater.hrefUrl?if_exists>
+					<a target="_" href="${(pater.hrefUrl)!}">
+				<#else>
+					<a href="##">
+				</#if>
+				<li><img src="${(pater.microPic)!}" border="0"><span>${(pater.title)!}</span></li>
+				</a>
+			</#if>
+		</#list>
+	</#if>
+	</ul>
+</div>
+</#if>
+	
+
+<div class="footer">
+<div class="quicklink">
+<#if user ??>
+	<a href="/userMan/userInfo.htm">用户中心</a>
+<#else>
+	<a href="###" onclick="open_login();">用户中心</a>
+</#if>
+  |  <a href=/company/contactus.htm>联系我们</a>  |  <a href="/company/synopsis.htm">关于我们</a>  |  <a href="/game/toGame.htm">竞技对战</a>  |  <a href="/menu/detail.htm?id=6">主题活动</a>  |  <a href="/menu/detail.htm?id=0395b5b8-968a-4409-a0d7-7b6379a6fe41">未来之星</a></div>
+<div>CopyRight©2015 上海聚运动文化传播有限公司     All Rights Reserved 沪ICP备15015551号-1</div>
+</div>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e876084fc31a06282b7d751b381d2ea3";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>

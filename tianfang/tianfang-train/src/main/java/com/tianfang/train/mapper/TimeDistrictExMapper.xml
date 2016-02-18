@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianfang.train.mapper.TimeDistrictExMapper">
+	<select id="findTimeDistrictBySpaceId" resultType="com.tianfang.train.pojo.TimeDistrict" parameterType="java.lang.String">
+	   SELECT a.id,a.day_of_week as dayOfWeek,a.start_time as startTime,a.end_time as endTime ,a.create_time as createTime,a.update_time as updateTime,a.status FROM training_time_district a WHERE a.id IN (
+	   SELECT b.district_time_id FROM training_address_district_time b WHERE b.address_id = #{spaceId,jdbcType=VARCHAR}  AND  b.status = 1) 
+       AND a.status = 1
+	</select>
+</mapper> 

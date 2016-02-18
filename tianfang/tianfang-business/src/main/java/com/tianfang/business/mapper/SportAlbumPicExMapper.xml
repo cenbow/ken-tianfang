@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianfang.business.mapper.SportAlbumPicExMapper">
+
+	<select id="selectAlbumPicByPage" resultType="com.tianfang.business.dto.AlbumPictureDto"
+		parameterType="com.tianfang.business.pojo.SportAlbumPicture">
+		SELECT a.id,a.album_id as albumId,a.pic,a.last_update_time as
+		lastUpdateTime,a.create_time as createTime,a.stat,a.team_id as
+		teamId,a.pic_status as picStatus,a.pic_type as picType, b.title,b.stat as albumStat,c.name
+		as teamName,c.stat as teamStat
+		FROM sport_album_picture a
+		LEFT JOIN sport_album b on a.album_id = b.id
+		LEFT JOIN sport_team c on a.team_id = c.id
+		WHERE a.stat =1
+		<include refid="where_assistant_bypage" />
+		ORDER BY a.create_time desc
+		limit #{page.startNum}, #{page.pageSize}
+	</select>
+
+	<select id="selectAlbumPicByPageCount" resultType="java.lang.Long"
+		parameterType="com.tianfang.business.pojo.SportAlbumPicture">
+		SELECT count(*)
+		FROM sport_album_picture a
+		LEFT JOIN sport_album b on a.album_id = b.id
+		WHERE a.stat =1
+		<include refid="where_assistant_bypage" />
+	</select>
+
+	<sql id="where_assistant_bypage">
+		<!-- <if test="sportAlbum.title != null and sportAlbum.title != ''"> and 
+			a.title like "%"#{sportAlbum.title}"%" </if> -->
+		<if test="sportAlbumPicture.picStatus != null">
+			and a.pic_status = #{sportAlbumPicture.picStatus}
+		</if>
+		<if
+			test="sportAlbumPicture.albumId != null and sportAlbumPicture.albumId != ''">
+			and a.album_id = #{sportAlbumPicture.albumId}
+		</if>
+		<if
+			test="sportAlbumPicture.teamId != null and sportAlbumPicture.teamId != ''">
+			and a.team_id = #{sportAlbumPicture.teamId}
+		</if>
+		<if test="sportAlbumPicture.picType != null">
+			and a.pic_type = #{sportAlbumPicture.picType}
+	   </if>
+		<!-- <if test="sportAlbum.createTime != null"> and a.name like "%"#{sportAlbum.createTime}"%" 
+			</if> <if test="sportAlbum.lastUpdateTime != null"> and a.name like "%"#{sportAlbum.lastUpdateTime}"%" 
+			</if> -->
+	</sql>
+
+	<insert id="insertPictures" parameterType="com.tianfang.business.dto.AlbumPictureDto">
+		insert into sport_album_picture
+		(id,album_id,pic,title,described,last_update_time,create_time,stat,team_id,user_id)
+		values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(UUID(),#{albumPicDto.albumId},#{item},#{albumPicDto.title},#{albumPicDto.described},#{albumPicDto.lastUpdateTime},now(),#{albumPicDto.stat},#{albumPicDto.teamId},#{albumPicDto.userId})
+		</foreach>
+	</insert>
+
+	<update id="updateAlbumPicList" parameterType="java.lang.String">
+		update
+		sport_album_picture set stat = 0 where album_id = #{albumId};
+	</update>
+
+	<select id="findTeamAlbumPicByRand" resultType="com.tianfang.business.pojo.SportAlbumPicture"
+		parameterType="com.tianfang.business.dto.AlbumPictureDto">
+		SELECT * FROM sport_album_picture ORDER BY RAND() LIMIT
+		#{albumPictureDto.randNumber}
+	</select>
+
+</mapper> 

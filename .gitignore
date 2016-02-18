@@ -1,0 +1,8 @@
+*.bak
+*.prefs
+*.classpath
+*.project
+/target/
+/.settings/*
+/.gitignore/*
+

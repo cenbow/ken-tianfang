@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<#include "/common/head.htm"/>
+<link href="/static/css/competition.css" rel="stylesheet" />
+	<body>
+		<#include "/common/topbar.htm"/>
+		<div class="youth-bg">
+			<div class="wrapper">
+				<div class="youth-title">
+					<!-- <h1><img src="${(sportTeamDto.logo)!}" class="youth-ico"></img>${(sportTeamDto.name)!}</h1> -->
+					<img class="youth-ico" src="${(sportTeamDto.logo)!}" />
+					<span class="youth-name">${(sportTeamDto.name)!}</span>
+					<div class="youth-banner">
+						<ul class="youth-banner-ul">
+							<li class="youth-banner-li index" to="/tc/index/${(sportTeamDto.id)!}.htm">球队首页</li>
+							<li class="youth-banner-li team-info" to="/tc/team/${(sportTeamDto.id)!}.htm">球队信息</li>
+							<li class="youth-banner-li pic" to="/tc/pic/${(sportTeamDto.id)!}.htm">相册</li>
+							<li class="youth-banner-li video" to="/tc/video/${(sportTeamDto.id)!}.htm">视频</li>
+							<li class="youth-banner-li herald" to="/tc/herald/${(sportTeamDto.id)!}.htm">比赛预告</li>
+							<li class="youth-banner-li history cur" to="/tc/history/${(sportTeamDto.id)!}.htm">历史战绩</li>
+							<li class="youth-banner-li honor" to="/tc/honor/${(sportTeamDto.id)!}.htm">荣誉</li>
+						</ul>
+					</div>
+				</div>
+				<div class="youth-history">
+					<ul class="youth-history-ul">
+						<li class="youth-history-li title">
+							<p class="title col1">场次</p>
+							<p class="title col2">对阵双方</p>
+							<p class="title col3">时间地点</p>
+							<p class="title col4">赛事类型</p>
+						</li>
+						<#if pageList??> 
+							<#list pageList.results as page>
+								<li class="youth-history-li">
+									<p class="col1">${(page.index)!}</p>
+								    <#if page.homeTeamNumber gt page.vsTeamNumber> 
+										<p class="col2"><span class="team1 win">${(page.homeTeamName)!}</span><span class="splits"><i class="win">${(page.homeTeamNumber)!}</i>:<i>${(page.vsTeamNumber)!}</i></span><span class="team2">${(page.vsTeamName)!} </span></p>
+									</#if>
+									<#if page.homeTeamNumber lt page.vsTeamNumber>
+										<p class="col2"><span class="team1">${(page.homeTeamName)!}</span><span class="splits"><i>${(page.homeTeamNumber)!}</i>:<i class="win">${(page.vsTeamNumber)!}</i></span><span class="team2 win">${(page.vsTeamName)!} </span></p>
+									</#if> 
+									<#if page.homeTeamNumber == page.vsTeamNumber>
+										<p class="col2"><span class="team1">${(page.homeTeamName)!}</span><span class="splits"><i>${(page.homeTeamNumber)!}</i>:<i>${(page.vsTeamNumber)!}</i></span><span class="team2">${(page.vsTeamName)!} </span></p>
+									</#if> 
+									<p class="timeplace col3"><i>${(page.raceTimeStr)!}</i>
+										<br><i>${(page.raceAddress)!}</i> </p>
+									<p class="col4">
+										<#list types as type>
+											<#if page.type == type.getIndex()>${type.getName()}</#if>
+										</#list>
+									</p>
+								</li>
+							</#list> 
+						</#if>
+						
+					<!-- 	<#if pageList??> 
+							<#list pageList.results as page>
+								<li class="youth-history-li">
+									<p class="col1">${(page.index)!}</p>
+									<p class="col2">
+										<span <#if page.homeTeamNumber gt page.vsTeamNumber>class="win"<#else>class="lose"</#if>>${(page.homeTeamName)!}<i>&nbsp;&nbsp;${(page.homeTeamNumber)!}</i></span>:<span <#if page.homeTeamNumber lt page.vsTeamNumber>class="win"<#else>class="lose"</#if>><i>${(page.vsTeamNumber)!}&nbsp;&nbsp;</i>${(page.vsTeamName)!} </span>
+									</p>
+									<p class="timeplace col3"><i>${(page.raceTimeStr)!}</i>
+										<br><i>${(page.raceAddress)!}</i> </p>
+									<p class="col4">
+										<#list types as type>
+											<#if page.type == type.getIndex()>${type.getName()}</#if>
+										</#list>
+									</p>
+								</li>
+							</#list>
+						</#if> -->
+					</ul>
+				</div>
+				<#include "/common/page.htm"/>
+			</div>
+		</div>
+
+		<#include "/common/footer.htm"/>
+		<script src="/static/js/competition.js"></script>
+		<script type="text/javascript">
+		function gotoPage(page){
+			window.location.href = '/tc/history/${(sportTeamDto.id)!}.htm?currPage='+page;
+		}
+		</script>
+	</body>
+
+</html>

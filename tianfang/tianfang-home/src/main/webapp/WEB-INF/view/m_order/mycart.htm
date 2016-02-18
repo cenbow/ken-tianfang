@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+    <link rel="icon" type="image/gif" href="static/img/favicon.ico">
+    <title>聚运动</title>
+    <#include "/common/head.htm"/>
+	<script src="/static/js/login.js"></script>
+    <link href="/static/css/style.css" rel="stylesheet" />
+</head>
+<body>
+	<#include "/common/topbar.htm"/>
+	<div class="store_topbar">
+		<span class="cart">我的购物车</span>
+	</div>
+	<div class="cart_box">
+		<div class="bar">
+			<i tag="none"></i>
+			<span class="choose">全选</span>
+			<span class="goodsname">商品</span>
+			<span class="price">单价</span>
+			<span class="amount">数量</span>
+			<span class="total_price">小计</span>
+			<span class="stock"><!-- <select><option>上海</option><option>上海</option><option>上海</option><option>上海</option><option>上海</option></select> --></span>
+			<span class="action">操作</span>
+		</div>
+		<ul>
+			<#if carList??>
+				<#list carList as car>
+					<li class="no-sel">
+						<i object-id="${(car.id)!}"></i>
+						<a href="###"><img class="pic" src="${(car.imgUrl)!}" border="0">
+						<span class="goodsname">${(car.productName)!}</span></a>
+						<span class="price">￥${(car.price)!}</span>				
+						<span class="amount"><a class="minus" href="###" object-id="${(car.id)!}">-</a><input class="amt" sin_price="${(car.price)?replace(',','')}" data_max="${(car.productStock)!}" value="${(car.numberOf)!}"><a class="plus" href="###" object-id="${(car.id)!}">+</a></span>
+						<span class="total_price">￥${(car.price*car.numberOf)}</span>
+						<span class="stock">有货</span>
+						<span class="action"><a href="###" object-id="${(car.id)!}">删除</a></span>
+					</li>
+				</#list>
+			</#if>
+		</ul>
+		<div class="b_bar"><a class="del_all" href="###">删除购车商品</a><a href="/m/Product/homeInfo.htm">继续购物</a></div>
+		<div class="total_box">共计（不含运费）：<span>￥0</span></div>
+		<#if user??>
+			<div class="submit"><a href="###" onclick="settle();">确认结算</a></div>
+		<#else>
+			<div class="submit"><a href="###" onclick="open_login();">确认结算</a></div>
+		</#if>
+	</div>
+	
+	<div class="store_box">
+		<h4>猜你喜欢<a class="refu" onclick="refu();" style="cursor: pointer;">换一组</a></h4>
+		<div class="goods">
+			<ul>
+			</ul>
+		</div>
+	</div>
+	<#include "/common/footer.htm"/>
+	<script>
+	$(function(){		
+		//导航标记
+		nav_mark('SportStore')
+		
+		var del = $('.cart_box ul li .action a')
+		var del_all = $('.del_all')
+		var choose = $('.cart_box ul li i')
+		var choose_all = $('.cart_box .bar i')
+		
+		del.on('click', function(){
+			var id = $(this).attr("object-id");
+			$.ajax({
+				url:"/m/Product/delShoppingCar.htm",
+				data:{ids:id},
+				datatype:'json',
+				type:'post',
+				success:function(data){
+					if(data.success = true){
+						alert(data.msg);
+						$(this).closest('li').remove()
+						price_all() 
+						//location.href='/m/Product/getShoppingCard.htm';
+					}else{
+						alert(data.msg);
+					}
+				}
+			})
+			$(this).closest('li').remove()
+			price_all() 
+		})
+		
+		choose.on('click', function(){
+			var _t = $(this).closest('li').attr('class')
+			if(_t=='no-sel'){
+				$(this).addClass('cur')
+				$(this).closest('li').attr('class','seled')
+			}else{
+				$(this).removeClass('cur')
+				$(this).closest('li').attr('class','no-sel')
+			}
+		    mark_all()
+			price_all()
+		})
+		choose_all.on('click', function(){
+			var _t  = $(this).attr('tag')
+			if(_t=='none'){
+				$(this).addClass('cur')
+				$(this).attr('tag','all')
+				$('.cart_box ul li i').addClass('cur')
+				$('.cart_box ul li').attr('class','seled')
+			}else{
+				$(this).removeClass('cur')
+				$(this).attr('tag','none')
+				$('.cart_box ul li i').removeClass('cur')
+				$('.cart_box ul li').attr('class','no-sel')
+			}
+			price_all()
+		})
+		del_all.on('click', function(){
+			
+			var str= "";
+		 	var ids= $(".seled i.cur");
+		 	for (var i=0;i<ids.length;i++) {
+			 	str += ids[i].getAttribute("object-id")+",";
+			} 
+		 	$.ajax({
+				url:"/m/Product/delShoppingCar.htm",
+				data:{ids:str},
+				datatype:'json',
+				type:'post',
+				success:function(data){
+					if(data.success = true){
+						alert(data.msg);
+						//location.href='/m/Product/getShoppingCard.htm';
+						$('.cart_box ul li.seled').remove()
+						mark_all()
+						price_all()
+					}else{
+						alert(data.msg);
+					}
+				}
+			})
+		})
+		//购物车增删 
+		function cardAddOrRem(obj){
+			var carId = obj.attr("object-id");
+			var number= obj.parents("li").find(".amt").val();
+			$.ajax({
+				url:"/m/Product/cardAddOrRem.htm",
+				data:{numberOf:number,id:carId},
+				datatype:"json",
+				type:"post",
+				success:function(data){
+					if(data.success = true){
+						return ;
+					}else{
+						alert("出错了,请刷新页面重试");
+					}
+				}
+			})
+		}
+		
+		$(".minus").on("click", function() {
+			var amt_field = $(this).parent().find('.amt')
+			if(parseInt(amt_field.val()) <= 1){
+				return
+			}else{
+				amt_field.val(parseInt(amt_field.val()) - 1);
+				var _totalprice = $(this).closest('li').find('.total_price')
+				var _count = $(this).closest('li').find('.amount input').val()
+				var _price = $(this).closest('li').find('.amount input').attr('sin_price')
+				_totalprice.text('￥' + _price*_count)
+			}
+			price_all()
+			cardAddOrRem($(this));
+		})
+		$(".plus").on("click", function() {
+			var amt_field = $(this).parent().find('.amt')
+			if(parseInt(amt_field.val()) >= parseInt(amt_field.attr('data_max'))){
+				alert("库存数量不足~~ ");
+				return
+			}else{
+				amt_field.val(parseInt(amt_field.val()) + 1);
+				var _totalprice = $(this).closest('li').find('.total_price')
+				var _count = $(this).closest('li').find('.amount input').val()
+				var _price = $(this).closest('li').find('.amount input').attr('sin_price')
+				_totalprice.text('￥' + _price*_count)
+			}
+			price_all()
+			cardAddOrRem($(this));
+		})
+		$(".amt").on("keyup", function() {
+				var val = $(this).val(),max = parseInt($(this).attr("max"));
+				if (val.length == 0) {
+					return;
+				}
+				val = isNaN(parseInt(val, 10)) ? 1 : parseInt(val, 10);
+				val = val < 1 ? 1 : val;
+				val = val >= max ? max : val;
+				$(this).val(val);
+			}).on("blur", function() {
+				var val = $(this).val(),max = parseInt($(this).attr("max"));
+				if (val.length == 0) {
+					$(this).val(1);
+				}
+				val = isNaN(parseInt(val, 10)) ? 1 : parseInt(val, 10);
+				val = val < 1 ? 1 : val;
+				val = val >= max ? max : val;
+				$(this).val(val);
+				price_all()
+				cardAddOrRem($(this));
+			});
+	})
+	function mark_all(){
+		 //判断选择
+		var _curNum = $('.cart_box ul li.seled').length
+		var _totalNum = $('.cart_box ul li').length
+		if(_curNum == _totalNum){
+			$('.cart_box .bar i').addClass('cur')
+			$('.cart_box .bar i').attr('tag','all')
+		}else if(_curNum < _totalNum){
+			$('.cart_box .bar i').removeClass('cur')
+			$('.cart_box .bar i').attr('tag','none')
+		}
+		if( _totalNum <= 0){
+			$('.cart_box .bar i').removeClass('cur')
+			$('.cart_box .bar i').attr('tag','none')
+		}
+	}
+	function price_all(){
+	//计算总价
+		var _totalPrice = 0;
+		for(i=0;i<$('.cart_box ul li.seled .amt').length;i++){
+			_totalPrice = _totalPrice + parseInt($('.cart_box ul li.seled .amt').eq(i).val())*parseInt($('.cart_box ul li.seled .amt').eq(i).attr('sin_price'))
+		}
+		$('.total_box span').text('￥' + _totalPrice)
+	}
+	
+	<!-- 	分割   ---------------------------------------------------------------------->
+	
+	//随机获取四条商品记录 
+	$.ajax({
+		url:'/m/Product/randomFour.htm',
+		dataType:"json",
+		type:"post",
+		data:{},
+		success:function(datas){
+			$(".goods ul").empty();
+			var data = datas.data;
+			console.log(data);
+			var str = "";
+			for ( var res in data) {
+				console.log(res);
+				str += "<a href=\"/estore/detail/getProduct.htm?id="+data[res].id+"\">"
+				str += "<li>"
+				str += "<img src=\""+data[res].thumbnail+"\" border=\"0\">"
+				str += "<p class=\"price\">￥"+data[res].productPrice+"</p>"
+				str += "<p class=\"des\">"+data[res].productName+"</p>"
+				if(data[res].star==null || data[res].star == ""){
+					str += "<p class=\"rating\"><img src=\"/static/img/star-1.png\" border=\"0\">暂无评分</p>"						
+				}else{
+					str += "<p class=\"rating\"><img src=\"/static/img/star-"+data[res].star+".png\" border=\"0\">评分"+data[res].star+".0</p>"
+				}
+				str += "<span>立即购买</span>"
+				str += "</li>"
+				str += "</a>" 
+			}
+			$(".goods ul").append(str);
+		}
+	})
+	
+	function refu(){
+		$.ajax({
+			url:'/m/Product/randomFour.htm',
+			dataType:"json",
+			type:"post",
+			data:{},
+			success:function(datas){
+				$(".goods ul").empty();
+				var data = datas.data;
+				console.log(data);
+				var str = "";
+				for ( var res in data) {
+					console.log(res);
+					str += "<a href=\"/estore/detail/getProduct.htm?id="+data[res].id+"\">"
+					str += "<li>"
+					str += "<img src=\""+data[res].thumbnail+"\" border=\"0\">"
+					str += "<p class=\"price\">￥"+data[res].productPrice+"</p>"
+					str += "<p class=\"des\">"+data[res].productName+"</p>"
+					if(data[res].star==null || data[res].star == ""){
+						str += "<p class=\"rating\"><img src=\"/static/img/star-1.png\" border=\"0\">暂无评分</p>"						
+					}else{
+						str += "<p class=\"rating\"><img src=\"/static/img/star-"+data[res].star+".png\" border=\"0\">评分"+data[res].star+".0</p>"
+					}
+					str += "<span>立即购买</span>"
+					str += "</li>"
+					str += "</a>" 
+				}
+				$(".goods ul").append(str);
+			}
+		})
+	}
+	//获取购物车选中对象 
+	function settle(){
+		var id = "";
+		$("ul .cur").each(function(){
+			if($(this).attr("object-id") == undefined){
+				return ;
+			}
+			id += $(this).attr("object-id") +",";	
+		})
+		location.href = "/m_shipping/toShipping.htm?id="+id;
+	}
+	</script>
+</body>
+</html>

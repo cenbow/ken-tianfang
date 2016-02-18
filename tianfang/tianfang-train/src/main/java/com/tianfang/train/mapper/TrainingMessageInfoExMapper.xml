@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianfang.train.mapper.TrainingMessageInfoExMapper">
+	<select id="selectMessageInfo" resultType="com.tianfang.train.dto.TrainingMessageInfoDto">
+		SELECT
+		i.id,
+		i.user_id as userId,
+		i.title,
+		i.content,
+		i.type,
+		i.create_time
+		as createTime
+		FROM
+		training_message_info i
+		WHERE 1=1
+		<include refid="where_message_info_1" />
+		and i.stat = 1
+		limit #{page.startNum},#{page.pageSize}
+	</select>
+
+	<select id="countMessageInfo" resultType="java.lang.Long">
+		SELECT
+		COUNT(*)
+		FROM
+		training_message_info i
+		WHERE 1=1
+		<include refid="where_message_info_1" />
+		and i.stat = 1
+	</select>
+
+	<sql id="where_message_info_1">
+		<if
+			test="trainingMessageInfoDto.title != null and trainingMessageInfoDto.title != ''">
+			and i.title like "%"#{trainingMessageInfoDto.title}"%"
+		</if>
+		<if
+			test="trainingMessageInfoDto.content != null and trainingMessageInfoDto.content != ''">
+			and i.content like "%"#{trainingMessageInfoDto.content}"%"
+		</if>
+		<if
+			test="trainingMessageInfoDto.startTimeStr != null and trainingMessageInfoDto.startTimeStr != ''">
+			and i.create_time &gt;= #{trainingMessageInfoDto.startTimeStr}
+		</if>
+		<if
+			test="trainingMessageInfoDto.endTimeStr != null and trainingMessageInfoDto.endTimeStr != ''">
+			and i.create_time &lt;= DATE_ADD(#{trainingMessageInfoDto.endTimeStr},INTERVAL 1 DAY)
+		</if>
+		<if
+			test="trainingMessageInfoDto.type != null and trainingMessageInfoDto.type != ''">
+			and i.type = #{trainingMessageInfoDto.type}
+		</if>
+	</sql>
+</mapper>

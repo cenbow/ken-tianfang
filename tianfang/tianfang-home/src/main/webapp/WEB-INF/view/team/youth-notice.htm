@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<#include "/common/head.htm"/>
+<link href="/static/css/competition.css" rel="stylesheet" />
+<body>
+	<#include "/common/topbar.htm"/>
+	<div class="youth-bg">
+		<div class="wrapper">
+			<div class="youth-title">
+				<!-- <h1><img src="${(sportTeamDto.logo)!}" class="youth-ico"></img>${(sportTeamDto.name)!}</h1> -->
+				<img class="youth-ico" src="${(sportTeamDto.logo)!}" /> <span
+					class="youth-name">${(sportTeamDto.name)!}</span>
+				<div class="youth-banner">
+					<ul class="youth-banner-ul">
+						<li class="youth-banner-li index"
+							to="/tc/index/${(sportTeamDto.id)!}.htm">球队首页</li>
+						<li class="youth-banner-li team-info"
+							to="/tc/team/${(sportTeamDto.id)!}.htm">球队信息</li>
+						<li class="youth-banner-li pic"
+							to="/tc/pic/${(sportTeamDto.id)!}.htm">相册</li>
+						<li class="youth-banner-li video"
+							to="/tc/video/${(sportTeamDto.id)!}.htm">视频</li>
+						<li class="youth-banner-li herald"
+							to="/tc/herald/${(sportTeamDto.id)!}.htm">比赛预告</li>
+						<li class="youth-banner-li history"
+							to="/tc/history/${(sportTeamDto.id)!}.htm">历史战绩</li>
+						<li class="youth-banner-li honor" to="/tc/honor/${(sportTeamDto.id)!}.htm">荣誉</li>
+					</ul>
+				</div>
+			</div>
+			<div class="youth-honor-manage">
+				<#if sportTeamDto.owner == true>
+				<div class="manage-honor">
+					<a class="bt" href="/tc/notice/${(sportTeamDto.id)!}/add.htm"><img
+						src="/static/img/youth-edit-icon.png" alt="" />写公告</a>
+				</div>
+				</#if>
+				<h1 class="youth">全部公告</h1>
+				<ul class="youth-honor-ul manage">
+					<#if pageList ??> <#list pageList.results as page>
+					<li class="youth-honor-li manage">
+						<p class="contents">${(page.title)!}</p> <#if sportTeamDto.owner
+						== true> <a class="edit bt"
+						href="/tc/notice/${(sportTeamDto.id)!}/edit.htm?id=${(page.id)!}">编辑</a>
+						<a class="delete bt" notice-id="${(page.id)!}" href="##">删除</a>
+						</#if>
+					</li> </#list> </#if>
+				</ul>
+			</div>
+			<#include "/common/page.htm"/>
+		</div>
+	</div>
+
+	<#include "/common/footer.htm"/>
+	<script src="/static/js/competition.js"></script>
+	<script type="text/javascript">
+			function gotoPage(page){
+				window.location.href = '/tc/notice/${(sportTeamDto.id)!}.htm?currPage='+page;
+			}
+			
+			$(function(){
+				$(".youth-honor-ul.manage .delete").on("click",function(){
+					var id = $(this).attr("notice-id");
+					<#if user ??>
+					<#else>
+						open_login();	// 没有登陆的话跳转登陆页面
+						return;
+					</#if>
+					//确认删除
+					layer.confirm('确认删除？', {
+					    btn: ['确认','取消'] //按钮
+					}, function(){
+						$.ajax({
+							type : "POST",
+							url : "/tc/notice/${(sportTeamDto.id)!}/delete.htm",
+							data : {id:id},
+							datatype : "json",// "xml", "html", "script", "json", "jsonp", "text".
+							beforeSend : function() {
+							},
+							success : function(data) {// 成功返回之后调用的函数
+								var jsondata = data;// eval('(' + data + ')');
+								if(data.success){
+									layer.msg(data.msg, {
+										shade: [0.9, '#000'],
+									    icon: 6,
+									    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+									}, function(){
+										window.location.reload();//刷新当前页面
+									}); 
+								}else{
+									layer.msg(data.msg);
+								}
+							},
+							complete : function(XMLHttpRequest, textStatus) {// 调用执行后调用的函数
+								
+							},
+							error : function() {// 调用出错执行的函数
+							}
+						});
+						}, function(){
+					    /* layer.msg('也可以这样', {
+					        time: 20000, //20s后自动关闭
+					        btn: ['明白了', '知道了']
+					    }); */
+					});
+				});
+			});
+			
+		</script>
+</body>
+
+</html>

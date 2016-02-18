@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+	<#include "/common/head.htm"/>
+	<link href="/static/css/competition.css" rel="stylesheet" />
+	<body>
+		<#include "/common/topbar.htm"/>
+		<div class="youth-bg">
+			<div class="wrapper">
+				<div class="youth-title">
+					<!-- <h1><img src="${(sportTeamDto.logo)!}" class="youth-ico"></img>${(sportTeamDto.name)!}</h1> -->
+					<img class="youth-ico" src="${(sportTeamDto.logo)!}" />
+					<span class="youth-name">${(sportTeamDto.name)!}</span>
+					<div class="youth-banner">
+						<ul class="youth-banner-ul">
+							<li class="youth-banner-li index" to="/tc/index/${(sportTeamDto.id)!}.htm">球队首页</li>
+							<li class="youth-banner-li team-info cur" to="/tc/team/${(sportTeamDto.id)!}.htm">球队信息</li>
+							<li class="youth-banner-li pic" to="/tc/pic/${(sportTeamDto.id)!}.htm">相册</li>
+							<li class="youth-banner-li video" to="/tc/video/${(sportTeamDto.id)!}.htm">视频</li>
+							<li class="youth-banner-li herald" to="/tc/herald/${(sportTeamDto.id)!}.htm">比赛预告</li>
+							<li class="youth-banner-li history" to="/tc/history/${(sportTeamDto.id)!}.htm">历史战绩</li>
+							<li class="youth-banner-li honor" to="/tc/honor/${(sportTeamDto.id)!}.htm">荣誉</li>
+						</ul>
+					</div>
+				</div>
+				<div class="youth-team-info">
+					<h1 class="youth">球队信息</h1>
+					<div class="team-detail">
+						<#if team??>
+							<img src="${(team.logo)!}" alt="" />
+							<p>地区：<span>${(addressMap[team.distruct])!}</span></p>
+							<p>成员：<span>${(team.members)!}人</span></p>
+							<p>创建人：<span>${(team.creater)!}</span></p>
+							<p>成立时间：<span>${(team.setUpTimeVo)!}</span></p>
+							<p>主场：<span>${(team.homeCourt)!}</span></p>
+							<p>等级：<span>${(team.grade)!}</span></p>
+						</#if>
+						<!-- <img src="/static/img/cooper1.png" alt="" />
+						<p>地区：<span>上海市</span></p>
+						<p>成员：<span>100人</span></p>
+						<p>创建人：<span>jackey</span></p>
+						<p>成立时间：<span>2006-08-08</span></p>
+						<p>主场：<span>虹口足球场</span></p>
+						<p>等级：<span>AAA级战队</span></p> -->
+					</div>
+					<div class="team-introduce">
+						${(team.teamIntroduce)!}
+						<!-- <p>电信业中 对电信服务提供商来说，TOM是他们在考虑重新设计内部业务流程的需要，是与合作伙伴、结盟以及与其他运营商工作TOM协定时提供的中立参考点；对网络设备和OSS供应商来说，TOM则概述了OSS软件部分可能的分层结构，以及OSS软件所必须支持的功能及其输入输出接口。TOM的目标是为实现端到端的电信流程和数据业务运营流程的自动化提供一个框架。和记黄埔有限公司和长江实业集团有限公司共同投资，李嘉诚控股的企业，2000年3月在香港上市。专注于向年轻时尚的群体提供包括无线互联网业务和网络广告在内的服务。公司业务范围覆盖了包括短信、彩信，WAP，无线音讯互动服务（IVR），内容频道，搜索，分类信息，免费及付费电邮服务，及网络游戏的多个领域。</p>
+						<p>电信业中 对电信服务提供商来说，TOM是他们在考虑重新设计内部业务流程的需要，是与合作伙伴、结盟以及与其他运营商工作TOM协定时提供的中立参考点；对网络设备和OSS供应商来说，TOM则概述了OSS软件部分可能的分层结构，以及OSS软件所必须支持的功能及其输入输出接口。TOM的目标是为实现端到端的电信流程和数据业务运营流程的自动化提供一个框架。</p>
+					 -->
+					</div>
+				</div>
+				<div class="youth-team-member">
+					<h1 class="youth">球队成员</h1>
+					<div class="team-member">
+						<ul class="team-member-ul">
+							<li class="team-member-li title">
+								<p>头像</p>
+								<p>姓名</p>
+								<p>号码</p>
+								<p>位置</p>
+							</li>
+							<#if members ??>
+								<#list members as member>
+									<li class="team-member-li">
+										<p><img class="member-pic" src="${(member.pic)!}" /></p>
+										<p>${(member.name)!}</p>
+										<p>${(member.number)!}</p>
+										<p>${playerPosition[member.position]}</p>
+									</li>
+								</#list>
+							</#if>
+						</ul>
+					</div>
+					<div class="team-beats">
+						<p class="formation"><i class="formation">首发球员阵容</i>已选阵型: <i>
+						<#if team.lineup ??>${(team.lineup)!}<#else>4-2-4</#if>
+						</i></p>
+						<#if team.lineup ??>
+							<img src="/static/img/player/${formationMap[team.lineup]}" alt="" />
+						<#else>
+							<img src="/static/img/player/424.jpg" alt="" />
+						</#if>
+						
+						<h1 class="youth">球队胜率</h1>
+						<ul class="team-beats-ul">
+							<li class="team-beats-li title">
+								<p class="win"><span>胜</span></p>
+								<p class="equal"><span>平</span></p>
+								<p class="lose"><span>负</span></p>
+								<p class="win">胜率</p>
+							</li>
+							<li class="team-beats-li">
+								<p class="win">${(team.win)!}</p>
+								<p class="equal">${(team.drew)!}</p>
+								<p class="lose">${(team.lost)!}</p>
+								<p class="win">${(team.winRate)!}</p>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<#include "/common/footer.htm"/>
+		<script src="/static/js/competition.js"></script>
+		<script type="text/javascript">
+			/* for (var i = 0; i < 10; i++) {
+				$(".team-member-ul").append($(".team-member-li:last").clone());
+			} */
+		</script>
+	</body>
+
+</html>

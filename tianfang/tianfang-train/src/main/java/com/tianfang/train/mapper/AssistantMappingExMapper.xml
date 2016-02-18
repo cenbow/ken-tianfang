@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianfang.train.mapper.AssistantMappingExMapper">
+	
+	<select id="findAssistantByPage" resultType="com.tianfang.train.dto.AssistantDto" parameterType="com.tianfang.train.dto.AssistantDto">
+	   SELECT count(a.id) ,a.id, a.name,a.account,a.password,a.create_time as createtime, a.update_time as updatetime, a.status as status
+	   FROM training_assistant a 
+	   LEFT JOIN training_assistant_address_time b ON a.id = b.assistant_id 
+	   LEFT JOIN training_address c on b.address_id = c.id  
+	   WHERE a.status =1 
+	   <include refid="where_assistant_bypage" />
+	   GROUP BY a.id
+	   ORDER BY a.create_time desc
+       limit  #{page.startNum}, #{page.pageSize}
+	</select>
+	
+	<select id="findAssistantByPageCount" resultType="java.lang.Long" parameterType="com.tianfang.train.dto.AssistantDto">
+	   SELECT count(*) 
+	   FROM training_assistant a 
+	   LEFT JOIN training_assistant_address_time b ON a.id = b.assistant_id 
+	   LEFT JOIN training_address c on b.address_id = c.id  
+	   WHERE a.status =1 
+	   <include refid="where_assistant_bypage" />
+	</select>
+	
+	<select id="findAssistantAddressTimeById" resultType="com.tianfang.train.dto.AssistantSpaceTimeRespDto" parameterType="java.lang.String">
+	   SELECT a.id id,b.assistant_id assistantId, e.day_of_week dayOfWeek,e.start_time startTime,e.end_time endTime,c.place place,
+	   c.id addressId, b.address_district_time_id timeDistrictId
+	   FROM training_assistant_address_time b 
+	   LEFT JOIN training_assistant a ON a.id = b.assistant_id 
+	   LEFT JOIN training_address c ON b.address_id = c.id  
+	   LEFT JOIN training_address_district_time d ON d.id = b.address_district_time_id
+	   LEFT JOIN training_time_district e ON e.id = d.district_time_id
+	   WHERE a.status =1 
+	   and a.id = #{id,jdbcType=VARCHAR}
+	</select>
+	
+	<sql id="where_assistant_bypage">
+		<if test="assistantDto.name != null">
+			and a.name like "%"#{assistantDto.name}"%"
+	   </if>
+	   <if test="assistantDto.account != null">
+			and a.account like "%"#{assistantDto.account}"%"
+	   </if>
+	   <if test="assistantDto.address != null">
+			and c.place like "%"#{assistantDto.address}"%"
+	   </if>
+	</sql>
+</mapper> 

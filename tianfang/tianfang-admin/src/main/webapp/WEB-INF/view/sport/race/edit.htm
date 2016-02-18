@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Form Elements - Ace Admin</title>
+		<meta name="description" content="Common form elements and layouts" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<#include "../../admin/head.htm"/>
+		<link rel="stylesheet" href="${base}/static/css/bootstrap-timepicker.css" />
+		<link rel="stylesheet" href="${base}/static/css/datepicker.css" />
+		<link href="${base}/plugins/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
+		<!-- <script type="text/javascript" src="${base}/plugins/uploadify/jquery-1.3.2.min.js"></script> -->
+ 		<script type="text/javascript" src="${base}/plugins/uploadify/swfobject.js"></script>
+		<script type="text/javascript" src="${base}/plugins/uploadify/jquery.uploadify.v2.1.4.min.js"></script>			
+		
+	</head>
+	<body>
+		<div class="container-fluid" id="main-container">
+			<div id="main-content" class="clearfix" style="margin-left:0px;">
+					<div id="page-content" class="clearfix">
+						<div class="row-fluid">
+							<!-- PAGE CONTENT BEGINS HERE -->
+							<form id="submitForm" class="form-horizontal" method="POST">
+								<input type="hidden" id="id" name="id" value="${(data.id)!}"/>
+								<div class="control-group">
+									<label class="control-label" for="name">赛事名称</label>
+									<div class="controls">
+										<input type="text" name="name" class="span5" id="name" value="${(data.name)!}" placeholder="赛事名称">
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label" for="homeTeam">主场球队</label>
+									<div class="controls">
+										<select name="homeTeam" id="homeTeam">
+												<option value="">请选择一支球队</option>
+												<#if teams??> <#list teams as team>
+												<option <#if (((data.homeTeam)!) == team.id)>selected="true"</#if>  value="${(team.id)!}">${(team.name)!}</option>
+												</#list> </#if>
+										</select>
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label" for="homeTeamNumber">主场得分</label>
+									<div class="controls">
+										<input type="text" name="homeTeamNumber" class="span5" id="homeTeamNumber" value="${(data.homeTeamNumber)!}" placeholder="主场得分">
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label" for="vsTeam">客场球队</label>
+									<div class="controls">
+										<select name="vsTeam" id="vsTeam">
+												<option value="">请选择一支球队</option>
+												<#if teams??> <#list teams as team>
+												<option <#if (((data.vsTeam)!) == team.id)>selected="true"</#if> value="${(team.id)!}">${(team.name)!}</option>
+												</#list> </#if>
+										</select>
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label" for="vsTeamNumber">客场得分</label>
+									<div class="controls">
+										<input type="text" name="vsTeamNumber" class="span5" id="vsTeamNumber" value="${(data.vsTeamNumber)!}" placeholder="客场得分">
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label" for="type">赛事类型</label>
+									<div class="controls">
+										<select name="type" id="type">
+												<option value="">请选择</option>
+												<#list types as type>
+													<option  <#if (((data.type)!-1) == type.getIndex())>selected="true"</#if> value="${type.getIndex()}">${type.getName()}</option>
+												</#list>
+										</select>
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label" for="raceStatus">赛事状态</label>
+									<div class="controls">
+										<select name="raceStatus" id="raceStatus">
+												<option <#if (((data.raceStatus)!-1) == 0)>selected="true"</#if> value="0">未开始</option>
+												<option <#if (((data.raceStatus)!-1) == 1)>selected="true"</#if> value="1">进行中</option>
+												<option <#if (((data.raceStatus)!-1) == 2)>selected="true"</#if> value="2">已结束</option>
+										</select>
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label" for="raceTimeDay">对战日期</label>
+									<div class="controls">
+										<div class="input-append date">
+											<span class="add-on"><i class="icon-calendar"></i></span>
+											<input class="span5 date-picker" name="raceTimeDay" id="raceTimeDay"
+												type="text" data-date-format="yyyy-mm-dd" readonly="readonly" value="${(data.raceTimeDay)!}" 
+												style="width: 168px;" placeholder="对战日期" />
+										</div>
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label" for="raceTimeHour">对战时间</label>
+									<div class="controls">
+										<div class="input-append bootstrap-timepicker">
+											<span class="add-on"><i class="icon-time"></i></span>
+											<input type="text" class="input-small" name="raceTimeHour" readonly="readonly" id="timepicker1" value="${(data.raceTimeHour)!}"  placeholder="对战时间">
+										</div>
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label" for="raceAddress">比赛地点</label>
+									<div class="controls">
+										<input type="text" name="raceAddress" class="span5" id="raceAddress" value="${(data.raceAddress)!}" placeholder="比赛地点">
+									</div>
+								</div>
+								
+								<div class="form-actions">
+									<button id='savebutton' class="btn btn-info" type="submit"><i class="icon-ok"></i>保存</button>
+									&nbsp; &nbsp; &nbsp;
+									<button class="btn" type="reset" id="close"><i class="icon-undo"></i>关闭</button>
+								</div>
+							 </form>
+							<!-- PAGE CONTENT ENDS HERE -->
+						 </div><!--/row-->
+					</div><!--/#page-content-->
+			</div><!-- #main-content -->
+		</div><!--/.fluid-container#main-container-->
+		<a href="#" id="btn-scroll-up" class="btn btn-small btn-inverse">
+			<i class="icon-double-angle-up icon-only"></i>
+		</a>
+		<!-- basic scripts -->
+		<!-- <script src="${base}/static/1.9.1/jquery.min.js"></script> -->
+		<script type="text/javascript">
+		window.jQuery || document.write("<script src='${base}/static/js/jquery-1.9.1.min.js'>\x3C/script>");
+		</script>
+		
+		<script src="${base}/static/js/bootstrap.min.js"></script>
+		<!-- page specific plugin scripts -->
+		
+		<!--[if lt IE 9]>
+		<script type="text/javascript" src="${base}/static/js/excanvas.min.js"></script>
+		<![endif]-->
+		<script type="text/javascript" src="${base}/static/js/jquery-ui-1.10.2.custom.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/jquery.ui.touch-punch.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/chosen.jquery.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/fuelux.spinner.js"></script>
+		<script type="text/javascript" src="${base}/static/js/bootstrap-datepicker.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/bootstrap-timepicker.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/date.js"></script>
+		<script type="text/javascript" src="${base}/static/js/daterangepicker.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/bootstrap-colorpicker.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/jquery.autosize-min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/jquery.inputlimiter.1.3.1.min.js"></script>
+		<!-- ace scripts -->
+		<script src="${base}/static/js/ace-elements.min.js"></script>
+		<script src="${base}/static/js/ace.min.js"></script>
+		<!-- inline scripts related to this page -->
+
+	<link href="${base}/plugins/umeditor1.2.2/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" charset="utf-8" src="${base}/plugins/umeditor1.2.2/umeditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="${base}/plugins/umeditor1.2.2/umeditor.min.js"> </script>
+    <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+    <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+    <script type="text/javascript" charset="utf-8" src="${base}/plugins/umeditor1.2.2/lang/zh-cn/zh-cn.js"></script>	
+		
+		<!-- layer 弹出框处理 -->
+		<script type="text/javascript" src="${base}/plugins/layer2.0/layer.js"></script>
+		
+		<!-- 表达验证 -->
+		<script type="text/javascript" src="${base}/static/js/jquery.validate.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/jquery.maskedinput.min.js"></script>
+		
+		<script type="text/javascript">
+		$(function() {
+			// 验证两次输入值是否不相同  
+			jQuery.validator.addMethod("notEqualTo", function (value, element, param) {  
+			    return value != $(param).val();  
+			}, $.validator.format("两次输入不能相同!"));
+			$("#submitForm").validate({
+				 errorElement: 'span',
+					errorClass: 'help-inline',
+					focusInvalid: false,
+				    rules:{
+				    	name: {
+							required: true
+						},
+				    	homeTeam:{
+				    		required: true,
+				    		notEqualTo:"#vsTeam"
+				    	} ,
+				    	homeTeamNumber:{
+				    		required: true,
+				    		digits:true
+				    	},
+				    	vsTeam:{
+				    		required: true,
+				    		notEqualTo:"#homeTeam"
+				    	},
+				    	vsTeamNumber:{
+				    		required: true,
+				    		digits:true
+				    	},
+				    	type:{
+				    		required: true
+				    	},
+				    	raceStatus:{
+				    		required: true
+				    	},
+				    	raceTimeDay:{
+				    		required: true
+				    	},
+				    	raceTimeHour:{
+				    		required: true
+				    	},
+				    	raceAddress:{
+				    		required: true
+				    	}
+				    },
+				    messages:
+				    {
+				    	name: {
+							required: "赛事名称不能为空"
+						},
+						homeTeam:{
+				    		required: "请选择一支主场球队",
+				    		notEqualTo: "主客场不能为同一球队"
+				    	},
+				    	homeTeamNumber:{
+				    		required: "主场比分不能为空",
+				    		digits: "请正确输入比分"
+				    	},
+				    	vsTeam:{
+				    		required: "请选择一支客场球队",
+				    		notEqualTo: "主客场不能为同一球队"
+				    	},
+				    	vsTeamNumber:{
+				    		required: "客场比分不能为空",
+				    		digits: "请正确输入比分"
+				    	},
+				    	type:{
+				    		required: "请选择赛事类型"
+				    	},
+				    	raceStatus:{
+				    		required: "请选择赛事状态"
+				    	},
+				    	raceTimeDay:{
+				    		required: "对战日期不能为空"
+				    	},
+				    	raceTimeHour:{
+				    		required: "对战时间不能为空"
+				    	},
+				    	raceAddress:{
+				    		required: "比赛地点不能为空"
+				    	}  
+				    },
+					highlight: function (e) {
+						$(e).closest('.control-group').removeClass('info').addClass('error');
+					},
+					success: function (e) {
+						$(e).closest('.control-group').removeClass('error').addClass('info');
+						$(e).remove();
+					},
+					errorPlacement: function (error, element) {
+						if(element.is(':checkbox') || element.is(':radio')) {
+							var controls = element.closest('.controls');
+							if(controls.find(':checkbox,:radio').length > 1) controls.append(error);
+							else error.insertAfter(element.nextAll('.lbl').eq(0));
+						} 
+						else if(element.is('.chzn-select')) {
+							error.insertAfter(element.nextAll('[class*="chzn-container"]').eq(0));
+						}
+						else error.insertAfter(element);
+					},
+					submitHandler: function (form) {
+						toSubmit();
+					},
+					invalidHandler: function (form) {
+						layer.alert('请填写完整信息', { icon: 7 });
+					}
+			});
+			
+			function toSubmit(){
+				var ajaxParams = $("#submitForm").serialize();
+				$.ajax({
+					type : "POST",
+					url : "${base}/sport/race/update.do",
+					data : ajaxParams,
+					datatype : "json",// "xml", "html", "script", "json", "jsonp", "text".
+					success : function(data) {// 成功返回之后调用的函数
+						var jsondata = null;//eval('(' + data + ')');
+						if (data instanceof Object){
+							jsondata = data;
+						}else{
+							jsondata = eval('(' + data + ')');
+						}
+						if(jsondata.success){
+							parent.layer.msg(jsondata.msg, {
+								shade: [0.9, '#000'],
+							    icon: 6,
+							    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+							}, function(){
+								parent.reload_page();
+								var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+								parent.layer.close(index);
+							}); 							
+						}else{
+							parent.layer.msg(jsondata.msg, {
+								shade: [0.9, '#000'],
+							    icon: 6,
+							    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+							}, function(){
+							}); 	
+						}
+					},
+					complete : function(XMLHttpRequest, textStatus) {// 调用执行后调用的函数
+						
+					},
+					error : function() {// 调用出错执行的函数
+					}
+				});
+			}
+			// 时间
+			$('#timepicker1').timepicker({
+				minuteStep: 1,
+				showSeconds: false,
+				showMeridian: false
+			});
+			
+			//日期框
+			$('.date-picker').datepicker();			
+			//下拉框
+			$(".chzn-select").chosen(); 
+			$(".chzn-select-deselect").chosen({allow_single_deselect:true}); 
+			
+			$("#form-radio-show label input").on('click',function(){
+				$("#marked").val($(this).val());
+			});
+			
+			$('#close').click(function(){
+				var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+				parent.layer.close(index);
+			});
+		});
+		
+		</script>
+	</body>
+</html>

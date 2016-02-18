@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<#include "/common/head.htm"/>
+<link href="/static/css/competition.css" rel="stylesheet" />
+<link href="/static/css/lightbox.css" rel="stylesheet">
+<script src="/static/js/lightbox.js"></script>
+	<body>
+		<#include "/common/topbar.htm"/>
+
+		<div class="login_box" id="picqrcode" onclick="closebg()">
+			<div class="picqrcode" id="code">
+				<span>分享到微信朋友圈</span>
+				<p>打开微信，点击底部的“发现”， 使用“扫一扫”即可将网页分享至朋友圈。</p>
+			</div>
+		</div>
+		<div class="youth-bg">
+			<div class="wrapper">
+				<div class="youth-title">
+					<!-- <h1><img src="${(sportTeamDto.logo)!}" class="youth-ico"></img>${(sportTeamDto.name)!}</h1> -->
+					<img class="youth-ico" src="${(sportTeamDto.logo)!}" />
+					<span class="youth-name">${(sportTeamDto.name)!}</span>
+					<div class="youth-banner">
+						<ul class="youth-banner-ul">
+							<li class="youth-banner-li index" to="/tc/index/${(sportTeamDto.id)!}.htm">球队首页</li>
+							<li class="youth-banner-li team-info" to="/tc/team/${(sportTeamDto.id)!}.htm">球队信息</li>
+							<li class="youth-banner-li pic cur" to="/tc/pic/${(sportTeamDto.id)!}.htm">相册</li>
+							<li class="youth-banner-li video" to="/tc/video/${(sportTeamDto.id)!}.htm">视频</li>
+							<li class="youth-banner-li herald" to="/tc/herald/${(sportTeamDto.id)!}.htm">比赛预告</li>
+							<li class="youth-banner-li history" to="/tc/history/${(sportTeamDto.id)!}.htm">历史战绩</li>
+							<li class="youth-banner-li honor" to="/tc/honor/${(sportTeamDto.id)!}.htm">荣誉</li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="youth-pics">
+					<h1 class="youth">精彩比赛瞬间</h1>
+					<#if data??> 
+						<a class="cur" href="${(data[0].pic)!}" data-lightbox="image-1">全屏查看</a>
+					</#if>					
+					<div class="youth-pic-show">
+						<p class="time"></p>
+						<div class="youth-pics-show" move=0>
+							<#if data??> 
+								<#list data as page>
+									<img src="${(page.pic)!}" data-time="" data-selected=true data-heart=20 />
+								</#list>
+							</#if>
+						</div>
+						<a class="left youth-pic-bt"></a>
+						<a class="right youth-pic-bt"></a>
+						<div class="heart" style="display: none;">
+							<img src="/static/img/heart-unselect.png" />
+							<p class="hearts">60</p>
+						</div>
+					</div>
+					<div style="float:right;padding-right:15px;">
+						<div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a><a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a><a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a><a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a></div>
+						<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{},"image":{"viewList":["qzone","tsina","tqq","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<#include "/common/footer.htm"/>
+		<script src="/static/js/competition.js"></script>
+		<script type="text/javascript">
+			$(function() {
+				var pic_len = $(".youth-pics-show img").length;
+				$(".youth-pics-show").css("width", pic_len * 960 + "px");
+				$(".youth-pic-bt.left").on("click", function() {
+					var imgs = $(".youth-pics-show img");
+					var cur = moveRight(".youth-pics-show", 960);
+					$(".youth-pics a.cur").attr("href", $(".youth-pics-show img")[cur].src);
+					fill_pics(imgs[cur]);
+				})
+				$(".youth-pic-bt.right").on("click", function() {
+					var imgs = $(".youth-pics-show img");
+					var cur = moveLeft(".youth-pics-show", 960, 1);
+					$(".youth-pics a.cur").attr("href", $(".youth-pics-show img")[cur].src);
+					fill_pics(imgs[cur]);
+				})
+				$(".heart").on("click", function() {
+					var _this = $(".heart"),
+						no = parseInt(_this.find("p")[0].innerText, 10);
+					if (_this.hasClass("checked")) {
+						_this.find("img")[0].src = "/static/img/heart-unselect.png";
+						_this.find("p")[0].innerText = no - 1 > 0 ? no - 1 : 0;
+						_this.removeClass("checked");
+					} else {
+						_this.find("img")[0].src = "/static/img/heart-select.png";
+						_this.find("p")[0].innerText = no + 1;
+						_this.addClass("checked");
+					}
+				});
+				fill_pics($(".youth-pics-show img")[0]);
+				
+			});
+
+			function fill_pics(imgdata) {
+				var time = $(imgdata).attr("data-time"),
+					status = $(imgdata).attr("data-selected"),
+					hearts = $(imgdata).attr("data-heart");
+				if ("true" == status) {
+					$(".heart img").attr("src", "/static/img/heart-select.png");
+				} else {
+					$(".heart img").attr("src", "/static/img/heart-unselect.png");
+				}
+				$(".youth-pic-show .hearts").text(hearts);
+				$(".youth-pic-show .time").text(time);
+			}
+			
+			//以下是分享
+			function click1(){
+				var openqr = false;
+				var textUrl=window.location.href;
+				if (openqr) {
+					return;
+				}
+				if (!openqr) {
+					$('#picqrcode').addClass('open');
+					$("#code").qrcode({
+						width:250,height:250,correctLevel:0,
+					    text: textUrl 
+					})
+					openqr = true;
+				}
+				return;			
+			}
+			function closebg() {
+				$('#picqrcode').removeClass('open');
+				return;
+			}
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianfang.business.mapper.SportRaceExMapper">
+
+	<sql id="Column_List">
+		a.id, a.name, a.type, a.race_time as raceTime, a.race_address as raceAddress,
+		a.home_team as homeTeam, a.vs_team as vsTeam, a.home_team_number as homeTeamNumber,
+		a.vs_team_number as vsTeamNumber, a.race_status as raceStatus, a.race_number as raceNumber,
+		a.create_time as createTime, a.last_update_time as lastUpdateTime, a.stat,
+		b.name as homeTeamName, b.logo as homeTeamLogo, c.name as vsTeamName, c.logo as vsTeamLogo
+	</sql>
+	<sql id="Where_Clause">
+		<where>
+			<if test="params.id != null">
+				and a.id = #{params.id} 
+			</if>
+			<if test="params.name != null">
+				and a.name = #{params.name} 
+			</if>
+			<if test="params.type != null">
+				and a.type = #{params.type} 
+			</if>
+			<if test="params.raceAddress != null">
+				and a.race_address = #{params.raceAddress}  
+			</if>
+			<if test="params.homeTeam != null">
+				and a.home_team = #{params.homeTeam}  
+			</if>
+			<if test="params.vsTeam != null">
+				and a.vs_team = #{params.vsTeam}  
+			</if>
+			<if test="params.raceStatus != null">
+				and a.race_status = #{params.raceStatus} 
+			</if>
+			<if test="params.stat != null">
+				and a.stat = #{params.stat} 
+			</if>
+			<if test="params.raceTimeS != null">
+				and a.race_time &gt;= #{params.raceTimeS} 
+			</if>
+			<if test="params.raceTimeE != null">
+				and a.race_time &lt; #{params.raceTimeE} 
+			</if>
+			<if test="params.createTimeS != null">
+				and a.create_time &gt;= #{params.createTimeS} 
+			</if>
+			<if test="params.createTimeE != null">
+				and a.create_time &lt; #{params.createTimeE} 
+			</if>
+			<if test="params.homeTeamName != null">
+				and b.name LIKE #{params.homeTeamName} 
+			</if>
+			<if test="params.vsTeamName != null">
+				and c.name LIKE #{params.vsTeamName} 
+			</if>
+			<if test="params.teamId != null">
+				and (a.home_team = #{params.teamId} or a.vs_team = #{params.teamId})
+			</if>
+		</where>
+	</sql>
+
+	<sql id="Order_Clause">
+		ORDER BY
+		<if test="params.raceStatus != null">
+				a.race_status ASC,
+		</if>
+		 a.race_time DESC
+	</sql>
+
+	<select id="findRaceByParams" parameterType="java.util.Map"
+		resultType="com.tianfang.business.dto.SportRaceDto">
+		SELECT
+		<include refid="Column_List" />
+		FROM sport_race AS a LEFT JOIN sport_team AS b ON a.home_team = b.id
+		LEFT JOIN sport_team AS c ON a.vs_team = c.id
+		<include refid="Where_Clause" />
+		<include refid="Order_Clause" />
+		<if test="params.start != null and params.count > 0">
+			LIMIT #{params.start},#{params.count}
+		</if>
+	</select>
+
+	<select id="countRaceByParams" parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT count(a.id)
+		FROM sport_race AS a LEFT JOIN sport_team AS b ON a.home_team = b.id
+		LEFT JOIN sport_team AS c ON a.vs_team = c.id
+		<include refid="Where_Clause" />
+	</select>
+
+</mapper>

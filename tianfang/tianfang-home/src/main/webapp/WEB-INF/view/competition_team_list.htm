@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<link href="/static/css/competition.css" rel="stylesheet" />
+<#include "/common/head.htm"/>
+
+	<body>
+		<#include "/common/topbar.htm"/>
+		<input id="gameId" name="gameId" type="hidden" value="${(game.id)!}" />
+		<div class="wrapper">
+			<div class="content">
+				<h1>球队类型</h1>
+				<div class="wrap">
+					<div class="item-list">
+						<div class="item-title">
+							<span class="js-team-type item-all cur">全部</span>
+							<#if types??> 
+								<#list types as type>
+									| <span class="js-team-type item-club" team_type_id="${type.typeId}" >${type.typeName}</span> 
+								</#list> 
+							</#if>
+						</div>
+						<ul class="team-ul">
+							<!--  <li class="team-li">
+								<img class="team-ico" src="static/img/cooper2.jpg" />
+								<div class="team-info">
+									<p class="team-info-1"><span class="team-name">巴塞罗那</span><span class="team-type">青训队</span></p>
+									<p class="team-info-2"><span class="team-type1">类型：<i>足球AAA队</i></span><span class="team-area">地区：<i>上海</i></span></p>
+									<span class="create-date"><i>2015-10-29</i>创建</span>
+								</div>
+							</li>
+							<li class="team-li">
+								<img class="team-ico" src="static/img/cooper2.jpg" />
+								<div class="team-info">
+									<p class="team-info-1"><span class="team-name">巴塞罗那</span><span class="team-type">青训队</span></p>
+									<p class="team-info-2"><span class="team-type1">类型：<i>足球AAA队</i></span><span class="team-area">地区：<i>上海</i></span></p>
+									<span class="create-date"><i>2015-10-29</i>创建</span>
+								</div>
+							</li>
+							<li class="team-li">
+								<img class="team-ico" src="static/img/cooper2.jpg" />
+								<div class="team-info">
+									<p class="team-info-1"><span class="team-name">巴塞罗那</span><span class="team-type">青训队</span></p>
+									<p class="team-info-2"><span class="team-type1">类型：<i>足球AAA队</i></span><span class="team-area">地区：<i>上海</i></span></p>
+									<span class="create-date"><i>2015-10-29</i>创建</span>
+								</div>
+							</li>
+							<li class="team-li">
+								<img class="team-ico" src="static/img/cooper2.jpg" />
+								<div class="team-info">
+									<p class="team-info-1"><span class="team-name">巴塞罗那</span><span class="team-type">青训队</span></p>
+									<p class="team-info-2"><span class="team-type1">类型：<i>足球AAA队</i></span><span class="team-area">地区：<i>上海</i></span></p>
+									<span class="create-date"><i>2015-10-29</i>创建</span>
+								</div>
+							</li>
+							<li class="team-li">
+								<img class="team-ico" src="static/img/cooper2.jpg" />
+								<div class="team-info">
+									<p class="team-info-1"><span class="team-name">巴塞罗那</span><span class="team-type">青训队</span></p>
+									<p class="team-info-2"><span class="team-type1">类型：<i>足球AAA队</i></span><span class="team-area">地区：<i>上海</i></span></p>
+									<span class="create-date"><i>2015-10-29</i>创建</span>
+								</div>
+							</li>-->
+						</ul>
+						<div class="team-page">
+							<!--  <a class="team-prev" href="#">上一页</a>
+							<a class="team-next" href="#">下一页</a>
+							<span class="team-page-info"><i>1</i>/<i>20</i></span>-->
+						</div>
+					</div>
+					<div class="wrap-right">
+						<div class="team-regist-info">
+							<img src="/static/img/competition3.png" />
+							<span class="regiest-info">现在已有<i class="team-mumber">${(total)!}支</i>球队注册</span>
+						</div>
+						<div class="team-search">
+							<input class="team-search-text" type="text" placeholder="请输入搜索球队名称" />
+							<div class="team-search-bt"></div>
+						</div>
+						<div class="team-hot">
+							<ul class="team-hot-ul">
+								<li class="team-hot-li team-hot-title">热门球队</li>
+								<#if hots??> 
+								<#list hots as hot>
+									<#if hot_index < 3> 
+										<li class="team-hot-li top"><i>${hot_index+1}</i>${hot.name}</li>
+									<#else>
+										<li class="team-hot-li"><i>${hot_index+1}</i>${hot.name}</li>
+									</#if> 
+								</#list> 
+							</#if>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<h1>介绍</h1>
+				<div class="introduce">
+					<div class="introduce-wrapper close">
+						<p>${(game.subtitle)!}</p>
+						<p>${(game.content)!}</p>
+					</div>
+					<a class="introduce-more" href="#">展开 ∨</a>
+				</div>
+			</div>
+		</div>
+<!-- 		<div class="ball">
+			<img class="ball0" src="/static/img/ball0.png" />
+			<img class="ball1" src="/static/img/ball1.png" />
+		</div> -->
+		<#include "/common/footer.htm"/>
+		<script src="/static/js/competition.js"></script>
+		<script src="/static/sport/competition_team_list.js"></script>
+		<script type="text/javascript">
+			//热门球队
+			/*$(".team-hot-li:not(:first)").remove();
+			var str = "";
+			for (var i = 0; i < 10; i++) {
+				if (i < 3) {
+					str += '<li class="team-hot-li top"><i>' + (i + 1) + '</i>广州恒大</li>';
+				} else {
+					str += '<li class="team-hot-li"><i>' + (i + 1) + '</i>广州恒大</li>';
+				}
+			}
+			$(".team-hot-ul").append(str);*/
+			$(function() {
+				//球
+				var _offsetX = $('.wrap').offset().left + 1036;
+				var _offsetY = 220;
+				var _offsetY_b = $(".introduce").offset().top;
+				var $ball = $(".ball");
+				$ball.css({
+					"left": $('.wrap').offset().left + 1036 + "px",
+					"display": "block"
+				});
+				$(window).scroll(function() {
+					var _wscrollTop = $(window).scrollTop()
+					if (_wscrollTop > _offsetY) {
+						$ball.css({
+							'top': _wscrollTop + 40 + 'px'
+						})
+					} else if (_wscrollTop <= _offsetY) {
+						$ball.css({
+							'top': _offsetY + 'px'
+						})
+					}
+				});
+				$(window).on("resize", function() {
+					var left = $('.wrap').offset().left;
+					//					console.log("dsf:"+left);
+					if (left <= 172.5) {
+						$ball.hide();
+					} else {
+						$ball.show();
+					}
+					$ball.css({
+						"left": left + 1036 + "px"
+					});
+				});
+			})
+		</script>
+	</body>
+
+</html>

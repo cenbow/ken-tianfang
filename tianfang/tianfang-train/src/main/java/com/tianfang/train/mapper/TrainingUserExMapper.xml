@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.tianfang.train.mapper.TrainingUserExMapper">
+	<select id="selectUserInfo" resultType="com.tianfang.train.dto.TrainingUserDto">
+		SELECT
+		u.id,
+		uc.id,
+		uc.open_id AS openId,
+		uc.pname,
+		uc.mobile,
+		c.id AS
+		courseId,
+		c.`name`,
+		uc.cname,
+		a.id,
+		a.address,
+		td.id AS spaceTimeId,
+		td.day_of_week AS dayOfWeek,
+		td.start_time AS startTime,
+		td.end_time AS
+		endTime,
+		uc.birthday AS birthdays,
+		uc.origin_school AS originSchool,
+		cc.id AS classId
+		FROM
+		training_user u
+		INNER JOIN training_user_course_day
+		ucd ON ucd.user_id = u.id
+		INNER JOIN training_user_course uc ON
+		ucd.order_id = uc.id
+		INNER JOIN training_course_class cc ON uc.class_id
+		= cc.id
+		INNER JOIN training_course c ON cc.course_id = c.id
+		INNER JOIN
+		training_time_district td ON td.id = cc.time_district_id
+		INNER JOIN
+		training_address a ON cc.address_id = a.id
+		WHERE 1=1
+		<include refid="where_user_1" />
+		and u.status = 1
+		GROUP BY ucd.course_id
+		limit #{page.startNum},
+		#{page.pageSize}
+	</select>
+
+	<select id="count" resultType="java.lang.Long">
+		SELECT
+		COUNT(ucd.counts) as count
+		FROM
+		(SELECT course_id,COUNT(*) counts
+		FROM training_user_course_day GROUP BY course_id) ucd
+
+		<!-- SELECT COUNT(*) FROM training_user u,training_user_course_day ucd,training_course_class 
+			cc WHERE u.id = ucd.user_id AND ucd.course_id = cc.course_id -->
+		<!-- <include refid="where_user_1" /> -->
+		<!-- and u.status = 1 -->
+	</select>
+
+	<select id="selectUserRecord" resultType="com.tianfang.train.dto.TrainingUserDto">
+		SELECT
+		u.id,
+		u.location
+		FROM
+		training_user u
+		WHERE 1=1
+<!-- 		AND u.status = 1 -->
+		GROUP BY u.location
+	</select>
+
+<!-- 	<update id="updateUser" resultType="com.tianfang.train.dto.TrainingUserDto"> -->
+<!-- 		UPDATE -->
+<!-- 		training_user set -->
+<!-- 		update_time=#{updateTime},pname=#{pname},mobile=#{mobile},location=#{location},cname=#{cname},birthday=#{birthday}, -->
+<!-- 		origin_school=#{originSchool} -->
+<!-- 		WHERE -->
+<!-- 		id=#{id,jdbcType=VARCHAR} -->
+<!-- 	</update> -->
+
+	<sql id="where_user_1">
+		<if test="trainingUserDto.pname != null and trainingUserDto.pname != ''">
+			and uc.pname like "%"#{trainingUserDto.pname}"%"
+		</if>
+		<if test="trainingUserDto.mobile != null and trainingUserDto.mobile != ''">
+			and uc.mobile like "%"#{trainingUserDto.mobile}"%"
+		</if>
+		<if
+			test="trainingUserDto.courseId != null and trainingUserDto.courseId != ''">
+			and c.id = #{trainingUserDto.courseId}
+		</if>
+		<if test="trainingUserDto.cname != null and trainingUserDto.cname != ''">
+			and uc.cname like "%"#{trainingUserDto.cname}"%"
+		</if>
+		<if
+			test="trainingUserDto.addressId != null and trainingUserDto.addressId!=''">
+			and a.id = #{trainingUserDto.addressId}
+		</if>
+		<if
+			test="trainingUserDto.spaceTimeId != null and trainingUserDto.spaceTimeId!=''">
+			and td.id = #{trainingUserDto.spaceTimeId}
+		</if>
+		<if
+			test="trainingUserDto.birthday != null and trainingUserDto.birthday != ''">
+			and uc.birthday like #{trainingUserDto.birthday}
+		</if>
+		<if
+			test="trainingUserDto.originSchool != null and trainingUserDto.originSchool != ''">
+			and uc.origin_school like "%"#{trainingUserDto.originSchool}"%"
+		</if>
+	</sql>
+
+	<!--上课情况统计 -->
+	<select id="findCourseCount" resultType="com.tianfang.train.dto.UserCourseDayDto">
+		<!-- SELECT -->
+		<!-- count(*) as count -->
+		<!-- FROM -->
+		<!-- training_user u -->
+		<!-- INNER JOIN training_user_course_day ucd ON u.id = ucd.user_id -->
+		<!-- WHERE 1=1 -->
+		<!-- SELECT -->
+		<!-- COUNT(*) -->
+		<!-- FROM -->
+		<!-- training_user_course_day ucd -->
+		<!-- WHERE 1=1 -->
+
+		<!-- SELECT -->
+		<!-- COUNT(*) as count -->
+		<!-- FROM -->
+		<!-- training_user_course_day ucd,training_time_district td,training_course_class 
+			cc -->
+		<!-- WHERE -->
+		<!-- 1=1 and ucd.class_id = cc.id and cc.time_district_id = td.id -->
+
+		SELECT
+		COUNT(*) as count
+		FROM
+		training_user_course_day
+		ucd,training_course_class cc,training_time_district td
+		WHERE 1=1 and
+		ucd.class_id = cc.id AND cc.time_district_id = td.id
+		<include refid="where_count" />
+	</select>
+
+	<sql id="where_count">
+		<if test="id != null">
+			and ucd.user_id = #{id}
+		</if>
+		<if test="courseId != null">
+			and ucd.course_id = #{courseId}
+		</if>
+		<if test="classId != null">
+			and ucd.class_id = #{classId}
+		</if>
+		<if test="type != null">
+			and ucd.type = #{type}
+		</if>
+	</sql>
+	<!-- <select id="selectAddressByCourseName" resultType="com.tianfang.train.dto.TrainingCourseDtoX" 
+		parameterType="java.lang.Integer"> -->
+	<!-- SELECT -->
+	<!-- a.id, -->
+	<!-- a.address, -->
+	<!-- c.id, -->
+	<!-- cc.id -->
+	<!-- FROM -->
+	<!-- training_course c,training_course_class cc,training_address a -->
+	<!-- WHERE -->
+	<!-- c.id = cc.course_id AND cc.address_id = a.id AND c.status = 1 -->
+	<!-- <if test="courseId!=null"> -->
+	<!-- and c.id = #{courseId} -->
+	<!-- </if> -->
+	<!-- </select> -->
+
+	<!-- <select id="selectTimeByAddress" resultType="com.tianfang.train.dto.TrainingUserDto" 
+		parameterType="java.lang.Integer"> -->
+	<!-- SELECT -->
+	<!-- adt.id, -->
+	<!-- a.id, -->
+	<!-- td.id, -->
+	<!-- td.day_of_week, -->
+	<!-- td.start_time, -->
+	<!-- td.end_time -->
+	<!-- FROM -->
+	<!-- training_address a,training_address_district_time adt,training_time_district 
+		td -->
+	<!-- WHERE -->
+	<!-- a.id = adt.address_id AND adt.district_time_id = td.id AND a.status 
+		= 1 -->
+	<!-- <if test="addressId!=null"> -->
+	<!-- and a.id = #{addressId} -->
+	<!-- </if> -->
+	<!-- </select> -->
+</mapper>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianfang.order.mapper.SportMCategoryExMapper" >
+	
+  <select id="selectCategoryByPage" resultType="com.tianfang.order.dto.SportMCategoryDto" parameterType="com.tianfang.order.dto.SportMCategoryDto">
+	   SELECT a.id,a.type_id as typeId,a.parent_id as parentId,a.category_name as categoryName,a.category_pic as categoryPic,a.category_order as categoryOrder,a.is_show as isShow,a.last_update_time as lastUpdateTime,a.create_time as createTime,a.stat,b.type_name as typeName
+	   FROM sport_m_category a 
+	   LEFT JOIN sport_m_type b on a.type_id = b.id  
+	   WHERE a.stat =1 and b.stat = 1
+	   <include refid="where_category_bypage" />
+	   ORDER BY a.create_time desc
+       limit  #{page.startNum}, #{page.pageSize}
+	</select>
+	
+	<sql id="where_category_bypage">		
+		<if test="sportMCategoryDto.categoryName != null and sportMCategoryDto.categoryName != ''">
+			and a.category_name like "%"#{sportMCategoryDto.categoryName}"%"
+	   </if>
+	   <if test="sportMCategoryDto.typeId != null and sportMCategoryDto.typeId != ''">
+			and a.type_id = #{sportMCategoryDto.typeId}
+	   </if>
+	   <if test="sportMCategoryDto.parentId != null and sportMCategoryDto.parentId != ''">
+			and a.parent_id = #{sportMCategoryDto.parentId}
+	   </if>
+	   <if test="sportMCategoryDto.isShow != null and sportMCategoryDto.isShow != ''">
+			and a.is_show = #{sportMCategoryDto.isShow}
+	   </if>
+	</sql>
+	
+</mapper>

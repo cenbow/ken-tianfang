@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianfang.business.mapper.SportAlbumExMapper">
+	
+	<select id="selectAlbumByPage" resultType="com.tianfang.business.dto.AlbumDto" parameterType="com.tianfang.business.pojo.SportAlbum">
+	   SELECT a.id,a.pic_Type as picType,a.title,a.thumbnail,a.publisher,a.page_ranking as pageRanking,a.last_update_time as lastUpdateTime,a.create_time as createTime,a.stat,a.team_id as teamId,b.name as teamName
+	   FROM sport_album a 
+	   LEFT JOIN sport_team b on a.team_id = b.id  
+	   WHERE a.stat =1 and b.stat = 1
+	   <include refid="where_assistant_bypage" />
+	   ORDER BY a.create_time desc
+       limit  #{page.startNum}, #{page.pageSize}
+	</select>
+	
+	<select id="selectAlbumByPageCount" resultType="java.lang.Long" parameterType="com.tianfang.business.pojo.SportAlbum">
+	   SELECT count(*) 
+	   FROM sport_album a 
+	   LEFT JOIN sport_team b on a.team_id = b.id  
+	   WHERE a.stat =1 and b.stat = 1
+	   <include refid="where_assistant_bypage" />
+	</select>
+	
+	<sql id="where_assistant_bypage">
+		<if test="sportAlbum.title != null and sportAlbum.title != ''">
+			and a.title like "%"#{sportAlbum.title}"%"
+	   </if>
+	   <if test="sportAlbum.teamId != null and sportAlbum.teamId != ''">
+			and a.team_id = #{sportAlbum.teamId}
+	   </if>
+<!-- 	   <if test="sportAlbum.createTime != null">
+			and a.name like "%"#{sportAlbum.createTime}"%"
+	   </if>
+	   <if test="sportAlbum.lastUpdateTime != null">
+			and a.name like "%"#{sportAlbum.lastUpdateTime}"%"
+	   </if> -->
+	</sql>
+	
+	<select id="findTeamAlbumByRand" resultType="com.tianfang.business.pojo.SportAlbum" parameterType="com.tianfang.business.dto.AlbumDto">
+		SELECT * FROM sport_album WHERE game_id = #{albumDto.gameId} ORDER BY RAND() LIMIT #{albumDto.randNumber}
+	</select>	
+	
+</mapper> 

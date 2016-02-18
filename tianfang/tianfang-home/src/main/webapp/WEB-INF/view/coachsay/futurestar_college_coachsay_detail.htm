@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<#include "/common/head.htm"/>
+<body>
+	<#include "/common/topbar.htm"/>
+	<div class="wrapper">
+		<h1>教练博文</h1>
+		<div class="fs_coach_say">
+			<div class="cont">
+				<div class="text">
+					<h5><span>${blog.title}</span></h5>
+					${blog.content}
+				</div>
+				
+			</div>
+			<div class="fs_top_coach col">
+				<a href="###"><img src="/static/img/top_coach1.jpg" border="0"><p>${user.cname}<span>${user.ename}</span></p></a>
+				<h7>简介</h7>
+				<div class="info">${user.description}</div>
+				<h7>他的文章</h7>
+				<div class="link_box">
+					<#if blogs??>
+						<#list blogs as data>
+							<a href="/coach/blog.htm?id=${data.id}">${data.title}</a>
+						</#list>
+					</#if>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<#include "/common/footer.htm"/>
+	<script>
+	$(function(){		
+		//导航标记
+		nav_mark('futurestar')
+	})
+	</script>
+</body>
+</html>

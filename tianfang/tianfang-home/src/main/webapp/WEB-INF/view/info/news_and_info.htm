@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<#include "/common/head.htm"/>
+<body>
+	<#include "/common/topbar.htm"/>
+	<div class="wrapper">
+		<div class="activityinfo_box">
+			<h1>专业资讯<a class="more" href="/info/list.htm?orderType=2">更多>></a></h1>
+			<div class="left">
+				<div id="slideBox" class="slideBox">
+					<div class="hd">
+						<ul><li></li><li></li><li></li><li></li></ul>
+					</div>
+					<div class="bd">
+						<ul>
+							<#if pageList1 ??>
+								<#list pageList1.getResults() as page>
+									<li>
+										<a href="/info/details/${(page.id)!}.htm"><img src="${(page.microPic)!}"></a> 
+										<span>${(page.title)!}</span>
+									</li>
+								</#list>
+							</#if>	
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="right">
+				<#if pageList1 ??>
+					<#list pageList1.getResults() as page>
+						<#if page.marked == 1>
+							<a class="cur" href="/info/details/${(page.id)!}.htm">${(page.title)!}</a>
+						<#else>
+							<a href="/info/details/${(page.id)!}.htm">${(page.title)!}</a>
+						</#if>
+						
+					</#list>
+				</#if>	
+			</div>
+		</div>
+		
+		<div class="activityinfo_box">
+			<h1>媒体中心<a class="more" href="/news/findNewsInfo.htm?orderType=2">更多>></a></h1>
+			<div class="left">
+				<div id="slideBox2" class="slideBox">
+					<div class="hd">
+						<ul><li></li><li></li><li></li><li></li></ul>
+					</div>
+					<div class="bd">
+						<ul>
+							<#if pageList2 ??>
+								<#list pageList2.getResults() as page>
+									<li>
+										<a href="/news/details/${(page.id)!}.htm"><img src="${(page.microPic)!}" /></a>
+										<span>${(page.title)!}</span>
+									</li>
+								</#list>
+							</#if>	
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="right">
+				<#if pageList2 ??>
+					<#list pageList2.getResults() as page>
+						<#if page.marked == 1>
+							<a class="cur" href="/news/details/${(page.id)!}.htm">${(page.title)!}</a>
+						<#else>
+							<a href="/news/details/${(page.id)!}.htm">${(page.title)!}</a>
+						</#if>
+						
+					</#list>
+				</#if>	
+			</div>
+		</div>
+	</div>
+	<#include "/common/footer.htm"/>
+	<script>
+	$(function(){		
+		//导航标记
+		nav_mark('activity')
+		//轮播图
+		jQuery(".slideBox").slide({mainCell:".bd ul",autoPlay:true,interTime:3500});
+	})
+	</script>
+	
+</body>
+</html>

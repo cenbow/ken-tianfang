@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianfang.business.mapper.SportQuestionAnswerExMapper"> 
+	<select id="selectOrSfCriteria" parameterType="com.tianfang.business.dto.SportSfResultExDto" resultType="com.tianfang.business.dto.SportSfResultExDto">
+		select 
+		result.create_time as createTime , 
+		result.id,result.sf_answer as sfAnswer ,
+		result.sf_question as sfQuestion ,
+		result.sf_user_id as userId,
+		us.sf_type as sfType,
+		us.sf_uname as sfUname,
+		us.sf_phone as sfPhone,
+		us.sf_email as sfEmail,
+		us.sf_feedback as sfFeedback,
+		us.sf_picture as sfPicture,
+		que.sf_question_content as sfQuestionContent 
+		from sport_sf_result as result INNER JOIN sport_sf_question as que ON (result.sf_question = que.id)
+		inner join sport_suggestion_user as us on (result.sf_user_id = us.id)
+		where us.stat = '1' and que.stat = '1' and result.stat = '1'
+		<if test="params.id != null">
+			and result.id = #{params.id} 
+		</if>
+		<if test="params.sfQuestion != null and params.sfQuestion !='' ">
+			and result.sf_question = #{params.sfQuestion} 
+		</if>
+		<if test="params.sfAnswer != null and params.sfAnswer != ''">
+			and result.sf_answer = #{params.sfAnswer} 
+		</if>
+		<if test="params.sfType != null ">
+			and us.sf_type = #{params.sfType} 
+		</if>
+		<if test="params.sfUname != null and params.sfUname != ''">
+			and us.sf_uname Like #{params.sfUname}  
+		</if>
+		<if test="params.sfPhone != null and params.sfPhone !='' ">
+			and us.sf_phone = #{params.sfPhone}  
+		</if>
+		<if test="params.sfEmail != null and params.sfEmail !=''">
+			and us.sf_email = #{params.sfEmail}  
+		</if>
+		<if test="params.start != null and params.limit != null ">
+			limit #{params.start},#{params.limit}
+		</if>
+	</select>
+	
+	<select id="countOrSfCriterias" parameterType="com.tianfang.business.dto.SportSfResultExDto" resultType="java.lang.Long">
+		select count(*) 
+		from sport_sf_result as result INNER JOIN sport_sf_question as que ON (result.sf_question = que.id)
+		inner join sport_suggestion_user as us on (result.sf_user_id = us.id)
+		where us.stat = '1' and que.stat = '1' and result.stat = '1'
+		<if test="params.id != null">
+				and result.id = #{params.id} 
+		</if>
+		<if test="params.sfQuestion != null and params.sfQuestion !='' ">
+			and result.sf_question = #{params.sfQuestion} 
+		</if>
+		<if test="params.sfAnswer != null and params.sfAnswer != ''">
+			and result.sf_answer = #{params.sfAnswer} 
+		</if>
+		<if test="params.sfType != null ">
+			and us.sf_type = #{params.sfType} 
+		</if>
+		<if test="params.sfUname != null and params.sfUname != ''">
+			and us.sf_uname Like #{params.sfUname}  
+		</if>
+		<if test="params.sfPhone != null and params.sfPhone !='' ">
+			and us.sf_phone = #{params.sfPhone}  
+		</if>
+		<if test="params.sfEmail != null and params.sfEmail !=''">
+			and us.sf_email = #{params.sfEmail}  
+		</if>
+	</select>
+</mapper>

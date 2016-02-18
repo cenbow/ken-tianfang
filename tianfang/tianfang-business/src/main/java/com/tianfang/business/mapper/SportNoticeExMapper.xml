@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianfang.business.mapper.SportNoticeExMapper">
+
+	<update id="resetTop" parameterType="java.lang.String">
+		UPDATE sport_notice SET
+		marked = 0 WHERE team_id = #{teamId}
+	</update>
+
+	<sql id="Column_List">
+		a.id, a.team_id as teamId, a.title, a.subtract, a.marked,
+		a.publisher,
+		a.page_ranking as pageRanking, a.last_update_time as lastUpdateTime,
+		a.create_time as createTime, a.stat,
+		b.name as teamName, a.content
+	</sql>
+	<sql id="Where_Clause">
+		<where>
+			<if test="params.id != null">
+				and a.id = #{params.id} 
+			</if>
+			<if test="params.teamId != null">
+				and a.team_id = #{params.teamId} 
+			</if>
+			<if test="params.title != null">
+				and a.title like #{params.title} 
+			</if>
+			<if test="params.publisher != null">
+				and a.publisher = #{params.publisher}  
+			</if>
+			<if test="params.marked != null">
+				and a.marked = #{params.marked}  
+			</if>
+			<if test="params.stat != null">
+				and a.stat = #{params.stat} 
+			</if>
+			<if test="params.createTimeS != null">
+				and a.create_time &gt; #{params.createTimeS} 
+			</if>
+			<if test="params.createTimeE != null">
+				and a.create_time &lt; #{params.createTimeE} 
+			</if>
+			    and a.stat =1 and b.stat = 1
+		</where>
+	</sql>
+
+	<sql id="Order_Clause">
+		ORDER BY
+		<if test="params.teamId != null">
+			a.marked DESC,
+		</if>
+		a.create_time DESC
+	</sql>
+
+	<select id="findNoticeByParams" parameterType="java.util.Map"
+		resultType="com.tianfang.business.dto.SportNoticeDto">
+		SELECT
+		<include refid="Column_List" />
+		FROM sport_notice AS a LEFT JOIN sport_team AS b ON b.id = a.team_id
+		<include refid="Where_Clause" />		
+		<include refid="Order_Clause" />
+		<if test="params.start != null and params.count > 0">
+			LIMIT #{params.start},#{params.count}
+		</if>
+	</select>
+
+</mapper>

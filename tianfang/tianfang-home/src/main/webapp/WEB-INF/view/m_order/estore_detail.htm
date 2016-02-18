@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<#include "/common/head.htm"/>
+		<meta charset="UTF-8">
+		<link rel="icon" type="image/gif" href="/static/img/favicon.ico">
+		<title>聚运动</title>
+		<link href="/static/css/eshop-detail.css" rel="stylesheet" />
+		<link href="/static/css/eshop-detail-pic.css" rel="stylesheet" />
+	</head>
+
+	<body>
+	<#include "/common/topbar.htm"/>
+		<form id="byCriteria" action="/m/Product/homeInfo.htm">
+			<input type="hidden" name="productName" value="${(spuDto.productName)!}" />
+		</form>
+		<div class="store_topbar">
+			<span>装备商店</span>
+			<div class="search_bar">
+				<input type="button" id="selectBy" value="">
+				<input type="text" id="productName" placeholder="请输入您要搜索的名称" value="${(spuDto.productName)!}"> 
+			</div>
+			<a class="btn_cart" style="cursor:pointer;" href="/m/Product/getShoppingCard.htm">购物车</a>
+		</div>
+		<div class="wrapper">
+			<div class="detail-item">
+				<div class="main-pic">
+					<div class="preview">
+						<div id="vertical" class="bigImg">
+							<!-- <img src="/static/img/mid/05.jpg" width="400" height="400" alt="" id="midimg" /> -->
+							<#if pics??>
+								<#list pics as pic>
+									<#if pic_index=0>
+										<img src="${(pic)!}" width="400" height="400" alt="" id="midimg" />
+									</#if>								
+								</#list>
+							</#if>
+							<div style="display:none;" id="winSelector"></div>
+						</div>
+						<!--bigImg end-->
+						<div class="smallImg">
+							<div class="scrollbutton smallImgUp disabled"></div>
+							<div id="imageMenu">
+								<ul>
+									<#if pics??>
+										<#list pics as pic>
+											<li><img src="${(pic)!}" width="68" height="68" alt="洋妞" /></li>
+										</#list>
+									</#if>									
+									<!-- <li id="onlickImg"><img src="/static/img/small/05.jpg" width="68" height="68" alt="洋妞" /></li>
+									<li><img src="/static/img/small/02.jpg" width="68" height="68" alt="洋妞" /></li>
+									<li><img src="/static/img/small/03.jpg" width="68" height="68" alt="洋妞" /></li>
+									<li><img src="/static/img/small/04.jpg" width="68" height="68" alt="洋妞" /></li>
+									<li><img src="/static/img/small/01.jpg" width="68" height="68" alt="洋妞" /></li>
+									<li><img src="/static/img/small/06.jpg" width="68" height="68" alt="洋妞" /></li>
+									<li><img src="/static/img/small/07.jpg" width="68" height="68" alt="洋妞" /></li>
+									<li><img src="/static/img/small/08.jpg" width="68" height="68" alt="洋妞" /></li>
+									<li><img src="/static/img/small/09.jpg" width="68" height="68" alt="洋妞" /></li>
+									<li><img src="/static/img/small/10.jpg" width="68" height="68" alt="洋妞" /></li> -->
+								</ul>
+							</div>
+							<div class="scrollbutton smallImgDown"></div>
+						</div>
+						<!--smallImg end-->
+						<div id="bigView" style="display:none;"><img width="800" height="800" alt="" src="" /></div>
+					</div>
+				</div>
+				<div class="main-box">
+					<div class="main-box-hd">
+						<h1 class="es-detail-hd">${(sportMProductSpuDto.productName)!}</h1>
+						<!-- <h1 class="es-detail-hd">阿迪达斯男鞋2015秋冬季新款运动鞋透气耐磨跑步鞋B33550</h1> -->
+						<div id="es-detail-price">
+							<div class="es-detail-price">
+								<label for="">售价</label>
+								<span id ="productMarketPrice">￥${(sportMProductSpuDto.productMarketPrice)?replace(',','')}</span>
+							</div>
+						</div>
+						<div class="es-detail-review">
+							<label for="">评价</label>
+							<#if sportMProductSpuDto.star??>
+								<img src="/static/img/star-${(sportMProductSpuDto.star)!}.png" alt="" />
+								<#if (sportMEvaluateDtos?size>0)>
+									<a class="js-review-no"  href="###">已有${(sportMEvaluateDtos.total)!}人评价&nbsp;></a>
+								<#else>
+									<a href="###">暂无评价&nbsp;></a>
+								</#if>								
+							<#else>
+								<#if (sportMEvaluateDtos?size>0)>
+									<a class="js-review-no"  href="###">已有${(sportMEvaluateDtos.total)!}人评价&nbsp;></a>
+								<#else>
+									<a href="###">暂无评价&nbsp;></a>
+								</#if>
+							</#if>
+							<!-- <img src="/static/img/star-3.png" alt="" /> -->
+							
+						</div>
+					</div>
+					<div class="main-box-bd">
+						<ul>
+							<li>
+								<label class="lf">配送</label>
+								<span class="lf addre">
+									<select class="dt-address" name="">
+										<option value="1">上海</option>
+										<option value="2">北京</option>
+									</select>
+									<label class="status" for="">有货</label>
+								</span>
+
+							</li>
+							<!-- <li class="size-li">
+								<label class="size" for="">尺码</label>
+								<span class="size">
+									<label class="dt-size">S码</label>
+									<label class="dt-size cur">M码</label>
+									<label class="dt-size">L码</label>
+									<label class="dt-size">S码</label>
+									<label class="dt-size">S码</label>
+									<label class="dt-size">S码</label>
+									<label class="dt-size">S码</label>
+									<label class="dt-size">S码</label>
+									<label class="dt-size">S码</label>
+									<label class="dt-size">S码</label>
+									<label class="dt-size">S码</label>
+									<label class="dt-size">S码</label>
+								</span>
+							</li> -->
+							<#if specVaules??>
+								<#list specVaules as specVaule>
+									<li class="size-li">
+									<label class="size" for="">${(specVaule.specName)!}</label>
+									<span class="size">
+									<#if specVaule.sportMSpecValuesDtos??>										
+										<#list specVaule.sportMSpecValuesDtos as value>
+											<#if value_index == 0>
+												<label class="dt-size cur" data-obj-id= "${(value.specId)!}*${(value.id)!}">${(value.specValue)!}</label>
+											<#else>
+												<label class="dt-size" data-obj-id= "${(value.specId)!}*${(value.id)!}">${(value.specValue)!}</label>
+											</#if>
+											
+										</#list>
+									</#if>
+								</#list>
+							</li>
+							</#if>
+							<li>
+								<label class="lf">数量</label>
+								<span class="lf num">
+									<a class="amount-decrease amount-change">-</a>
+									<input class="amount-Num js-amount" type="text" max="5" id="" value="1" maxlength="4"/>
+									<a class="amount-increase amount-change">+</a>
+									<label class="limit" for="">限购5件</label>
+								</span>
+							</li>
+						</ul>
+						<#if user??>
+							<!-- <div class="submit"><a href="/m_shipping/toShipping.htm">确认结算</a></div> -->
+							<div class="bts"><input class="add-cart" type="button" id="addCart" value="加入购物车" />	</div>
+						<#else>
+							<!-- <div class="submit"><a href="###" >用户登录</a></div> -->
+							<div class="bts"><input class="add-cart" type="button" id="" value="加入购物车" onclick="open_login();" />	</div>
+						</#if>
+					</div>
+				</div>
+			</div>
+			<!-- 下面详情DIV -->
+			<div class="con-tab">
+				<ul class="con-tab-ul">
+					<li class="con-tab-li js-intro cur" data-d="con-intro">产品介绍</li>
+					<li class="con-tab-li js-review" data-d="con-review">评价晒单</li>
+					<li class="con-tab-li js-record" data-d="con-record">成交记录</li>
+					<li class="con-tab-li js-af-sale" data-d="con-af-sale">售后服务</li>
+				</ul>
+				<div class="con-intro">
+					${(sportMProductSpuDto.content)!}
+				</div>
+				<div class="con-review hide">
+					<div class="con-review-totle">
+						<div class="rate">
+							<#if sportMProductSpuDto.goodEvaluate??>
+								<span class="rate-num">${(sportMProductSpuDto.goodEvaluate)!}%</span>
+								<span>好评度</span>
+							<#else>
+								<span>暂无评价</span>
+							</#if>
+						</div>
+						<div class="percent">
+							<dl> <dt>好评<span></span></dt>
+								<dd>
+									<div style="width: ${(sportMProductSpuDto.goodEvaluate)!}%;"></div>
+								</dd>
+							</dl>
+							<dl> <dt>中评<span></span></dt>
+								<dd class="d1">
+									<div style="width: ${(sportMProductSpuDto.inEvaluate)!}%;"> </div>
+								</dd>
+							</dl>
+							<dl> <dt>差评<span></span></dt>
+								<dd class="d1">
+									<div style="width: ${(sportMProductSpuDto.badEvaluate)!}%;"> </div>
+								</dd>
+							</dl>
+						</div>
+						<div class="share">
+							<input class="bt bt1" type="button" name="" id="" value="我要评价" />
+							<br />
+							<!-- <input class="bt bt2" type="button" name="" id="" value="发表晒单" /> -->
+						</div>
+					</div>
+					<div class="review">
+						<div class="review-hd">
+							<span class="review-hd-li cur" data-d="review-bd">所有评价(<i>${(sportMEvaluateDtos.total)!}</i>)</span>
+							<i>|</i><span class="review-hd-li" data-d="review-goodCount">好评(<i>${(sportMEvaluateDtosGood.total)!}</i>)</span>
+							<i>|</i><span class="review-hd-li" data-d="review-inCount">中评(<i>${(sportMEvaluateDtosIn.total)!}</i>)</span>
+							<i>|</i><span class="review-hd-li" data-d="review-picCount">晒单(<i>${(sportMEvaluateDtosPic.total)!}</i>)</span>
+						<div id="reviewAll" class="review-bd">							
+							<ul class="comm-ul">
+								<#if sportMEvaluateDtos.results??>
+								<#if (sportMEvaluateDtos.results?size>0)>
+									<#list sportMEvaluateDtos.results as page>
+											<li class="comm-li">
+												<div class="user-hd">
+													<#if page.userPic??>
+														<img src="${(page.userPic)!}" />
+													<#else>
+														<img src="http://i0.letvimg.com/img/201207/30/tx70.png" />
+													</#if>												
+													<br /><span>${(page.nickName)!}</span>
+												</div>
+												<div class="comments">
+													<div class="comments_hd">
+														<img src="/static/img/star-${(page.star)!}.png" alt="" />
+														<#if page.createTime??>
+															<span>发表于<i>${(page.createTime)?string("yyyy-MM-dd HH:mm:ss")}</i></span>
+														<#else>
+															<span>发表于<i></i></span>
+														</#if>
+														
+													</div>
+													<div class="comments_con">
+														${(page.evaluateContent)!}
+													</div>
+													<div class="comments_img">
+													<#if page.pic??>
+														<#list page.pic?split(",") as pics>
+															<#if pics != ''><img alt="" src="${(pics)!}"></#if> 
+														</#list>
+													</#if>
+													</div>
+												</div>
+											</li>
+									  	</#list>
+									<#else>
+										<p class="no-comm">暂无评价</p>
+									</#if>
+								<#else>
+									<p class="no-comm">暂无评价</p>
+								</#if>								
+							</ul>
+							<!-- 分页展示个数 ,这个值只能为奇数-->
+							<!-- 页面的跳转功能请实现 gotoPageAll(page) 函数-->
+							<#assign show_num = 7>
+							<#if sportMEvaluateDtos?? && sportMEvaluateDtos.total gt 0> 
+							<div class="pagenav herald">
+								<#if sportMEvaluateDtos.currPage gt 1 >
+									<a href="javascript:gotoPageAll(1)">首页</a>
+								<#else>
+									<a href="javascript:;">首页</a>
+								</#if>
+								<#if (sportMEvaluateDtos.currPage-1) gt 0 >
+									<a href="javascript:gotoPageAll(${sportMEvaluateDtos.currPage - 1})">上一页</a>
+								<#else>
+									<a href="javascript:;">上一页</a>
+								</#if>
+								<#if sportMEvaluateDtos.totalPage lte show_num>
+									<#list 1..sportMEvaluateDtos.totalPage as i>
+										<a <#if sportMEvaluateDtos.currPage == i>class="cur"<#else>href="javascript:gotoPageAll(${i})"</#if> >${i}</a>
+									</#list>
+								<#else>
+									<#if sportMEvaluateDtos.currPage lte ((show_num + 1)/2)>
+										<#if sportMEvaluateDtos.currPage gt 1>
+											<#list 1..(sportMEvaluateDtos.currPage-1) as i>
+												<a href="javascript:gotoPageAll(${i})">${i}</a>
+											</#list>
+										</#if>
+										<a class="cur">${sportMEvaluateDtos.currPage}</a>
+										<#list 1..(show_num - sportMEvaluateDtos.currPage) as i>
+											<a href="javascript:gotoPageAll(${sportMEvaluateDtos.currPage + i})">${sportMEvaluateDtos.currPage + i}</a>
+										</#list>
+									<#else>
+										<#if (sportMEvaluateDtos.totalPage - sportMEvaluateDtos.currPage) lt ((show_num - 1)/2) >
+											<#list (sportMEvaluateDtos.totalPage - show_num + 1)..sportMEvaluateDtos.totalPage as i>
+												<#if sportMEvaluateDtos.currPage == i>
+													<a class="cur">${i}</a>
+												<#else>
+													<a href="javascript:gotoPageAll(${i})">${i}</a>
+												</#if>
+											</#list>
+										<#else>
+											<#list ((show_num - 1)/2)..1 as i>
+												<a href="javascript:gotoPageAll(${sportMEvaluateDtos.currPage - i})">${sportMEvaluateDtos.currPage - i}</a>
+											</#list>
+											<a class="cur">${sportMEvaluateDtos.currPage}</a>
+											<#list 1..((show_num - 1)/2) as i>
+												<a href="javascript:gotoPageAll(${sportMEvaluateDtos.currPage + i})">${sportMEvaluateDtos.currPage + i}</a>
+											</#list>
+										</#if>
+									</#if>
+								</#if>
+								<#if (sportMEvaluateDtos.currPage + 1) lte sportMEvaluateDtos.totalPage >
+									<a href="javascript:gotoPageAll(${sportMEvaluateDtos.currPage + 1})">下一页</a>
+								<#else>
+									<a href="javascript:;">下一页</a>
+								</#if>
+								<#if sportMEvaluateDtos.currPage lt sportMEvaluateDtos.totalPage>
+									<a href="javascript:gotoPageAll(${sportMEvaluateDtos.totalPage})">末页</a>
+								<#else>
+									<a href="javascript:;">末页</a>
+								</#if>
+							</div>
+							</#if>	
+						</div>
+						<div id="reviewGood" class="review-goodCount hide">							
+							<ul class="comm-ul">
+								<#if sportMEvaluateDtosGood.results??>
+									<#if (sportMEvaluateDtosGood.results?size>0)>
+										<#list sportMEvaluateDtosGood.results as page>
+											<li class="comm-li">
+												<div class="user-hd">
+													<#if page.userPic??>
+														<img src="${(page.userPic)!}" />
+													<#else>
+														<img src="http://i0.letvimg.com/img/201207/30/tx70.png" />
+													</#if>												
+													<br /><span>${(page.nickName)!}</span>
+												</div>
+												<div class="comments">
+													<div class="comments_hd">
+														<img src="/static/img/star-${(page.star)!}.png" alt="" />
+														<#if page.createTime??>
+															<span>发表于<i>${(page.createTime)?string("yyyy-MM-dd HH:mm:ss")}</i></span>
+														<#else>
+															<span>发表于<i></i></span>
+														</#if>
+													</div>
+													<div class="comments_con">
+														${(page.evaluateContent)!}
+													</div>
+													<div class="comments_img">
+													<#if page.pic??>
+														<#list page.pic?split(",") as pics>
+															<#if pics != ''><img alt="" src="${(pics)!}"></#if> 
+														</#list>
+													</#if>
+													</div>
+												</div>
+											</li>
+										</#list>
+									<#else>
+										<p class="no-comm">暂无评价</p>
+									</#if>
+								<#else>
+									<p class="no-comm">暂无评价</p>
+								</#if>								
+							</ul>
+							<!-- 分页展示个数 ,这个值只能为奇数-->
+							<!-- 页面的跳转功能请实现 gotoPageAll(page) 函数-->
+							<#assign show_num = 7>
+							<#if sportMEvaluateDtosGood?? && sportMEvaluateDtosGood.total gt 0> 
+							<div class="pagenav herald">
+								<#if sportMEvaluateDtosGood.currPage gt 1 >
+									<a href="javascript:gotoPageGood(1)">首页</a>
+								<#else>
+									<a href="javascript:;">首页</a>
+								</#if>
+								<#if (sportMEvaluateDtosGood.currPage-1) gt 0 >
+									<a href="javascript:gotoPageGood(${sportMEvaluateDtosGood.currPage - 1})">上一页</a>
+								<#else>
+									<a href="javascript:;">上一页</a>
+								</#if>
+								<#if sportMEvaluateDtosGood.totalPage lte show_num>
+									<#list 1..sportMEvaluateDtosGood.totalPage as i>
+										<a <#if sportMEvaluateDtosGood.currPage == i>class="cur"<#else>href="javascript:gotoPageGood(${i})"</#if> >${i}</a>
+									</#list>
+								<#else>
+									<#if sportMEvaluateDtosGood.currPage lte ((show_num + 1)/2)>
+										<#if sportMEvaluateDtosGood.currPage gt 1>
+											<#list 1..(sportMEvaluateDtosGood.currPage-1) as i>
+												<a href="javascript:gotoPageGood(${i})">${i}</a>
+											</#list>
+										</#if>
+										<a class="cur">${sportMEvaluateDtosGood.currPage}</a>
+										<#list 1..(show_num - sportMEvaluateDtosGood.currPage) as i>
+											<a href="javascript:gotoPageGood(${sportMEvaluateDtosGood.currPage + i})">${sportMEvaluateDtosGood.currPage + i}</a>
+										</#list>
+									<#else>
+										<#if (sportMEvaluateDtosGood.totalPage - sportMEvaluateDtosGood.currPage) lt ((show_num - 1)/2) >
+											<#list (sportMEvaluateDtosGood.totalPage - show_num + 1)..sportMEvaluateDtosGood.totalPage as i>
+												<#if sportMEvaluateDtosGood.currPage == i>
+													<a class="cur">${i}</a>
+												<#else>
+													<a href="javascript:gotoPageGood(${i})">${i}</a>
+												</#if>
+											</#list>
+										<#else>
+											<#list ((show_num - 1)/2)..1 as i>
+												<a href="javascript:gotoPageGood(${sportMEvaluateDtosGood.currPage - i})">${sportMEvaluateDtosGood.currPage - i}</a>
+											</#list>
+											<a class="cur">${sportMEvaluateDtosGood.currPage}</a>
+											<#list 1..((show_num - 1)/2) as i>
+												<a href="javascript:gotoPageGood(${sportMEvaluateDtosGood.currPage + i})">${sportMEvaluateDtosGood.currPage + i}</a>
+											</#list>
+										</#if>
+									</#if>
+								</#if>
+								<#if (sportMEvaluateDtosGood.currPage + 1) lte sportMEvaluateDtosGood.totalPage >
+									<a href="javascript:gotoPageGood(${sportMEvaluateDtosGood.currPage + 1})">下一页</a>
+								<#else>
+									<a href="javascript:;">下一页</a>
+								</#if>
+								<#if sportMEvaluateDtosGood.currPage lt sportMEvaluateDtosGood.totalPage>
+									<a href="javascript:gotoPageGood(${sportMEvaluateDtosGood.totalPage})">末页</a>
+								<#else>
+									<a href="javascript:;">末页</a>
+								</#if>
+							</div>
+							</#if>	
+						</div>
+						<div id="reviewIn" class="review-inCount hide">							
+							<ul class="comm-ul">
+								<#if sportMEvaluateDtosIn.results??>
+									<#if (sportMEvaluateDtosIn.results?size>0)>
+										<#list sportMEvaluateDtosIn.results as page>
+											<li class="comm-li">
+												<div class="user-hd">
+													<#if page.userPic??>
+														<img src="${(page.userPic)!}" />
+													<#else>
+														<img src="http://i0.letvimg.com/img/201207/30/tx70.png" />
+													</#if>												
+													<br /><span>${(page.nickName)!}</span>
+												</div>
+												<div class="comments">
+													<div class="comments_hd">
+														<img src="/static/img/star-${(page.star)!}.png" alt="" />
+														<#if page.createTime??>
+															<span>发表于<i>${(page.createTime)?string("yyyy-MM-dd HH:mm:ss")}</i></span>
+														<#else>
+															<span>发表于<i></i></span>
+														</#if>
+													</div>
+													<div class="comments_con">
+														${(page.evaluateContent)!}
+													</div>
+													<div class="comments_img">
+													<#if page.pic??>
+														<#list page.pic?split(",") as pics>
+															<#if pics != ''><img alt="" src="${(pics)!}"></#if> 
+														</#list>
+													</#if>
+													</div>
+												</div>
+											</li>
+										</#list>									
+									<#else>
+									<p class="no-comm">暂无评价</p>
+									</#if>	
+								<#else>
+									<p class="no-comm">暂无评价</p>	
+								</#if>				
+							</ul>
+							<!-- 分页展示个数 ,这个值只能为奇数-->
+							<!-- 页面的跳转功能请实现 gotoPageAll(page) 函数-->
+							<#assign show_num = 7>
+							<#if sportMEvaluateDtosIn?? && sportMEvaluateDtosIn.total gt 0> 
+							<div class="pagenav herald">
+								<#if sportMEvaluateDtosIn.currPage gt 1 >
+									<a href="javascript:gotoPageIn(1)">首页</a>
+								<#else>
+									<a href="javascript:;">首页</a>
+								</#if>
+								<#if (sportMEvaluateDtosIn.currPage-1) gt 0 >
+									<a href="javascript:gotoPageIn(${sportMEvaluateDtosIn.currPage - 1})">上一页</a>
+								<#else>
+									<a href="javascript:;">上一页</a>
+								</#if>
+								<#if sportMEvaluateDtosIn.totalPage lte show_num>
+									<#list 1..sportMEvaluateDtosIn.totalPage as i>
+										<a <#if sportMEvaluateDtosIn.currPage == i>class="cur"<#else>href="javascript:gotoPageIn(${i})"</#if> >${i}</a>
+									</#list>
+								<#else>
+									<#if sportMEvaluateDtosIn.currPage lte ((show_num + 1)/2)>
+										<#if sportMEvaluateDtosIn.currPage gt 1>
+											<#list 1..(sportMEvaluateDtosIn.currPage-1) as i>
+												<a href="javascript:gotoPageIn(${i})">${i}</a>
+											</#list>
+										</#if>
+										<a class="cur">${sportMEvaluateDtosIn.currPage}</a>
+										<#list 1..(show_num - sportMEvaluateDtosIn.currPage) as i>
+											<a href="javascript:gotoPageIn(${sportMEvaluateDtosIn.currPage + i})">${sportMEvaluateDtosIn.currPage + i}</a>
+										</#list>
+									<#else>
+										<#if (sportMEvaluateDtosIn.totalPage - sportMEvaluateDtosIn.currPage) lt ((show_num - 1)/2) >
+											<#list (sportMEvaluateDtosIn.totalPage - show_num + 1)..sportMEvaluateDtosIn.totalPage as i>
+												<#if sportMEvaluateDtosIn.currPage == i>
+													<a class="cur">${i}</a>
+												<#else>
+													<a href="javascript:gotoPageIn(${i})">${i}</a>
+												</#if>
+											</#list>
+										<#else>
+											<#list ((show_num - 1)/2)..1 as i>
+												<a href="javascript:gotoPageIn(${sportMEvaluateDtosIn.currPage - i})">${sportMEvaluateDtosIn.currPage - i}</a>
+											</#list>
+											<a class="cur">${sportMEvaluateDtosIn.currPage}</a>
+											<#list 1..((show_num - 1)/2) as i>
+												<a href="javascript:gotoPageIn(${sportMEvaluateDtosIn.currPage + i})">${sportMEvaluateDtosIn.currPage + i}</a>
+											</#list>
+										</#if>
+									</#if>
+								</#if>
+								<#if (sportMEvaluateDtosIn.currPage + 1) lte sportMEvaluateDtosIn.totalPage >
+									<a href="javascript:gotoPageIn(${sportMEvaluateDtosIn.currPage + 1})">下一页</a>
+								<#else>
+									<a href="javascript:;">下一页</a>
+								</#if>
+								<#if sportMEvaluateDtosIn.currPage lt sportMEvaluateDtosIn.totalPage>
+									<a href="javascript:gotoPageIn(${sportMEvaluateDtosIn.totalPage})">末页</a>
+								<#else>
+									<a href="javascript:;">末页</a>
+								</#if>
+							</div>
+							</#if>	
+						</div>
+						<div id="reviewPic" class="review-picCount hide">							
+							<ul class="comm-ul">
+								<#if sportMEvaluateDtosPic.results??>
+									<#if (sportMEvaluateDtosPic.results?size>0)>
+										<#list sportMEvaluateDtosPic.results as page>
+											<li class="comm-li">
+												<div class="user-hd">
+													<#if page.userPic??>
+														<img src="${(page.userPic)!}" />
+													<#else>
+														<img src="http://i0.letvimg.com/img/201207/30/tx70.png" />
+													</#if>												
+													<br /><span>${(page.nickName)!}</span>
+												</div>
+												<div class="comments">
+													<div class="comments_hd">
+														<img src="/static/img/star-${(page.star)!}.png" alt="" />
+														<#if page.createTime??>
+															<span>发表于<i>${(page.createTime)?string("yyyy-MM-dd HH:mm:ss")}</i></span>
+														<#else>
+															<span>发表于<i></i></span>
+														</#if>
+													</div>
+													<div class="comments_con">
+														${(page.evaluateContent)!}
+													</div>
+													<div class="comments_img">
+													<#if page.pic??>
+														<#list page.pic?split(",") as pics>
+															<#if pics != ''><img alt="" src="${(pics)!}"></#if> 
+														</#list>
+													</#if>
+													</div>
+												</div>
+											</li>
+										</#list>									
+									<#else>
+									<p class="no-comm">暂无评价</p>
+									</#if>	
+								<#else>
+									<p class="no-comm">暂无评价</p>	
+								</#if>				
+							</ul>
+							<!-- 分页展示个数 ,这个值只能为奇数-->
+							<!-- 页面的跳转功能请实现 gotoPageAll(page) 函数-->
+							<#assign show_num = 7>
+							<#if sportMEvaluateDtosPic?? && sportMEvaluateDtosPic.total gt 0> 
+							<div class="pagenav herald">
+								<#if sportMEvaluateDtosPic.currPage gt 1 >
+									<a href="javascript:gotoPagePic(1)">首页</a>
+								<#else>
+									<a href="javascript:;">首页</a>
+								</#if>
+								<#if (sportMEvaluateDtosPic.currPage-1) gt 0 >
+									<a href="javascript:gotoPagePic(${sportMEvaluateDtosPic.currPage - 1})">上一页</a>
+								<#else>
+									<a href="javascript:;">上一页</a>
+								</#if>
+								<#if sportMEvaluateDtosPic.totalPage lte show_num>
+									<#list 1..sportMEvaluateDtosPic.totalPage as i>
+										<a <#if sportMEvaluateDtosPic.currPage == i>class="cur"<#else>href="javascript:gotoPagePic(${i})"</#if> >${i}</a>
+									</#list>
+								<#else>
+									<#if sportMEvaluateDtosPic.currPage lte ((show_num + 1)/2)>
+										<#if sportMEvaluateDtosPic.currPage gt 1>
+											<#list 1..(sportMEvaluateDtosPic.currPage-1) as i>
+												<a href="javascript:gotoPagePic(${i})">${i}</a>
+											</#list>
+										</#if>
+										<a class="cur">${sportMEvaluateDtosPic.currPage}</a>
+										<#list 1..(show_num - sportMEvaluateDtosPic.currPage) as i>
+											<a href="javascript:gotoPagePic(${sportMEvaluateDtosPic.currPage + i})">${sportMEvaluateDtosPic.currPage + i}</a>
+										</#list>
+									<#else>
+										<#if (sportMEvaluateDtosPic.totalPage - sportMEvaluateDtosPic.currPage) lt ((show_num - 1)/2) >
+											<#list (sportMEvaluateDtosPic.totalPage - show_num + 1)..sportMEvaluateDtosPic.totalPage as i>
+												<#if sportMEvaluateDtosPic.currPage == i>
+													<a class="cur">${i}</a>
+												<#else>
+													<a href="javascript:gotoPagePic(${i})">${i}</a>
+												</#if>
+											</#list>
+										<#else>
+											<#list ((show_num - 1)/2)..1 as i>
+												<a href="javascript:gotoPagePic(${sportMEvaluateDtosPic.currPage - i})">${sportMEvaluateDtosPic.currPage - i}</a>
+											</#list>
+											<a class="cur">${sportMEvaluateDtosPic.currPage}</a>
+											<#list 1..((show_num - 1)/2) as i>
+												<a href="javascript:gotoPagePic(${sportMEvaluateDtosPic.currPage + i})">${sportMEvaluateDtosPic.currPage + i}</a>
+											</#list>
+										</#if>
+									</#if>
+								</#if>
+								<#if (sportMEvaluateDtosPic.currPage + 1) lte sportMEvaluateDtosPic.totalPage >
+									<a href="javascript:gotoPagePic(${sportMEvaluateDtosPic.currPage + 1})">下一页</a>
+								<#else>
+									<a href="javascript:;">下一页</a>
+								</#if>
+								<#if sportMEvaluateDtosPic.currPage lt sportMEvaluateDtosPic.totalPage>
+									<a href="javascript:gotoPagePic(${sportMEvaluateDtosPic.totalPage})">末页</a>
+								<#else>
+									<a href="javascript:;">末页</a>
+								</#if>
+							</div>
+							</#if>	
+						</div>
+						</div>
+					</div>
+				</div>
+				<div class="con-record  hide">
+					<ul class="con-record-ul" id="con-record-ul" >
+						<li class="con-record-li hd">
+							<p class="name">买家</p>
+							<p class="type">款式/型号</p>
+							<p class="num">数量</p>
+							<p class="date">成交时间</p>
+						</li>
+						<div id="con-record-order">
+							<#if sportMOrderInfoDtos.results??>
+								<#if (sportMOrderInfoDtos.results?size>0)>
+									<#list sportMOrderInfoDtos.results as page>
+										<li class="con-record-li">
+											<p class="name">${(page.nickName)!}</p>
+											<p class="type">${(page.skuName)!}</p>
+											<p class="num">${(page.number)!}</p>
+											<p class="date">${(page.createTime)?string("yyyy-MM-dd HH:mm:ss")}</p>
+										</li>
+									</#list>
+								<#else>
+									<li class="con-record-li" style="text-align:center;">
+										<div>暂无记录</div>	
+									</li>
+								</#if>
+							<#else>
+								<li class="con-record-li" style="text-align:center;">
+										<div>暂无记录</div>	
+									</li>
+							
+							<!-- 分页展示个数 ,这个值只能为奇数-->
+							<!-- 页面的跳转功能请实现 gotoPageAll(page) 函数-->
+							<#assign show_num = 7>
+							<#if sportMOrderInfoDtos?? && sportMOrderInfoDtos.total gt 0> 
+							<div class="pagenav herald">
+								<#if sportMOrderInfoDtos.currPage gt 1 >
+									<a href="javascript:gotoPageOrder(1)">首页</a>
+								<#else>
+									<a href="javascript:;">首页</a>
+								</#if>
+								<#if (sportMOrderInfoDtos.currPage-1) gt 0 >
+									<a href="javascript:gotoPageOrder(${sportMOrderInfoDtos.currPage - 1})">上一页</a>
+								<#else>
+									<a href="javascript:;">上一页</a>
+								</#if>
+								<#if sportMOrderInfoDtos.totalPage lte show_num>
+									<#list 1..sportMOrderInfoDtos.totalPage as i>
+										<a <#if sportMOrderInfoDtos.currPage == i>class="cur"<#else>href="javascript:gotoPageOrder(${i})"</#if> >${i}</a>
+									</#list>
+								<#else>
+									<#if sportMOrderInfoDtos.currPage lte ((show_num + 1)/2)>
+										<#if sportMOrderInfoDtos.currPage gt 1>
+											<#list 1..(sportMOrderInfoDtos.currPage-1) as i>
+												<a href="javascript:gotoPageOrder(${i})">${i}</a>
+											</#list>
+										</#if>
+										<a class="cur">${sportMOrderInfoDtos.currPage}</a>
+										<#list 1..(show_num - sportMOrderInfoDtos.currPage) as i>
+											<a href="javascript:gotoPageOrder(${sportMOrderInfoDtos.currPage + i})">${sportMOrderInfoDtos.currPage + i}</a>
+										</#list>
+									<#else>
+										<#if (sportMOrderInfoDtos.totalPage - sportMOrderInfoDtos.currPage) lt ((show_num - 1)/2) >
+											<#list (sportMOrderInfoDtos.totalPage - show_num + 1)..sportMOrderInfoDtos.totalPage as i>
+												<#if sportMOrderInfoDtos.currPage == i>
+													<a class="cur">${i}</a>
+												<#else>
+													<a href="javascript:gotoPageOrder(${i})">${i}</a>
+												</#if>
+											</#list>
+										<#else>
+											<#list ((show_num - 1)/2)..1 as i>
+												<a href="javascript:gotoPageOrder(${sportMOrderInfoDtos.currPage - i})">${sportMOrderInfoDtos.currPage - i}</a>
+											</#list>
+											<a class="cur">${sportMOrderInfoDtos.currPage}</a>
+											<#list 1..((show_num - 1)/2) as i>
+												<a href="javascript:gotoPageOrder(${sportMOrderInfoDtos.currPage + i})">${sportMOrderInfoDtos.currPage + i}</a>
+											</#list>
+										</#if>
+									</#if>
+								</#if>
+								<#if (sportMOrderInfoDtos.currPage + 1) lte sportMOrderInfoDtos.totalPage >
+									<a href="javascript:gotoPageOrder(${sportMOrderInfoDtos.currPage + 1})">下一页</a>
+								<#else>
+									<a href="javascript:;">下一页</a>
+								</#if>
+								<#if sportMOrderInfoDtos.currPage lt sportMOrderInfoDtos.totalPage>
+									<a href="javascript:gotoPageOrder(${sportMOrderInfoDtos.totalPage})">末页</a>
+								<#else>
+									<a href="javascript:;">末页</a>
+								</#if>
+							</div>
+							</#if>	
+							</#if>
+						</div>
+					</ul>
+					
+					
+				</div>
+				<div class="con-af-sale  hide">
+					<p>1.京东平台卖家销售并发货的商品</p>
+					<p>2.由平台卖家提供发票和相应的售后服务。</p>
+					<p>3.请您放心购买！ 注：因厂家会在没有任何提前通知的情况下更改产品包装、产地或者一些附件，本司不能确保客户收到的货物与商城图片、产地、附件说明完全一致。</p>
+					<p>4.只能确保为原厂正货！并且保证与当时市场上同样主流新品一致。若本商城没有及时更新，请大家谅解！ </p>
+				</div>
+			</div>
+		</div>
+		<#include "/common/footer.htm"/>
+		<script src="/static/js/eshop-detail-pic.js"></script>
+		<script type="text/javascript" src="/static/js/youth_page.js"></script>
+		<script>
+			function gotoPageAlls(){
+				var spuId = "${(sportMProductSpuDto.id)!}";
+				var ids = '';
+				$(".dt-size.cur").each(function(){
+					id = $(this).attr("data-obj-id")
+					ids += id+",";
+				});
+				$.ajax({
+					url:"/m/Product/checkGoods.htm",
+					type:"post",
+					dataType:"json",
+					data:{spuId:spuId,ids:ids},
+					async: false,
+					success:function(data){
+						if(data.success){
+							var sku = data.msg;
+							$('.es-detail-price').remove();
+							var textAll = "";
+							textAll += "<div class=\"es-detail-price\">"
+							textAll += "<label for=\"\">售价</label>"
+							textAll += "<span id=productMarketPrice>￥"+sku.productPrice+"</span>"
+							textAll += "<div>"
+							$('#es-detail-price').append(textAll)
+						}else {
+							alert(data.msg);
+						}							
+					}
+				});
+			}
+			$(function() {
+				/* for (var i = 0; i < 10; i++) {
+					$(".con-record-ul").append($(".con-record-li:last").clone());
+				} */
+				
+				gotoPageAlls();
+				$(".btn_cart").on("click", function() {
+					location.href = "/m/Product/getShoppingCard.htm";
+					return;
+				});
+				$(".dt-size").on("click", function() {
+					var spuId = "${(sportMProductSpuDto.id)!}";
+					var ids = '';
+					if (!$(this).hasClass("cur")) {
+						$(this).siblings().removeClass("cur");
+						$(this).addClass("cur");
+					}
+					$(".dt-size.cur").each(function(){
+						id = $(this).attr("data-obj-id")
+						ids += id+",";
+					});
+					$.ajax({
+						url:"/m/Product/checkGoods.htm",
+						type:"post",
+						dataType:"json",
+						data:{spuId:spuId,ids:ids},
+						async: false,
+						success:function(data){
+							if(data.success){
+								var sku = data.msg;
+								$('.es-detail-price').remove();
+								var textAll = "";
+								textAll += "<div class=\"es-detail-price\">"
+								textAll += "<label for=\"\">售价</label>"
+								textAll += "<span id=productMarketPrice>￥"+sku.productPrice+"</span>"
+								textAll += "<div>"
+								$('#es-detail-price').append(textAll)
+							}else {
+								alert(data.msg);
+							}							
+						}
+					});
+				});
+				$(".review-hd-li").on("click", function() {
+					var _this = $(this);
+					if (_this.hasClass("cur")) {
+						//					console.log("当前已选中且单击");
+						return;
+					} else {
+						$(".review-hd-li").removeClass("cur");
+						_this.addClass("cur");
+						$(".review-hd>div").addClass("hide");
+						$("." + _this.attr("data-d")).removeClass("hide");
+					}
+					
+				});
+				$(".con-tab-li").on("click", function() {
+					var _this = $(this);
+					if (_this.hasClass("cur")) {
+						//					console.log("当前已选中且单击");
+						return;
+					} else {
+						$(".con-tab-li").removeClass("cur");
+						_this.addClass("cur");
+						$(".con-tab>div").removeClass("hide").addClass("hide");
+						$("." + _this.attr("data-d")).removeClass("hide");
+						//						console.log("sd");
+					}
+				});
+				$(".amount-decrease").on("click", function() {
+					var $am = $(".js-amount");
+					if ($am.val() == 1) {
+						return;
+					} else {
+						$am.val(parseInt($am.val(), 10) - 1);
+					}
+				});
+				$("#selectBy").on("click",function(){
+					var name = $("#productName").val().trim();
+					$('[name="productName"]').val(name);
+					document.getElementById("byCriteria").submit();
+					//window.location.href = '/m/Product/homeInfo.htm?productName='+name;
+				})
+				$(".amount-increase").on("click", function() {
+					var $am = $(".js-amount");
+					console.log($am.val());
+					if ($am.val().length == 4 || $am.val() >= parseInt($am.attr("max"), 10)) {
+						$am.val($am.attr("max"));
+						return;
+					} else {
+						$am.val(parseInt($am.val(), 10) + 1);
+					}
+				});
+				$(".js-amount").on("keyup", function() {
+					var val = $(this).val(),
+						max = parseInt($(".js-amount").attr("max"), 10);
+					if (val.length == 0) {
+						return;
+					}
+					val = isNaN(parseInt(val, 10)) ? 1 : parseInt(val, 10);
+					val = val < 1 ? 1 : val;
+					val = val >= max ? max : val;
+					$(this).val(val);
+				}).on("blur", function() {
+					var val = $(this).val(),
+						max = parseInt($(".js-amount").attr("max"), 10);
+					if (val.length == 0) {
+						$(this).val(1);
+					}
+					val = isNaN(parseInt(val, 10)) ? 1 : parseInt(val, 10);
+					val = val < 1 ? 1 : val;
+					val = val >= max ? max : val;
+					$(this).val(val);
+				});
+				$("#addCart").on("click", function() {
+					var number = $(".amount-Num").val();
+				//	var price = "${(sportMProductSpuDto.productMarketPrice)?replace(',','')}";
+					var price = $('#productMarketPrice').html();
+					price = price.substring(1,price.Length).replace(',','');
+					var spuId = "${(sportMProductSpuDto.id)!}";
+					var ids = '';
+					$(".dt-size.cur").each(function(){
+						id = $(this).attr("data-obj-id")
+						ids += id+",";
+					});	
+					$.ajax({
+						url:"/m/Product/toMShppingCard.htm",
+						type:"post",
+						dataType:"json",
+						data:{spuId:spuId,ids:ids,numberOf:number,price:price},
+						async: false,
+						success:function(data){
+							if(data.success){
+								alert("加入成功，可到购物车中查看！");
+							}else {
+								alert(data.msg);
+							}							
+						}
+					});
+				});
+				$(".dt-size").on("click", function() {
+					var id = $(this).attr("data-obj-id");
+				});
+				$(".js-review-no").on("click", function() {
+					window.scrollTo(0, $(".con-tab").offset().top);
+					$(".js-review").trigger("click");
+				});				
+			})
+			//页码跳转 
+			function gotoPageAll(page){
+				var spuId = "${(sportMProductSpuDto.id)!}";
+				var show_num = 7;
+				$.ajax({
+					url:'/estore/detail/findByPage.htm',
+					data:{id:spuId,page:page},
+					type:'post',
+					datatype:'json',
+					success:function(data){
+						var result = data.data.results;
+						$('#reviewAll').remove();
+						var textAll = "";
+						textAll += "<div id=\"reviewAll\" class=\"review-bd\">"
+						textAll += "<ul class=\"comm-ul\">"
+						for (var i = 0; i < result.length; i++) {
+							textAll += "<li class=\"comm-li\">"
+								textAll += "<div class=\"user-hd\">"
+							if (result[i].userPic==null || result[i].userPic =="" ||result[i].userPic== undefined) {
+								textAll += "<img src=\"http://i0.letvimg.com/img/201207/30/tx70.png\" />";
+							} else{
+								textAll += "<img src='"+result[i].userPic+"' />";
+							}
+							textAll += "<br /><span>"+result[i].nickName+"</span>";
+							textAll += "</div>";
+							textAll += "<div class=\"comments\">";
+							textAll += "<div class=\"comments_hd\">";
+							textAll += "<img src=\"/static/img/star-"+result[i].star+".png\" alt=\"\" />";
+							textAll += "<span>发表于<i>"+result[i].createTimeStr+"</i></span>";
+							textAll += "</div>";
+							textAll += "<div class=\"comments_con\">"+result[i].evaluateContent+"</div>";			
+							textAll += "<div class=\"comments_img\">";
+							var str=new String();
+							var arr=new Array();
+							str = result[i].pic;
+							arr = str.split(',');
+							for(var i=0;i<arr.length;i++)
+							{
+								if (arr[i] != '' && arr[i] != null) {
+									textAll +=  "<img alt=\"\" src=\""+arr[i]+"\">";
+								}
+							}
+							textAll += "</div>";
+							textAll += "</li>";
+						}
+						textAll += "</ul>"
+						var	results = data.data;
+						var show_num = 7;
+						if(results!= null && results.total>0){
+							textAll += "<div class=\"pagenav herald\">";
+							if(results.currPage>1){
+								textAll += "<a href=\"javascript:gotoPageAll("+1+")\">首页</a>";
+							}else{
+								textAll += "<a href=\"javascript:;\">首页</a>";
+							}
+						 	if((results.currPage - 1) >0){
+								textAll += "<a href=\"javascript:gotoPageAll("+(results.currPage - 1)+")\">上一页</a>";
+							}else{
+								textAll += "<a href=\"javascript:;\">上一页</a>";
+							}
+							//小于7
+							if(results.totalPage < show_num){
+								for (var i = 0; i < results.totalPage; i++) {
+									if((i+1)==results.currPage){
+										textAll +="<a class=\"cur\" href=\"javascript:gotoPageAll("+(i+1)+")\">"+(i+1)+"</a>"
+									}else{
+										textAll +="<a href=\"javascript:gotoPageAll("+(i+1)+")\">"+(i+1)+"</a>"
+									}
+								}	
+							}else{
+							 if(results.currPage<=((show_num+1)/2)){
+									for (var i = 0; i < (results.currPage-1); i++) {
+										textAll +="<a href=\"javascript:gotoPageAll("+(i+1)+")\">"+(i+1)+"</a>"
+									}
+									textAll +="<a class=\"cur\" href=\"javascript:gotoPageAll("+results.currPage+")\">"+results.currPage+"</a>"
+									for (var i = 0; i < (show_num-results.currPage); i++) {
+										textAll +="<a href=\"javascript:gotoPageAll("+(results.currPage+(i+1))+")\">"+(results.currPage+(i+1))+"</a>"
+									}
+								}else{
+									if((results.totalPage-results.currPage) < ((show_num-1)/2)){
+										for (var i = (results.totalPage-show_num+1); i <= results.totalPage; i++) {
+											if(i == results.currPage){
+												textAll +="<a class=\"cur\">"+i+"</a>"
+											}else{
+												textAll +="<a href=\"javascript:gotoPageAll("+i+")\">"+i+"</a>"
+											}
+										}
+									}else{
+										for (var i =((show_num-1)/2); i >0 ; i--) {
+											textAll +="<a href=\"javascript:gotoPageAll("+(results.currPage - i)+")\">"+(results.currPage - i)+"</a>"
+										}
+										textAll +="<a class=\"cur\">"+results.currPage+"</a>";
+									    for (var i = 1; i <= ((show_num-1)/2); i++) {
+											textAll +="<a href=\"javascript:gotoPageAll("+(results.currPage + i)+")\">"+(results.currPage + i)+"</a>"
+										} 
+									}
+								} 
+							}
+							
+							if((results.currPage + 1) <= results.totalPage){
+								textAll +="<a href=\"javascript:gotoPageAll("+(results.currPage + 1)+")\">下一页</a>";
+							}else{
+								textAll +="<a href=\"javascript:;\">下一页</a>"
+							}
+							if(results.currPage<=results.totalPage){
+								textAll +="<a href=\"javascript:gotoPageAll("+results.totalPage+")\">末页</a>";
+							}else{
+								textAll +="<a href=\"javascript:;\">末页</a>"
+							}
+						}
+						textAll += "</div>"
+						$('.review-hd').append(textAll)
+					}
+				})
+			}
+			function gotoPageGood(page){
+				var spuId = "${(sportMProductSpuDto.id)!}";
+				var show_num = 7;
+				$.ajax({
+					url:'/estore/detail/findByPage.htm',
+					data:{id:spuId,page:page,evaluateStatus:1},
+					type:'post',
+					datatype:'json',
+					success:function(data){
+						var result = data.data.results;
+						$('#reviewGood').remove();
+						var textAll = "";
+						textAll += "<div id=\"reviewGood\" class=\"review-goodCount\">"
+						textAll += "<ul class=\"comm-ul\">"
+						for (var i = 0; i < result.length; i++) {
+							textAll += "<li class=\"comm-li\">"
+								textAll += "<div class=\"user-hd\">"
+							if (result[i].userPic==null || result[i].userPic =="" ||result[i].userPic== undefined) {
+								textAll += "<img src=\"http://i0.letvimg.com/img/201207/30/tx70.png\" />";
+							} else{
+								textAll += "<img src='"+result[i].userPic+"' />";
+							}
+							textAll += "<br /><span>"+result[i].nickName+"</span>";
+							textAll += "</div>";
+							textAll += "<div class=\"comments\">";
+							textAll += "<div class=\"comments_hd\">";
+							textAll += "<img src=\"/static/img/star-"+result[i].star+".png\" alt=\"\" />";
+							textAll += "<span>发表于<i>"+result[i].createTimeStr+"</i></span>";
+							textAll += "</div>";
+							textAll += "<div class=\"comments_con\">"+result[i].evaluateContent+"</div>";	
+							textAll += "<div class=\"comments_img\">";
+							var str=new String();
+							var arr=new Array();
+							str = result[i].pic;
+							arr = str.split(',');
+							for(var i=0;i<arr.length;i++)
+							{
+								if (arr[i] != '' && arr[i] != null) {
+									textAll +=  "<img alt=\"\" src=\""+arr[i]+"\">";
+								}
+							}
+							textAll += "</div>";
+							textAll += "</li>";
+						}
+						textAll += "</ul>"
+						var	results = data.data;
+						var show_num = 7;
+						if(results!= null && results.total>0){
+							textAll += "<div class=\"pagenav herald\">";
+							if(results.currPage>1){
+								textAll += "<a href=\"javascript:gotoPageGood("+1+")\">首页</a>";
+							}else{
+								textAll += "<a href=\"javascript:;\">首页</a>";
+							}
+						 	if((results.currPage - 1) >0){
+								textAll += "<a href=\"javascript:gotoPageGood("+(results.currPage - 1)+")\">上一页</a>";
+							}else{
+								textAll += "<a href=\"javascript:;\">上一页</a>";
+							}
+							//小于7
+							if(results.totalPage < show_num){
+								for (var i = 0; i < results.totalPage; i++) {
+									if((i+1)==results.currPage){
+										textAll +="<a class=\"cur\" href=\"javascript:gotoPageGood("+(i+1)+")\">"+(i+1)+"</a>"
+									}else{
+										textAll +="<a href=\"javascript:gotoPageGood("+(i+1)+")\">"+(i+1)+"</a>"
+									}
+								}	
+							}else{
+							 if(results.currPage<=((show_num+1)/2)){
+									for (var i = 0; i < (results.currPage-1); i++) {
+										textAll +="<a href=\"javascript:gotoPageGood("+(i+1)+")\">"+(i+1)+"</a>"
+									}
+									textAll +="<a class=\"cur\" href=\"javascript:gotoPageGood("+results.currPage+")\">"+results.currPage+"</a>"
+									for (var i = 0; i < (show_num-results.currPage); i++) {
+										textAll +="<a href=\"javascript:gotoPageGood("+(results.currPage+(i+1))+")\">"+(results.currPage+(i+1))+"</a>"
+									}
+								}else{
+									if((results.totalPage-results.currPage) < ((show_num-1)/2)){
+										for (var i = (results.totalPage-show_num+1); i <= results.totalPage; i++) {
+											if(i == results.currPage){
+												textAll +="<a class=\"cur\">"+i+"</a>"
+											}else{
+												textAll +="<a href=\"javascript:gotoPageGood("+i+")\">"+i+"</a>"
+											}
+										}
+									}else{
+										for (var i =((show_num-1)/2); i >0 ; i--) {
+											textAll +="<a href=\"javascript:gotoPageGood("+(results.currPage - i)+")\">"+(results.currPage - i)+"</a>"
+										}
+										textAll +="<a class=\"cur\">"+results.currPage+"</a>";
+									    for (var i = 1; i <= ((show_num-1)/2); i++) {
+											textAll +="<a href=\"javascript:gotoPageGood("+(results.currPage + i)+")\">"+(results.currPage + i)+"</a>"
+										} 
+									}
+								} 
+							}
+							
+							if((results.currPage + 1) <= results.totalPage){
+								textAll +="<a href=\"javascript:gotoPageGood("+(results.currPage + 1)+")\">下一页</a>";
+							}else{
+								textAll +="<a href=\"javascript:;\">下一页</a>"
+							}
+							if(results.currPage<=results.totalPage){
+								textAll +="<a href=\"javascript:gotoPageGood("+results.totalPage+")\">末页</a>";
+							}else{
+								textAll +="<a href=\"javascript:;\">末页</a>"
+							}
+						}
+						textAll += "</div>"
+						$('.review-hd').append(textAll)
+					}
+				})
+			}	
+			
+			function gotoPageIn(page){
+				var spuId = "${(sportMProductSpuDto.id)!}";
+				var show_num = 7;
+				$.ajax({
+					url:'/estore/detail/findByPage.htm',
+					data:{id:spuId,page:page,evaluateStatus:2},
+					type:'post',
+					datatype:'json',
+					success:function(data){
+						var result = data.data.results;
+						$('#reviewIn').remove();
+						var textAll = "";
+						textAll += "<div id=\"reviewIn\" class=\"review-inCount\">"
+						textAll += "<ul class=\"comm-ul\">"
+						for (var i = 0; i < result.length; i++) {
+							textAll += "<li class=\"comm-li\">"
+								textAll += "<div class=\"user-hd\">"
+							if (result[i].userPic==null || result[i].userPic =="" ||result[i].userPic== undefined) {
+								textAll += "<img src=\"http://i0.letvimg.com/img/201207/30/tx70.png\" />";
+							} else{
+								textAll += "<img src='"+result[i].userPic+"' />";
+							}
+							textAll += "<br /><span>"+result[i].nickName+"</span>";
+							textAll += "</div>";
+							textAll += "<div class=\"comments\">";
+							textAll += "<div class=\"comments_hd\">";
+							textAll += "<img src=\"/static/img/star-"+result[i].star+".png\" alt=\"\" />";
+							textAll += "<span>发表于<i>"+result[i].createTimeStr+"</i></span>";
+							textAll += "</div>";
+							textAll += "<div class=\"comments_con\">"+result[i].evaluateContent+"</div>";		
+							textAll += "<div class=\"comments_img\">";
+							var str=new String();
+							var arr=new Array();
+							str = result[i].pic;
+							arr = str.split(',');
+							for(var i=0;i<arr.length;i++)
+							{
+								if (arr[i] != '' && arr[i] != null) {
+									textAll +=  "<img alt=\"\" src=\""+arr[i]+"\">";
+								}
+							}
+							textAll += "</div>";
+							textAll += "</li>";
+						}
+						textAll += "</ul>"
+						var	results = data.data;
+						var show_num = 7;
+						if(results!= null && results.total>0){
+							textAll += "<div class=\"pagenav herald\">";
+							if(results.currPage>1){
+								textAll += "<a href=\"javascript:gotoPageIn("+1+")\">首页</a>";
+							}else{
+								textAll += "<a href=\"javascript:;\">首页</a>";
+							}
+						 	if((results.currPage - 1) >0){
+								textAll += "<a href=\"javascript:gotoPageIn("+(results.currPage - 1)+")\">上一页</a>";
+							}else{
+								textAll += "<a href=\"javascript:;\">上一页</a>";
+							}
+							//小于7
+							if(results.totalPage < show_num){
+								for (var i = 0; i < results.totalPage; i++) {
+									if((i+1)==results.currPage){
+										textAll +="<a class=\"cur\" href=\"javascript:gotoPageIn("+(i+1)+")\">"+(i+1)+"</a>"
+									}else{
+										textAll +="<a href=\"javascript:gotoPageIn("+(i+1)+")\">"+(i+1)+"</a>"
+									}
+								}	
+							}else{
+							 if(results.currPage<=((show_num+1)/2)){
+									for (var i = 0; i < (results.currPage-1); i++) {
+										textAll +="<a href=\"javascript:gotoPageIn("+(i+1)+")\">"+(i+1)+"</a>"
+									}
+									textAll +="<a class=\"cur\" href=\"javascript:gotoPageIn("+results.currPage+")\">"+results.currPage+"</a>"
+									for (var i = 0; i < (show_num-results.currPage); i++) {
+										textAll +="<a href=\"javascript:gotoPageIn("+(results.currPage+(i+1))+")\">"+(results.currPage+(i+1))+"</a>"
+									}
+								}else{
+									if((results.totalPage-results.currPage) < ((show_num-1)/2)){
+										for (var i = (results.totalPage-show_num+1); i <= results.totalPage; i++) {
+											if(i == results.currPage){
+												textAll +="<a class=\"cur\">"+i+"</a>"
+											}else{
+												textAll +="<a href=\"javascript:gotoPageIn("+i+")\">"+i+"</a>"
+											}
+										}
+									}else{
+										for (var i =((show_num-1)/2); i >0 ; i--) {
+											textAll +="<a href=\"javascript:gotoPageIn("+(results.currPage - i)+")\">"+(results.currPage - i)+"</a>"
+										}
+										textAll +="<a class=\"cur\">"+results.currPage+"</a>";
+									    for (var i = 1; i <= ((show_num-1)/2); i++) {
+											textAll +="<a href=\"javascript:gotoPageIn("+(results.currPage + i)+")\">"+(results.currPage + i)+"</a>"
+										} 
+									}
+								} 
+							}
+							
+							if((results.currPage + 1) <= results.totalPage){
+								textAll +="<a href=\"javascript:gotoPageIn("+(results.currPage + 1)+")\">下一页</a>";
+							}else{
+								textAll +="<a href=\"javascript:;\">下一页</a>"
+							}
+							if(results.currPage<=results.totalPage){
+								textAll +="<a href=\"javascript:gotoPageIn("+results.totalPage+")\">末页</a>";
+							}else{
+								textAll +="<a href=\"javascript:;\">末页</a>"
+							}
+						}
+						textAll += "</div>"
+						$('.review-hd').append(textAll)
+					}
+				})
+			}
+			function gotoPagePic(page){
+				var spuId = "${(sportMProductSpuDto.id)!}";
+				var show_num = 7;
+				$.ajax({
+					url:'/estore/detail/findByPage.htm',
+					data:{id:spuId,page:page,pic:1},
+					type:'post',
+					datatype:'json',
+					success:function(data){
+						var result = data.data.results;
+						$('#reviewPic').remove();
+						var textAll = "";
+						textAll += "<div id=\"reviewPic\" class=\"review-picCount\">"
+						textAll += "<ul class=\"comm-ul\">"
+						for (var i = 0; i < result.length; i++) {
+							textAll += "<li class=\"comm-li\">"
+								textAll += "<div class=\"user-hd\">"
+							if (result[i].userPic==null || result[i].userPic =="" ||result[i].userPic== undefined) {
+								textAll += "<img src=\"http://i0.letvimg.com/img/201207/30/tx70.png\" />";
+							} else{
+								textAll += "<img src='"+result[i].userPic+"' />";
+							}
+							textAll += "<br /><span>"+result[i].nickName+"</span>";
+							textAll += "</div>";
+							textAll += "<div class=\"comments\">";
+							textAll += "<div class=\"comments_hd\">";
+							textAll += "<img src=\"/static/img/star-"+result[i].star+".png\" alt=\"\" />";
+							textAll += "<span>发表于<i>"+result[i].createTimeStr+"</i></span>";
+							textAll += "</div>";
+							textAll += "<div class=\"comments_con\">"+result[i].evaluateContent+"</div>";	
+							textAll += "<div class=\"comments_img\">";
+							var str=new String();
+							var arr=new Array();
+							str = result[i].pic;
+							arr = str.split(',');
+							for(var i=0;i<arr.length;i++)
+							{
+								if (arr[i] != '' && arr[i] != null) {
+									textAll +=  "<img alt=\"\" src=\""+arr[i]+"\">";
+								}
+							}
+							textAll += "</div>";
+							textAll += "</li>";
+						}
+						textAll += "</ul>"
+						var	results = data.data;
+						var show_num = 7;
+						if(results!= null && results.total>0){
+							textAll += "<div class=\"pagenav herald\">";
+							if(results.currPage>1){
+								textAll += "<a href=\"javascript:gotoPagePic("+1+")\">首页</a>";
+							}else{
+								textAll += "<a href=\"javascript:;\">首页</a>";
+							}
+						 	if((results.currPage - 1) >0){
+								textAll += "<a href=\"javascript:gotoPagePic("+(results.currPage - 1)+")\">上一页</a>";
+							}else{
+								textAll += "<a href=\"javascript:;\">上一页</a>";
+							}
+							//小于7
+							if(results.totalPage < show_num){
+								for (var i = 0; i < results.totalPage; i++) {
+									if((i+1)==results.currPage){
+										textAll +="<a class=\"cur\" href=\"javascript:gotoPagePic("+(i+1)+")\">"+(i+1)+"</a>"
+									}else{
+										textAll +="<a href=\"javascript:gotoPagePic("+(i+1)+")\">"+(i+1)+"</a>"
+									}
+								}	
+							}else{
+							 if(results.currPage<=((show_num+1)/2)){
+									for (var i = 0; i < (results.currPage-1); i++) {
+										textAll +="<a href=\"javascript:gotoPagePic("+(i+1)+")\">"+(i+1)+"</a>"
+									}
+									textAll +="<a class=\"cur\" href=\"javascript:gotoPagePic("+results.currPage+")\">"+results.currPage+"</a>"
+									for (var i = 0; i < (show_num-results.currPage); i++) {
+										textAll +="<a href=\"javascript:gotoPagePic("+(results.currPage+(i+1))+")\">"+(results.currPage+(i+1))+"</a>"
+									}
+								}else{
+									if((results.totalPage-results.currPage) < ((show_num-1)/2)){
+										for (var i = (results.totalPage-show_num+1); i <= results.totalPage; i++) {
+											if(i == results.currPage){
+												textAll +="<a class=\"cur\">"+i+"</a>"
+											}else{
+												textAll +="<a href=\"javascript:gotoPagePic("+i+")\">"+i+"</a>"
+											}
+										}
+									}else{
+										for (var i =((show_num-1)/2); i >0 ; i--) {
+											textAll +="<a href=\"javascript:gotoPagePic("+(results.currPage - i)+")\">"+(results.currPage - i)+"</a>"
+										}
+										textAll +="<a class=\"cur\">"+results.currPage+"</a>";
+									    for (var i = 1; i <= ((show_num-1)/2); i++) {
+											textAll +="<a href=\"javascript:gotoPagePic("+(results.currPage + i)+")\">"+(results.currPage + i)+"</a>"
+										} 
+									}
+								} 
+							}
+							
+							if((results.currPage + 1) <= results.totalPage){
+								textAll +="<a href=\"javascript:gotoPagePic("+(results.currPage + 1)+")\">下一页</a>";
+							}else{
+								textAll +="<a href=\"javascript:;\">下一页</a>"
+							}
+							if(results.currPage<=results.totalPage){
+								textAll +="<a href=\"javascript:gotoPagePic("+results.totalPage+")\">末页</a>";
+							}else{
+								textAll +="<a href=\"javascript:;\">末页</a>"
+							}
+						}
+						textAll += "</div>"
+						$('.review-hd').append(textAll)
+					}
+				})
+			}
+			
+			function gotoPageOrder(page){
+				var spuId = "${(sportMProductSpuDto.id)!}";
+				var show_num = 7;
+				$.ajax({
+					url:'/estore/detail/findOrderByPage.htm',
+					data:{id:spuId,page:page},
+					type:'post',
+					datatype:'json',
+					success:function(data){
+						var result = data.data.results;
+						$('#con-record-order').remove();
+						var textAll = "";
+						textAll += "<div id=\"con-record-order\" >"
+						for (var i = 0; i < result.length; i++) {
+							textAll += "<li class=\"con-record-li\">"
+							textAll += "<p class=\"name\">"+result[i].nickName+"</p>";
+							textAll += "<p class=\"type\">"+result[i].skuName+"</p>";
+							textAll += "<p class=\"num\">"+result[i].number+"</p>";
+							textAll += "<p class=\"date\">"+result[i].createTimeStr+"</p>";
+							textAll += "</li>";
+						}
+						var	results = data.data;
+						var show_num = 7;
+						if(results!= null && results.total>0){
+							textAll += "<div class=\"pagenav herald\">";
+							if(results.currPage>1){
+								textAll += "<a href=\"javascript:gotoPageOrder("+1+")\">首页</a>";
+							}else{
+								textAll += "<a href=\"javascript:;\">首页</a>";
+							}
+						 	if((results.currPage - 1) >0){
+								textAll += "<a href=\"javascript:gotoPageOrder("+(results.currPage - 1)+")\">上一页</a>";
+							}else{
+								textAll += "<a href=\"javascript:;\">上一页</a>";
+							}
+							//小于7
+							if(results.totalPage < show_num){
+								for (var i = 0; i < results.totalPage; i++) {
+									if((i+1)==results.currPage){
+										textAll +="<a class=\"cur\" href=\"javascript:gotoPageOrder("+(i+1)+")\">"+(i+1)+"</a>"
+									}else{
+										textAll +="<a href=\"javascript:gotoPageOrder("+(i+1)+")\">"+(i+1)+"</a>"
+									}
+								}	
+							}else{
+							 if(results.currPage<=((show_num+1)/2)){
+									for (var i = 0; i < (results.currPage-1); i++) {
+										textAll +="<a href=\"javascript:gotoPageOrder("+(i+1)+")\">"+(i+1)+"</a>"
+									}
+									textAll +="<a class=\"cur\" href=\"javascript:gotoPageOrder("+results.currPage+")\">"+results.currPage+"</a>"
+									for (var i = 0; i < (show_num-results.currPage); i++) {
+										textAll +="<a href=\"javascript:gotoPageOrder("+(results.currPage+(i+1))+")\">"+(results.currPage+(i+1))+"</a>"
+									}
+								}else{
+									if((results.totalPage-results.currPage) < ((show_num-1)/2)){
+										for (var i = (results.totalPage-show_num+1); i <= results.totalPage; i++) {
+											if(i == results.currPage){
+												textAll +="<a class=\"cur\">"+i+"</a>"
+											}else{
+												textAll +="<a href=\"javascript:gotoPageOrder("+i+")\">"+i+"</a>"
+											}
+										}
+									}else{
+										for (var i =((show_num-1)/2); i >0 ; i--) {
+											textAll +="<a href=\"javascript:gotoPageOrder("+(results.currPage - i)+")\">"+(results.currPage - i)+"</a>"
+										}
+										textAll +="<a class=\"cur\">"+results.currPage+"</a>";
+									    for (var i = 1; i <= ((show_num-1)/2); i++) {
+											textAll +="<a href=\"javascript:gotoPageOrder("+(results.currPage + i)+")\">"+(results.currPage + i)+"</a>"
+										} 
+									}
+								} 
+							}
+							
+							if((results.currPage + 1) <= results.totalPage){
+								textAll +="<a href=\"javascript:gotoPageOrder("+(results.currPage + 1)+")\">下一页</a>";
+							}else{
+								textAll +="<a href=\"javascript:;\">下一页</a>"
+							}
+							if(results.currPage<=results.totalPage){
+								textAll +="<a href=\"javascript:gotoPageOrder("+results.totalPage+")\">末页</a>";
+							}else{
+								textAll +="<a href=\"javascript:;\">末页</a>"
+							}
+						}
+						textAll += "</div>"
+						$('#con-record-ul').append(textAll)
+					}
+				})
+			}
+		</script>
+	</body>
+
+</html>

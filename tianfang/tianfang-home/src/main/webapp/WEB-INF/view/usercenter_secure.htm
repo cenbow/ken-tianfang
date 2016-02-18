@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<#include "/common/head.htm"/>
+<body>
+	<#include "/common/topbar.htm"/>
+	<script src="/static/js/AjaxUpload.js"></script>
+	<div class="wrapper">
+		<#include "/common/usercentertop.htm"/>
+			<div class="main_box">
+				<div class="row_sec">
+					<ul>
+						<li class="close">
+							<div class="hd"><label>修改密码</label><div class="status">已设置安全密码</div><a class="set" href="###">设置</a></div>
+							<div class="bd">
+								<div class="row_box">
+									<ul>
+										<li><label>原密码</label><input type="password" id="oldPassword" placeholder="输入原密码"></li>
+										<li><label>新密码</label><input type="password" id="twoNewPassword" placeholder="输入新密码" onKeyUp=pwStrength(this.value) onBlur=pwStrength(this.value)></li>
+										<li class="str"><div id="strength_L" class="strength"></div><div id="strength_M" class="strength"></div><div id="strength_H" class="strength"></div></li>
+										<li><label>确认密码</label><input id="newPassword" type="password" placeholder="再次输入密码"></li>
+									</ul>
+									<input id="changePw" type="button" class="submit" value="保存">
+								</div>
+							</div>
+						</li>
+					
+						<li class="close">
+							<div class="hd"><label>安全提醒</label><div id="statInfo" class="status noset">未设置安全提醒</div><a class="set" href="###">设置</a></div>
+							<div class="bd">
+							<input type="hidden" id="ficId" value="${(notification.id)!}" />
+								<p>当账号进行安全相关的操作时，会接受提醒消息，实时掌握账号安全动态。</p>
+								<div class="row_box">
+									<div class="v_title">修改密码</div>
+									<div class="v_cont">
+										<label><input type="radio" name="upPasswordStat" value="1" id="RG1_0">手机提醒</label>
+										<label><input type="radio" name="upPasswordStat" value="2" id="RG1_1">邮件提醒</label>
+										<label><input type="radio" name="upPasswordStat" value="3" id="RG1_2" checked>不提醒</label>
+									 </div>
+								</div>
+								<div class="row_box">
+									<div class="v_title">设置登录保护</div>
+									<div class="v_cont">
+										<label><input type="radio" name="loginStat" value="1" id="RG2_0">手机提醒</label>
+										<label><input type="radio" name="loginStat" value="2" id="RG2_1">邮件提醒</label>
+										<label><input type="radio" name="loginStat" value="3" id="RG2_2" checked>不提醒</label>
+									 </div>
+								</div>
+								<div class="row_box">
+									<div class="v_title">异地登录</div>
+									<div class="v_cont">
+										<label><input type="radio" name="nonlocalLoginStat" value="1" id="RG1_0">手机提醒</label>
+										<label><input type="radio" name="nonlocalLoginStat" value="2" id="RG1_1">邮件提醒</label>
+										<label><input type="radio" name="nonlocalLoginStat" value="3" id="RG1_2" checked>不提醒</label>
+									 </div>
+									 <input id="notification" type="button" class="submit" value="保存">
+								</div>
+							</div>
+						</li>
+						
+						<li class="close">
+							<div class="hd"><label>安全邮箱</label><div id="staE" class="status">已绑定安全邮箱</div><a class="set" href="###">设置</a></div>
+							<div class="bd">
+								<div class="row_box">
+									<ul>
+									<!-- <#if notification??>
+										<#if (notification.email)=="">
+										未绑定	
+											<li><label>邮箱帐号</label><input type="text" id="email" placeholder="绑定您的邮箱" value="${(notification.email)!}"></li>
+											<li><label>验证码</label><input class="vef" id="randomCar" type="text" placeholder="填写验证码"><img id="randomImg" class="v_img" src="/userMan/drawRandom.htm" border="0" onclick="mailrefreshImage();"></li>
+										 <#else>
+											<li><label>邮箱帐号</label><span>${(notification.email)!}</span></li>
+											<li><label>新邮箱帐号</label><input type="text" placeholder="输入新邮箱地址"></li>
+											<li><label>登陆密码</label><input type="password" placeholder="输入登录密码"></li>
+											<li><label>验证码</label><input class="vef" type="text" placeholder="填写验证码"><img class="v_img" src="/userMan/drawRandom.htm" border="0" onclick="mailrefreshImage();"></li> 
+										</#if>
+									<#else>
+										<li><label>邮箱帐号</label><input type="text" id="email" placeholder="绑定您的邮箱" value="${(notification.email)!}"></li>
+										<li><label>验证码</label><input class="vef" id="randomCar" type="text" placeholder="填写验证码"><img id="randomImg" class="v_img" src="/userMan/drawRandom.htm" border="0" onclick="mailrefreshImage();"></li>
+									</#if> -->
+									
+									<#if notification??>
+										<#if (notification.email)!="">
+											<!--未绑定-->	
+												<li><label>邮箱帐号</label><input disabled="disabled" type="text" placeholder="绑定您的邮箱" value="${(notification.email)!}"></li>
+												<li><label>新邮箱帐号</label><input type="text"  id="emailNew" placeholder="输入新邮箱地址"></li>
+												<!-- <li><label>登陆密码</label><input type="password" placeholder="输入登录密码"></li> -->
+												<li><label>验证码</label><input class="vef" id="randomCar" type="text" placeholder="填写验证码"><img class="v_img" src="/userMan/drawRandom.htm" border="0" onclick="mailrefreshImage();"></li> 
+	
+										<#else>
+												<li><label>邮箱帐号</label><input type="text" id="email" placeholder="绑定您的邮箱" value="${(notification.email)!}"></li>
+												<li><label>验证码</label><input class="vef" id="randomCar" type="text" placeholder="填写验证码"><img id="randomImg" class="v_img" src="/userMan/drawRandom.htm" border="0" onclick="mailrefreshImage();"></li>
+										</#if>
+									<#else>
+										<li><label>邮箱帐号</label><input type="text" id="email" placeholder="绑定您的邮箱" value="${(notification.email)!}"></li>
+										<li><label>验证码</label><input class="vef" id="randomCar" type="text" placeholder="填写验证码"><img id="randomImg" class="v_img" src="/userMan/drawRandom.htm" border="0" onclick="mailrefreshImage();"></li>
+									</#if>
+									</ul>
+									<input id="emailSub" type="button" class="submit" value="保存">
+								</div>
+							</div>
+						</li>
+						<li class="close">
+							<div class="hd"><label>证件信息</label><div id="sta" class="status noset">未填写</div><a class="set" href="###">设置</a></div>
+							<div class="bd">
+								<div class="row_box">
+								<input type="hidden" name="telephone" />
+									<ul>
+										<li><label>真实姓名</label><input name="cname" type="text" placeholder="真实姓名" value="${(userInfo.cname)!}"></li>
+										<li><label>所在地区</label>
+											<select id="dic" name="province" onchange="doDistrict();">
+												<option value="">省份</option>
+													<#if result?? >	
+														<#list result as page>
+															<option value="${(page.id)?replace(',','')}">${(page.name)!}</option>
+														</#list>
+													</#if>
+											</select>
+											<select id="area" name="location"><option>上海</option><option>大连</option>
+											</select>
+										</li>
+										<li><label>邮政编码</label><input name="postcode" type="text" placeholder="输入邮政编码" value="${(userInfo.postcode)!}"/></li>
+										<li><label>手机号码</label><input name="mobile" type="text" placeholder="您的手机号码" value="${(userInfo.mobile)!}" /></li>
+										<#assign  fileName= userInfo.telephone?split("-")/>
+										<li><label>座机号码</label><input id="qPhone" class="area" type="text" placeholder="区号" value="${(fileName[0])!}"><input id="dPhone" value="${(fileName[1])!}" class="tel" type="text" placeholder="电话号"><input id="fPhone" value="${(fileName[2])!}" class="ext" type="text" placeholder="分机"></li>
+									</ul>
+									<input id="idInfoSub" type="button" class="submit" value="保存">
+								</div>
+							</div>
+						</li>
+						
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<#include "/common/footer.htm"/>
+</body>
+
+<script>
+	$(function(){
+		//mark_left_menu
+		$('.menu .icon2').addClass('cur')
+		
+		$('.set').on('click', function(){
+			if($(this).closest('li').hasClass('close')){
+				$(this).html('收起').closest('li').removeClass('close')
+			}else{
+				$(this).html('设置').closest('li').addClass('close')
+			}
+		})
+		$('.setting').on('click', function(){
+			if($(this).attr('status') == 'off'){
+				$('#address input[type=text], #address select').css('border-color','#ccc').removeAttr('disabled')
+				$(this).attr('status','on')
+			}else if($(this).attr('status') == 'on'){
+				$('#address input[type=text], #address select').css('border-color','#fff').attr('disabled','disabled')
+				$(this).attr('status','off')
+			}
+		})
+		//保存
+		$('.save').on('click', function(){
+			check_form()
+		})
+		
+		//取消错误提示
+		$('input[type=text], input[type=password]').keyup(function(){
+			$(this).siblings('span').html('').removeClass('warning')
+		})
+		
+	});
+	
+	function updateImg(){
+		$('.preview > img').attr('src','/static/img/simple4.jpg')
+	}
+	
+	//发送验证码按钮 倒数90秒方法
+	var wait=90; 
+	function time(sendObj) {
+		if (wait == 0) {
+			//sendObj.attr("disabled",false);
+			//sendObj.val("获取验证码");
+			sendObj.removeAttribute("disabled");         
+			sendObj.value="获取验证码"; 
+			wait = 90; 
+		} else {
+			//sendObj.attr("disabled",true);
+			//sendObj.val("请等待"+wait+"秒");			
+			sendObj.setAttribute("disabled", true); 
+			sendObj.value="请等待"+wait+"秒"; 
+			wait--; 
+			setTimeout(function() { 
+				time(sendObj) 
+			}, 1000) 
+		} 
+	} 
+	
+	//验证表单
+	function check_form(){
+		//登陆名
+        	var LoginName = $.trim($("#login_name").val());
+			if (LoginName.length <= 0) {
+			alert_redtext('login_name','用户名不能为空')
+            	return false;
+        	}
+		//密码
+        	var PassWord = $.trim($("#password").val());
+			if (PassWord.length < 6 || PassWord.length > 16) {
+			alert_redtext('password','密码应为6-16位，英文、数字或常用符号')
+            	return false;
+        	}
+	}
+		
+	//验证表单错误提示
+	function alert_redtext(d,t){
+		$('#' +d).focus().siblings('span').html(t).addClass('warning')
+	}
+	
+	/*
+	 * 查看密码强度
+	 */
+	//判断输入密码的类型  
+	function CharMode(iN) {
+		if (iN >= 48 && iN <= 57) //数字  
+			return 1;
+		if (iN >= 65 && iN <= 90) //大写  
+			return 2;
+		if (iN >= 97 && iN <= 122) //小写  
+			return 4;
+		else
+			return 8;
+	}
+	//bitTotal函数  
+	//计算密码模式  
+	function bitTotal(num) {
+		modes = 0;
+		for (i = 0; i < 4; i++) {
+			if (num & 1)
+				modes++;
+			num >>>= 1;
+		}
+		return modes;
+	}
+	//返回强度级别  
+	function checkStrong(sPW) {
+		if (sPW.length <= 4)
+			return 0; //密码太短  
+		Modes = 0;
+		for (i = 0; i < sPW.length; i++) {
+			//密码模式  
+			Modes |= CharMode(sPW.charCodeAt(i));
+		}
+		return bitTotal(Modes);
+	}
+
+	//显示颜色  
+	function pwStrength(pwd) {
+		O_color = "#eeeeee";
+		L_color = "#FF0000";
+		M_color = "#FF9900";
+		H_color = "#33CC00";
+		if (pwd == null || pwd == '') {
+			Lcolor = Mcolor = Hcolor = O_color;
+		} else {
+			S_level = checkStrong(pwd);
+			switch (S_level) {
+			case 0:
+				Lcolor = Mcolor = Hcolor = O_color;
+			case 1:
+				Lcolor = L_color;
+				Mcolor = Hcolor = O_color;
+				break;
+			case 2:
+				Lcolor = Mcolor = M_color;
+				Hcolor = O_color;
+				break;
+			default:
+				Lcolor = Mcolor = Hcolor = H_color;
+			}
+		}
+		document.getElementById("strength_L").style.background = Lcolor;
+		document.getElementById("strength_M").style.background = Mcolor;
+		document.getElementById("strength_H").style.background = Hcolor;
+		return;
+	}
+	
+	<!-- ------------------   ------------------- -->
+	//默认选中radio
+    var fic = $("[name=nonlocalLoginStat]");
+    for (var i = 0; i < fic.length; i++) {
+    	if(fic[i].value == "${(notification.nonlocalLoginStat)!}"){
+			$(fic[i]).prop("checked","checked");
+		}
+	}
+   	var log = $("[name=loginStat]");
+    for (var i = 0; i < log.length; i++) {
+		if(log[i].value == "${(notification.loginStat)!}"){
+			$(log[i]).prop("checked","checked");
+		}
+	}
+    var up = $("[name=upPasswordStat]");
+    for (var i = 0; i < up.length; i++) {
+    	if(up[i].value == "${(notification.upPasswordStat)!}"){
+    		$(up[i]).prop("checked","checked");
+    	}
+	}
+   
+    if("${(notification.nonlocalLoginStat)!}"==1|| "${(notification.loginStat)!}" ==1 || "${(notification.upPasswordStat)!}" == 1 || 
+    		"${(notification.nonlocalLoginStat)!}"==2|| "${(notification.loginStat)!}" ==2 || "${(notification.upPasswordStat)!}" == 2){
+    	$("#statInfo").removeClass('status noset').addClass('status');
+    	$("#statInfo").html("已绑定安全提醒");
+    }
+    if("${(userInfo.cname)!}"!=null && "${(userInfo.cname)!}"!=""){
+    	$('#sta').removeClass('status noset').addClass('status');
+    	$("#sta").html("已填写");
+    }
+    if("${(notification.email)!}"==null || "${(notification.email)!}" ==""){
+    	$('#staE').removeClass('status').addClass('status  noset');
+    	$("#staE").html("未绑定邮箱");
+    }
+    
+    window.onload = function() {
+	    document.getElementById('dic').value ="${(userInfo.province)!}";
+	    doDistrict(); //获取省份下区域信息  
+	    document.getElementById('area').value="${(userInfo.location)!}"; 
+	} 
+</script>
+<script type="text/javascript" src="/static/js/usercenter_secure.js"></script>
+</html>

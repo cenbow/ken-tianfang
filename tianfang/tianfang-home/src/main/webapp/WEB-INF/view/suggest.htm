@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<link rel="icon" type="image/gif" href="/static/img/favicon.ico">
+		<title>聚运动</title>
+		<link href="/static/css/style.css" rel="stylesheet" />
+		<script src="/static/js/jquery-2.1.3.min.js"></script>
+		<link href="/static/css/suggest.css" rel="stylesheet" />
+		<script src="/static/js/layer-1.9/layer.js"></script>
+		<style type="text/css">
+			input, button, select, textarea{
+				border:1px double black;
+			};
+		</style>
+	</head>
+
+	<body class="sug">
+		<div class="banner">
+			<div class="banner-logo">
+				<a class="logo" href="/index.htm"><img src="/static/img/logo.png" /></a>
+				<a class="bt back-index" href="/index.htm">返回首页</a>
+			</div>
+		</div>
+		<div class="content">
+			<form action="suggest/submit.htm" id="submitForm" method="post">
+			<h2>您可以通过勾选符合您要求的答案或发邮件给我们来反馈您的意见,您的意见是我们进步的动力</h2>
+			
+			<#if datas??>
+				<#list datas as data>
+					<div class="title">
+					<span class="red">*</span>
+					<p>${data_index+1}、${data.sfQuestionContent}</p>
+					<input name="qids" type="hidden" value="${data.id}"/>
+					</div>
+					<div class="detail">
+						<ul>
+							<#if data.sfAnswers??>
+								<#list data.sfAnswers as ans>
+									<li>
+										<#if data.sfSelectType == 0>
+											<input type="radio" id=${ans.id} name="qid_${ans.question}" value="${ans.id}" />
+										</#if>
+										<#if data.sfSelectType == 1>
+											<input type="checkBox" id=${ans.id} name="qid_${ans.question}" value="${ans.id}" />
+										</#if>
+										<label for="${ans.id}">${ans.answerName}</label>
+									</li>
+								</#list>
+							</#if>
+						</ul>
+					</div>
+				</#list>
+			</#if>
+			<div class="title">
+				<p class="other">其他</p>
+			</div>
+			<div class="detail">
+				<#list types as type>
+					<input type="radio" id="rd_id_${type_index}" name="sfType" value="${type.getIndex()}"/>
+					<label for="rd_id1">${type.getName()}</label>
+				</#list>
+			</div>
+			<div class="info">
+				<p>请留下您真实信息，我们可以尽快给予您反馈</p>
+				<ul class="info-ul">
+					<li>
+						<label for="name">姓名</label>
+						<input type="text" name="sfUname" id="sfUname" value="" placeholder="请输入您的名字" />
+					</li>
+					<li>
+						<label for="tel">联系电话</label>
+						<input type="text" name="sfPhone" id="sfPhone" value="" placeholder="请输入您的手机号" />
+					</li>
+					<li>
+						<label for="email">电子邮箱</label>
+						<input type="text" name="sfEmail" id="sfEmail" value="" placeholder="请输入您的电子邮箱" />
+					</li>
+					<li class="suggest-li">
+						<label for="detail">反馈意见</label>
+						<textarea title="意见限制200字" id="sfFeedback" name="sfFeedback" onchange="LimitTextArea(this);" onKeyDown="LimitTextArea(this);" onKeyUp="LimitTextArea(this);" onkeypress="LimitTextArea(this);" placeholder="您在使用聚运动产品的过程中如果遇到问题，我们都诚挚的邀约您的宝贵建议。我们会每天关注您的反馈（不论是网站还是移动端，或希望增添的功能等），不断优化产品，为您提供更好的服务！"></textarea>
+					</li>
+					<li>
+						<label for="">添加图片</label>
+						<input type="button" id="uploadObj" />
+						<span class="tip">(此项非必填)</span>
+					</li>
+					<li>
+						<div id="pictureList" class="uploaded-pic-div">
+							
+						</div>
+					</li>	
+				</ul>
+				<div class="added-img">
+					
+				</div>
+				<div class="bts">
+					<input class="bt sbu" type="button" id="bt_submit" value="提交" />
+				</div>
+			</div>
+		</form>
+		</div>
+		<#include "/common/footer.htm"/>
+		<link href="/static/plugins/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="/static/plugins/uploadify/swfobject.js"></script>
+		<script type="text/javascript" src="/static/plugins/uploadify/jquery.uploadify.v2.1.4.min.js"></script>	
+		<script type="text/javascript">
+		function LimitTextArea(field){ 
+		   var maxlimit = 200; 
+		   if (field.value.length > maxlimit){
+			   field.value = field.value.substring(0, maxlimit);
+		   }
+		}
+		
+		$(function(){
+			$('#bt_submit').click(function(){
+				toSubmit();
+			});
+			
+			$("#uploadObj").uploadify({
+	            'uploader': '/static/plugins/uploadify/uploadify.swf',
+	            'script':"/file/upload.htm",
+	            'cancelImg': '/static/plugins/uploadify/cancel.png',
+	            'queueID': 'fileQueue',
+	            'auto': true,
+	            'multi':true,
+	            'buttonText': 'select',
+	            'buttonImg':'/static/plugins/uploadify/picture.png',
+	            'simUploadLimit' : 4,
+	            'queueSizeLimit' : 4,
+	            'sizeLimit':1024*1024*10,
+	            'fileExt': '*.gif;*.png;*.jpg',
+	            'fileDesc':'请选择gif,png,jpg文件',
+	            onComplete: function(event, queueID, fileObj, response, data) {
+	                var dataObj = eval("("+response+")");
+	                if(dataObj.status == 200){
+	                	parent.layer.msg('图片上传成功', {
+							shade: [0.9, '#000'],
+						    icon: 1,
+						    time: 800 //2秒关闭（如果不配置，默认是3秒）
+						}, function(){
+							$("<div><img class='uploaded-pic' style='width:100px;height:100px;' src='"+dataObj.filePath+"' alt=''/><a href='##'></a></div>").appendTo($(".uploaded-pic-div"));							
+							$("<input type='hidden' name='sfPicture' value="+dataObj.filePath+">").appendTo($("#pictureList"));
+						});                
+						$("#microPic").val(dataObj.filePath);
+	                }else{
+	                	layer.alert("对不起," + fileObj.name + "上传失败!<br/>请选择小于10M的正确格式的图片", {
+		    				shade: [0.9, '#000'],
+		    			    icon: 3,
+		    			    time: 4000 //2秒关闭（如果不配置，默认是3秒）
+		    			});
+	                }
+	            },
+	            onSelect:function(){
+	            },
+	            onError: function(event, queueID, fileObj) {
+	            	layer.alert("对不起," + fileObj.name + "上传失败!<br/>请选择小于10M的图片", {
+	    				shade: [0.9, '#000'],
+	    			    icon: 3,
+	    			    time: 3000 //2秒关闭（如果不配置，默认是3秒）
+	    			});
+	            }
+	        });
+		});
+		
+		function toSubmit(){
+			<#if datas??>
+				<#list datas as data>
+					<#if data.sfAnswers??>
+						var arr = null;
+						var flag = false;
+						<#list data.sfAnswers as ans>
+						arr = $("[name=qid_${ans.question}]");
+						flag = false;
+						for (var i = 0; i < arr.length; i ++){
+							if(arr[i].checked){
+								flag = true;
+								break; 
+							}
+						}
+						if (flag == false){
+							alert('请选择第${data_index+1}项问题答案');
+							return;
+						}
+						</#list>
+					</#if>
+				</#list>
+			</#if>
+			arr = $("[name=sfType]");
+			flag = false;
+			for (var i = 0; i < arr.length; i ++){
+				if(arr[i].checked){
+					flag = true;
+					break; 
+				}
+			}
+			if (flag == false){
+				alert('请选择意见反馈类型');
+				return;
+			}
+			if (null == $("#sfUname").val() || '' == $("#sfUname").val()) {
+				alert("姓名不能为空！");
+				return;
+			}
+			var phone = $("#sfPhone").val();
+			if (null == phone || '' == phone) {
+				alert("联系电话为空！");
+				return;
+			}
+			var phone_reg = /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/;
+			if (!phone_reg.test(phone)){
+				alert("请正确输入手机号码！");
+				return;
+			}
+			var email = $("#sfEmail").val();
+			if (null == email || '' == email) {
+				alert("电子邮箱为空！");
+				return;
+			}
+			var email_reg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+			if (!email_reg.test(email)){
+				alert("请正确输入邮箱地址！");
+				return;
+			}
+			if (null == $("#sfFeedback").val() || '' == $("#sfFeedback").val()) {
+				alert("反馈意见为空！");
+				return;
+			}
+			
+			var ajaxParams = $('#submitForm').serialize();
+			$.ajax({
+				type : "POST",
+				url : "/suggest/submit.htm",
+				data : ajaxParams,
+				datatype : "json",// "xml", "html", "script", "json", "jsonp", "text".
+				success : function(data) {// 成功返回之后调用的函数
+					var jsondata = null;//eval('(' + data + ')');
+					if (data instanceof Object){
+						jsondata = data;
+					}else{
+						jsondata = eval('(' + data + ')');
+					}
+					console.log(jsondata);
+					if(jsondata.success){
+						layer.msg(jsondata.msg, {
+							shade: [0.9, '#000'],
+						    icon: 6,
+						    time: 2000 //2秒关闭（如果不配置，默认是3秒）
+						}, function(){
+							window.location.href="/index.htm";// 跳转首页
+						}); 
+					}else{
+						layer.msg(jsondata.msg);
+					}
+				},
+				complete : function(XMLHttpRequest, textStatus) {// 调用执行后调用的函数
+					
+				},
+				error : function() {// 调用出错执行的函数
+				}
+			});
+		}
+		</script>
+	</body>
+
+</html>

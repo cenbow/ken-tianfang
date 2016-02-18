@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+<html>
+<#include "/common/head.htm"/>
+<link href="/static/css/competition.css" rel="stylesheet" />
+
+	<body>
+		<#include "/common/topbar.htm"/>
+		<div class="youth-bg">
+			<div class="wrapper">
+				<div class="youth-title">
+					<!-- <h1><img src="${(sportTeamDto.logo)!}" class="youth-ico"></img>${(sportTeamDto.name)!}</h1> -->
+					<img class="youth-ico" src="${(sportTeamDto.logo)!}" />
+					<span class="youth-name">${(sportTeamDto.name)!}</span>
+					<div class="youth-banner">
+						<ul class="youth-banner-ul">
+							<li class="youth-banner-li index" to="/tc/index/${(sportTeamDto.id)!}.htm">球队首页</li>
+							<li class="youth-banner-li team-info" to="/tc/team/${(sportTeamDto.id)!}.htm">球队信息</li>
+							<li class="youth-banner-li pic cur" to="/tc/pic/${(sportTeamDto.id)!}.htm">相册</li>
+							<li class="youth-banner-li video" to="/tc/video/${(sportTeamDto.id)!}.htm">视频</li>
+							<li class="youth-banner-li herald" to="/tc/herald/${(sportTeamDto.id)!}.htm">比赛预告</li>
+							<li class="youth-banner-li history" to="/tc/history/${(sportTeamDto.id)!}.htm">历史战绩</li>
+							<li class="youth-banner-li honor" to="/tc/honor/${(sportTeamDto.id)!}.htm">荣誉</li>
+						</ul>
+					</div>
+				</div>
+				<div class="pic-manage">
+					<h1 class="youth">${(albumDto.title)!}</h1>
+					<input type="hidden" id="albumId" name="albumId" value="${(albumDto.id)!}"/>
+					<hr />
+					<div class="pic-wrapper">
+						<script>
+							function gotoUrl(albumId){
+								window.location.href = "/album/picList/"+albumId+".htm";
+							}
+						</script>					
+						<#if pageList ??>
+							<#list pageList.getResults() as page>
+								<li class="pic-div">
+									<img style="cursor:pointer;" src="${(page.pic)!}" alt="" onclick="gotoUrl('${(albumDto.id)!}');"/>
+									<#if page.title ??>
+										<input class="pic-name" type="text" name="" id="" value="${(page.title)!}" data-old="${(page.title)!}" readonly="readonly" />
+									<#else>
+										<input class="pic-name" type="text" name="" id="" value="图片名称" data-old="图片名称" readonly="readonly" />
+									</#if>
+									<#if sportTeamDto.owner == true>
+										<a class="edit" href="##">编辑</a>
+										<a class="statu save close setTitle" data-picId="${(page.id)!}" href="##">保存</a>
+										<a class="statu cancle close" href="##">取消</a>
+										<p class="status_bar">
+											<a class="cover setPageCover" data-cover="${(page.pic)!}" href="##">设封面</a>
+											<a class="delete" data-picId="${(page.id)!}" href="##">删除</a>
+										</p>
+									</#if>
+								</li>
+							</#list>
+						</#if>
+					</div>
+				</div>
+
+				<#include "/common/page.htm"/>
+
+			</div>
+		</div>
+
+		<#include "/common/footer.htm"/>
+		<script src="/static/js/competition.js"></script>
+		<script type="text/javascript">
+			function gotoPage(page){
+				window.location.href = '/pic/picList/${(albumDto.id)!}.htm?currPage='+page;
+			}
+		</script>		
+		<script type="text/javascript">
+			$(function() {
+				//设置封面
+				$(".setPageCover").on('click',function(){
+					var datapic = $(this).attr("data-cover");
+					var albumId = $("#albumId").val();
+					var ajaxParams = {picUrl:datapic,albumId:albumId};
+					$.ajax({
+						type : "POST",
+						url : "${base}/pic/setCover.htm",
+						data : ajaxParams,
+						datatype : "json",// "xml", "html", "script", "json", "jsonp", "text".
+						beforeSend : function() {
+							$("#msg").html("logining");
+						},
+						success : function(data) {// 成功返回之后调用的函数
+							var jsondata = data;// eval('(' + data + ')');
+							if(data.status==200){
+								layer.msg(data.message, {
+									shade: [0.9, '#000'],
+								    icon: 1,
+								    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+								}, function(){
+								}); 							
+							}else{
+								layer.msg(data.message, {
+									shade: [0.9, '#000'],
+								    icon: 6,
+								    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+								}, function(){
+									
+								}); 	
+							}
+						},
+						complete : function(XMLHttpRequest, textStatus) {// 调用执行后调用的函数
+							
+						},
+						error : function() {// 调用出错执行的函数
+						}
+					});						
+				});
+				
+				$(".setTitle").on('click',function(){
+					var picId = $(this).attr("data-picId");
+					var picTitle = $(this).parent().find(".pic-name").val();
+					//console.log("picTitle"+picTitle);
+					var ajaxParams = {picId:picId,picTitle:picTitle};
+					$.ajax({
+						type : "POST",
+						url : "${base}/pic/setTitle.htm",
+						data : ajaxParams,
+						datatype : "json",// "xml", "html", "script", "json", "jsonp", "text".
+						beforeSend : function() {
+							$("#msg").html("logining");
+						},
+						success : function(data) {// 成功返回之后调用的函数
+							var jsondata = data;// eval('(' + data + ')');
+							if(data.status==200){
+								layer.msg(data.message, {
+									shade: [0.9, '#000'],
+								    icon: 1,
+								    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+								}, function(){
+								}); 							
+							}else{
+								layer.msg(data.message, {
+									shade: [0.9, '#000'],
+								    icon: 6,
+								    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+								}, function(){
+									
+								}); 	
+							}
+						},
+						complete : function(XMLHttpRequest, textStatus) {// 调用执行后调用的函数
+							
+						},
+						error : function() {// 调用出错执行的函数
+						}
+					});
+				});
+				//编辑
+				$(".pic-wrapper").on("click", ".edit", function(e) {
+					e.preventDefault();
+					$(this).addClass("close");
+					var $parent = $(this).parent();
+					$parent.find(".statu").removeClass("close");
+					$parent.find(".pic-name").addClass("edit-inp").removeAttr("readonly");
+				});
+				//取消
+				$(".pic-wrapper").on("click", ".cancle", function(e) {
+					e.preventDefault();
+					var $parent = $(this).parent();
+					var $pic_inp = $parent.find(".pic-name");
+					$parent.find(".statu").addClass("close");
+					$parent.find(".edit").removeClass("close");
+					$pic_inp.attr("readonly", "readonly").removeClass("edit-inp").val($pic_inp.attr("data-old"));
+				});
+				//保存
+				$(".pic-wrapper").on("click", ".save", function(e) {
+					e.preventDefault();
+					var $parent = $(this).parent();
+					var $pic_inp = $parent.find(".pic-name");
+					$parent.find(".statu").addClass("close");
+					$parent.find(".edit").removeClass("close");
+					$pic_inp.attr("readonly", "readonly").attr("data-old", $pic_inp.val());
+				});
+				//删除
+				$(".pic-wrapper").on("click", ".delete", function() {
+					var picId = $(this).attr("data-picId");
+					var ajaxParams = {picId:picId};
+					$(this).parents("li").remove();
+					$.ajax({
+						type : "POST",
+						url : "${base}/pic/setDelete.htm",
+						data : ajaxParams,
+						datatype : "json",// "xml", "html", "script", "json", "jsonp", "text".
+						beforeSend : function() {
+							$("#msg").html("logining");
+						},
+						success : function(data) {// 成功返回之后调用的函数
+							var jsondata = data;// eval('(' + data + ')');
+							if(data.status==200){
+								layer.msg(data.message, {
+									shade: [0.9, '#000'],
+								    icon: 1,
+								    time: 500 //2秒关闭（如果不配置，默认是3秒）
+								}, function(){
+									$(this).parent().remove();
+								}); 							
+							}else{
+								layer.msg(data.message, {
+									shade: [0.9, '#000'],
+								    icon: 6,
+								    time: 500 //2秒关闭（如果不配置，默认是3秒）
+								}, function(){
+									
+								}); 	
+							}
+						},
+						complete : function(XMLHttpRequest, textStatus) {// 调用执行后调用的函数
+							$(this).parent().remove();
+						},
+						error : function() {// 调用出错执行的函数
+						}
+					});					
+				});
+			})
+		</script>
+	</body>
+
+</html>

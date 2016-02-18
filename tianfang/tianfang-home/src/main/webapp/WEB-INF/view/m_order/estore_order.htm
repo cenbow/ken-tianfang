@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<#include "/common/head.htm"/>
+		<meta charset="UTF-8">
+		<title>聚运动</title>
+		<link href="/static/css/eshop-detail.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<#include "/common/topbar.htm"/>
+		<div class="store_topbar">
+			<span>订单确认信息</span>
+		</div>
+		<div class="wrapper">
+			<div class="add-address">
+				<h2>新增地址</h2>
+				<div class="must-fill">
+				<form id="formSub" action="">
+				<input  type="hidden" name="maker" id="" value="" />
+					<ul class="fill-ul">
+						<li>
+							<label><span  class="must">*</span>收货人姓名</label>
+							<input  type="text" name="name" id="" value="" />
+						</li>
+						<li>
+							<label><span class="must">*</span>省份</label>
+							<select id="province" class="area province" name="province" onchange="changeForm(this.value)">
+								<option>省份</option>
+								<#if dicLis??>
+									<#list dicLis as dic >
+										<option value="${(dic.id)?replace(',','')}">${(dic.name)!}</option>	
+									</#list>
+								</#if>
+							</select>
+							<select id="area" class="area city" name="area" onchange="changeFormCity(this.value)">
+								<option value="${(dic.id)!}">市区</option>
+							</select>
+							<select id="areaCounty" name="distruct" class="area county">
+								<option value="${(dic.id)!}">区域</option>
+							</select>
+						</li>
+						<li>
+							<label><span class="must">*</span>详细地址</label>
+							<input  id="" type="text" name="addressInfo" value="" >
+						</li>
+						<li>
+							<label><span class="must">*</span>手机号码</label>
+							<input  id="" type="text" name="phone" value="">
+						</li>
+						<li>
+							<label>邮箱地址</label>
+							<input id="" type="text" name="email" value="">
+						</li>
+						<li>
+							<label>邮政编码</label>
+							<input  id="" type="text" name="coding" value="">
+						</li>
+						<li>
+							<label>地址别名</label>
+							<input  id="" type="text" name="addressEntryName" value="">
+						</li>
+						<li>
+							<label></label>
+							<input class="setDefault" type="checkbox" name="" value="" id="t1">
+							<label class="setDefault"for="t1" >设为默认地址</label>
+						</li>
+						<li>
+							<label></label>
+							<a class="bt save">保存</a>
+							<a class="bt cancle">取消</a>
+						</li>
+					</ul>
+				</form>
+				</div>
+			</div>
+		</div>
+		
+
+	<#include "/common/footer.htm"/>
+		<script>
+	$(function(){		
+		//导航标记
+		nav_mark('SportStore')
+		
+		var del = $('.cart_box ul li .action a')
+		var del_all = $('.del_all')
+		var choose = $('.cart_box ul li i')
+		var choose_all = $('.cart_box .bar i')
+		
+		del.on('click', function(){
+			$(this).closest('li').remove()
+			price_all()
+		})
+		choose.on('click', function(){
+			var _t = $(this).closest('li').attr('class')
+			if(_t=='no-sel'){
+				$(this).addClass('cur')
+				$(this).closest('li').attr('class','seled')
+			}else{
+				$(this).removeClass('cur')
+				$(this).closest('li').attr('class','no-sel')
+			}
+		    mark_all()
+			price_all()
+		})
+		choose_all.on('click', function(){
+			var _t  = $(this).attr('tag')
+			if(_t=='none'){
+				$(this).addClass('cur')
+				$(this).attr('tag','all')
+				$('.cart_box ul li i').addClass('cur')
+				$('.cart_box ul li').attr('class','seled')
+			}else{
+				$(this).removeClass('cur')
+				$(this).attr('tag','none')
+				$('.cart_box ul li i').removeClass('cur')
+				$('.cart_box ul li').attr('class','no-sel')
+			}
+			price_all()
+		})
+		del_all.on('click', function(){
+			$('.cart_box ul li.seled').remove()
+			mark_all()
+			price_all()
+		})
+		
+		$(".minus").on("click", function() {
+			var amt_field = $(this).parent().find('.amt')
+			if(parseInt(amt_field.val()) <= 1){
+				return
+			}else{
+				amt_field.val(parseInt(amt_field.val()) - 1);
+			}
+			price_all()
+		})
+		$(".plus").on("click", function() {
+			var amt_field = $(this).parent().find('.amt')
+			if(parseInt(amt_field.val()) >= parseInt(amt_field.attr('data_max'))){
+				return
+			}else{
+				amt_field.val(parseInt(amt_field.val()) + 1);
+			}
+			price_all()
+		})
+		$(".amt").on("keyup", function() {
+					var val = $(this).val(),max = parseInt($(this).attr("max"));
+					if (val.length == 0) {
+						return;
+					}
+					val = isNaN(parseInt(val, 10)) ? 1 : parseInt(val, 10);
+					val = val < 1 ? 1 : val;
+					val = val >= max ? max : val;
+					$(this).val(val);
+				}).on("blur", function() {
+					var val = $(this).val(),max = parseInt($(this).attr("max"));
+					if (val.length == 0) {
+						$(this).val(1);
+					}
+					val = isNaN(parseInt(val, 10)) ? 1 : parseInt(val, 10);
+					val = val < 1 ? 1 : val;
+					val = val >= max ? max : val;
+					$(this).val(val);
+					price_all()
+				});
+
+	})
+	function mark_all(){
+		 //判断选择
+		var _curNum = $('.cart_box ul li.seled').length
+		var _totalNum = $('.cart_box ul li').length
+		if(_curNum == _totalNum){
+			$('.cart_box .bar i').addClass('cur')
+			$('.cart_box .bar i').attr('tag','all')
+		}else if(_curNum < _totalNum){
+			$('.cart_box .bar i').removeClass('cur')
+			$('.cart_box .bar i').attr('tag','none')
+		}
+		if( _totalNum <= 0){
+			$('.cart_box .bar i').removeClass('cur')
+			$('.cart_box .bar i').attr('tag','none')
+		}
+	}
+	function price_all(){
+	//计算总价
+		var _totalPrice = 0;
+		for(i=0;i<$('.cart_box ul li.seled .amt').length;i++){
+			_totalPrice = _totalPrice + parseInt($('.cart_box ul li.seled .amt').eq(i).val())*parseInt($('.cart_box ul li.seled .amt').eq(i).attr('sin_price'))
+		}
+		$('.total_box span').text('￥' + _totalPrice)
+	}
+	
+	<!-- -------------   分割线       ---------------------------------------------------------->
+	//获取省份信息
+	function changeForm(val){
+		$.ajax({
+			type : "POST",
+			url : "${base}/m_shipping/getAddressByCriteria.htm",
+			data: {parentId:val.replace(',',''),level:2},
+			datatype : "json",
+			success : function(datas){
+				var data = datas.data;
+				console.log(data);
+				$("#area").empty();
+				var categoryId = document.getElementById("area");
+				categoryId[0] =new Option("全部","");
+				var i=0;
+				if (data.length > 0) {
+					for(var o in data){
+						if(data[o].name == undefined ||data[o].name == '' || data[o].name == null ){
+							continue;
+						}
+						i++;
+						categoryId[i] =new Option(data[o].name,data[o].id);
+					}
+				} else {
+					$("#area").empty(); 
+					categoryId[0] =new Option("全部","");
+				}
+			}
+		})
+	}
+	//获取区域信息 
+	function changeFormCity(val){
+		$.ajax({
+			type : "POST",
+			url : "${base}/m_shipping/getAddressByCriteria.htm",
+			data: {parentId:val.replace(',',''),level:3},
+			datatype : "json",
+			success : function(datas){
+				var data = datas.data;
+				console.log(data);
+				$("#areaCounty").empty();
+				var categoryId = document.getElementById("areaCounty");
+				categoryId[0] =new Option("全部","");
+				var i=0;
+				if (data.length > 0) {
+					for(var o in data){
+						if(data[o].name == undefined ||data[o].name == '' || data[o].name == null ){
+							continue;
+						}
+						i++;
+						categoryId[i] =new Option(data[o].name,data[o].id);
+					}
+				} else {
+					$("#areaCounty").empty(); 
+					categoryId[0] =new Option("全部","");
+				}
+			}
+		})
+	}
+	
+	$(".bt.save").on("click",function(){
+		//收货人姓名
+		var name = $("[name='name']").val().trim();
+		if(name.length >0){
+			if(name.length < 3 || name.length > 18){
+				layer.msg("收货人姓名格式不正确,一般为3-18个字符~~");
+				return;
+			}
+		}else{
+			layer.msg("收货人姓名不能为空~~");
+			return;
+		}
+		//省份
+		var distruct = $("[name ='distruct']").val();
+		if(distruct.length < 1 || distruct==""){
+			layer.msg("请完善省份信息~~");
+			return;
+		}
+		//详细地址 
+		var addressInfo = $("[name = 'addressInfo']").val();
+		if(addressInfo.length >1){
+			if(addressInfo.length <3 || addressInfo.length >50){
+				layer.msg("地址详情3-50个字符~~");
+				return;
+			}
+		}else{
+			layer.msg("地址详情不能是空~~");
+			return;
+		}
+		var phone_reg  = /(^13\d{9}$)|(^14)[5,7]\d{8}$|(^15[0,1,2,3,5,6,7,8,9]\d{8}$)|(^17)[6,7,8]\d{8}$|(^18\d{9}$)/g ;
+		var phone = $("[name='phone']").val();
+		if (!phone_reg.test(phone)) {
+			layer.msg("手机格式不正确~~");
+			return;
+		}
+		
+		var email = $("[name='email']").val();
+		var mail_reg = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
+		if(email.length > 1){
+			if (!mail_reg.test(email)) {
+				layer.msg("邮箱格式不正确~~");
+				return;
+			}			
+		}
+		
+		var coding = $("[name='coding']").val();
+		var re= /^[1-9]\d{5}$/;
+		if(coding.length > 1){
+			if(!re.test(coding)){
+				layer.msg("邮编不正确~~");
+				return;
+			}			
+		}
+		
+		var addressEntryName = $("[name = 'addressEntryName']").val();
+		if(addressEntryName.length >1){
+			if(addressEntryName.length <3 || addressEntryName.length >50){
+				layer.msg("地址别名3-50个字符~~");
+				return;
+			}
+		}
+		/* else{
+			layer.msg("地址别名不能是空~~");
+			return;
+		} */
+		
+		if(document.getElementById('t1').checked){
+			$("[name='maker']").val("1")
+		}else{
+			$("[name='maker']").val("0")
+		}
+	    var formSub =$("#formSub").serialize();
+		$.ajax({
+			type:"post",
+			url:"${base}/m_shipping/save.htm",
+			datatype:"json",
+			data:formSub,
+			success:function(data){
+				if(data.success == true){
+					alert(data.msg);
+				}
+				alert(data.msg);
+			}
+		})
+	})
+	
+		</script>
+	</body>
+
+</html>

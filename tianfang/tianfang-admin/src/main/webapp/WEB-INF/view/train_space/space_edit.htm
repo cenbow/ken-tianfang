@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Form Elements - Ace Admin</title>
+<meta name="description" content="Common form elements and layouts" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<#include "../admin/head.htm"/>
+<script type="text/javascript">
+	function toTimeDic() {
+		layer.open({
+			title:"添加时间段信息",
+			type : 2,
+			area : [ '600px', '300px' ],
+			fix : true, //不固定
+			maxmin : false,
+			content : '${base}/timeDistrict/findAllNoPage.do'
+		});
+	}
+</script>
+</head>
+<body>
+	<div class="container-fluid" id="main-container">
+		<div id="main-content" class="clearfix" style="margin-left: 0px;">
+			<div id="page-content" class="clearfix">
+				<div class="row-fluid">
+					<!-- PAGE CONTENT BEGINS HERE -->
+					<form id="submitForm" class="form-horizontal" method="POST">
+						<input type="hidden" id="content" name="description" value="" />
+						<input type="hidden" id="microPic" name="thumbnail" value="" /> <input
+							type="hidden" id="timeIdTrain" name="timeIdTrain" value="" /> <input
+							type="hidden" id="longtitude" name="longtitude" value="" /> <input
+							type="hidden" id="latitude" name="latitude" value="" />
+
+						<!-- 第一行 -->
+						<div class="control-group">
+							<div class="span6">
+								<label class="control-label" style="margin-right: 20px;"
+									for="form-field-2">场地名称</label> <input type="text" name="place"
+									style="width: 280px;" class="span6" id="form-field-1"
+									placeholder="场地地址" value="${(spaceInfo.place)!}"> <input
+									type="hidden" id="id" name="id"
+									value="${(spaceInfo.id)!}" />
+							</div>
+							<div class="span6">
+								<label class="control-label" for="form-field-1"
+									style="margin-right: 20px;">区域</label> <select
+									id="form-field-select-1" style="width: 260px;"
+									name="districtId">
+									<option value="">全部</option> <#if dis??> <#if spaceInfo??>
+									<#list dis as d> <#if spaceInfo.districtId == d.id>
+									<option selected value="${(d.id)!}">${(d.name)!}</option>
+									<#else>
+									<option value="${(d.id)!}">${(d.name)!}</option> </#if>
+									</#list> </#if> </#if>
+								</select>
+							</div>
+						</div>
+						<div class="control-group">
+							<div class="control-group">
+								<label class="control-label" style="margin-right: 20px;"
+									for="form-field-2">场地地址</label> <input type="text"
+									name="address" class="span6" style="width: 760px;"
+									id="form-field-1" placeholder="场地地址"
+									value="${(spaceInfo.address)!}">
+							</div>
+						</div>
+						<!-- 地图 -->
+						<div class="control-group">
+							<div class="step-content row-fluid position-relative">
+								<div style="float: left;">
+									<label class="control-label" style="margin-right: 20px;"
+									for="form-field-2">经度</label>
+									<span class="input-icon">
+										<input type="text" id="ZUOBIAO_Y2" title=""
+										value="${(spaceInfo.longtitude)!}" style="width: 79%;"
+										disabled="disabled"> <i class="icon-fire"></i>
+									</span> 纬度&nbsp;&nbsp;&nbsp; <span class="input-icon"> <input
+										type="text" id="ZUOBIAO_X2" title=""
+										value="${(spaceInfo.latitude)!}" style="width: 79%;"
+										disabled="disabled"> <i class="icon-fire"></i>
+									</span>
+								</div>
+								<div style="margin-top: -5px;">
+									&nbsp;&nbsp; <a href="###" onclick="openMap2();"><span
+										class="btn btn-warning btn-small tooltip-warning"
+										data-rel="tooltip" data-placement="left" title="Left Warning">定位</span></i>
+									</a>
+									<!-- <button class="btn btn-app btn-light btn-mini"  onclick="openMap2();">
+										<i class="icon-globe"></i> 
+										</button> -->
+								</div>
+							</div>
+							</br>
+							<div class="control-group">
+								<label class="control-label" for="form-field-3">缩略图</label>
+								<!-- ${(spaceInfo.price)!} -->
+								<div class="controls">
+									<input multiple type="file" id="id-input-file-3" />
+								</div>
+							</div>
+						</div>
+
+						<div class="control-group">
+							<label class="control-label">场地介绍</label>
+							<div class="controls">
+								<script id="editor" type="text/plain"
+									style="width: 769px; height: 300px;">${(spaceInfo.description)!} </script>
+							</div>
+						</div>
+						<div class="control-group">
+							<!-- <div class="form-actions center">
+										<button onclick="return false;" class="btn btn-small btn-success">Submit <i class="icon-arrow-right icon-on-right"></i></button>
+									  </div> -->
+							<!-- 时间段数据 -->
+							<label class="control-label">时间段</label>
+							<div class="controls">
+								<table id="table_time"
+									class="table table-striped table-bordered table-hover">
+									<tr>
+										<span onclick="toTimeDic()"
+											class="btn btn-success btn-small tooltip-success"
+											data-rel="popover" data-placement="right"
+											title="<i class='icon-ok green'></i> Right Success"
+											data-content="This is good, this is working and it's fine!">新增</span>
+										<span class="btn btn-danger btn-small tooltip-error"
+											data-rel="popover" data-placement="top"
+											data-original-title="<i class='icon-bolt red'></i> Top Danger"
+											data-content="Oops! It went wrong, maybe try again!"
+											id="deletes">删除</span>
+									</tr>
+									<tr>
+										<th class="center"><label><input id='check-all'
+												type="checkbox" /><span class="lbl"></span></label></th>
+										<th>日期</th>
+										<th>开始时间</th>
+										<th>结束时间</th>
+									</tr>
+
+									<tbody id="item-body">
+										<#if time??> <#list time as t>
+										<tr>
+											<th class="center"><label><input id='obj-id' name="checkBoxId" obj-id="${(t.timeId)!}"
+													value="${(t.timeId)!}" type="checkbox" /><span class="lbl"></span></label>
+											</th>
+											<td>${(t.day_of_week)!}</td>
+											<td>${(t.start_time)!}</td>
+											<td>${(t.end_time)!}</td>
+										</tr>
+										</#list> </#if>
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+						<div class="form-actions">
+							<button id='editBotton' class="btn btn-info" type="button">
+								<i class="icon-ok"></i>保存
+							</button>
+							&nbsp; &nbsp; &nbsp;
+							<button id="close" class="btn" type="reset">
+								<i class="icon-undo"></i>关闭
+							</button>
+						</div>
+
+					</form>
+					<!-- PAGE CONTENT ENDS HERE -->
+				</div>
+				<!--/row-->
+			</div>
+			<!--/#page-content-->
+		</div>
+		<!-- #main-content -->
+	</div>
+	<!--/.fluid-container#main-container-->
+	<a href="#" id="btn-scroll-up" class="btn btn-small btn-inverse"> <i
+		class="icon-double-angle-up icon-only"></i>
+	</a>
+	<!-- basic scripts -->
+	<script src="${base}/static/1.9.1/jquery.min.js"></script>
+	<script type="text/javascript">
+		window.jQuery
+				|| document
+						.write("<script src='${base}/static/js/jquery-1.9.1.min.js'>\x3C/script>");
+	</script>
+
+	<script src="${base}/static/js/bootstrap.min.js"></script>
+	<!-- page specific plugin scripts -->
+
+	<script type="text/javascript"
+		src="${base}/static/js/chosen.jquery.min.js"></script>
+	<!-- 下拉框 -->
+
+	<!--[if lt IE 9]>
+		<script type="text/javascript" src="${base}/static/js/excanvas.min.js"></script>
+		<![endif]-->
+	<script type="text/javascript"
+		src="${base}/static/js/jquery-ui-1.10.2.custom.min.js"></script>
+	<script type="text/javascript"
+		src="${base}/static/js/jquery.ui.touch-punch.min.js"></script>
+	<script type="text/javascript"
+		src="${base}/static/js/chosen.jquery.min.js"></script>
+	<script type="text/javascript"
+		src="${base}/static/js/fuelux.spinner.js"></script>
+	<script type="text/javascript"
+		src="${base}/static/js/bootstrap-datepicker.min.js"></script>
+	<script type="text/javascript"
+		src="${base}/static/js/bootstrap-timepicker.min.js"></script>
+	<script type="text/javascript" src="${base}/static/js/date.js"></script>
+	<script type="text/javascript"
+		src="${base}/static/js/daterangepicker.min.js"></script>
+	<script type="text/javascript"
+		src="${base}/static/js/bootstrap-colorpicker.min.js"></script>
+	<script type="text/javascript"
+		src="${base}/static/js/jquery.autosize-min.js"></script>
+	<script type="text/javascript"
+		src="${base}/static/js/jquery.inputlimiter.1.3.1.min.js"></script>
+	<!-- ace scripts -->
+	<script src="${base}/static/js/ace-elements.min.js"></script>
+	<script src="${base}/static/js/ace.min.js"></script>
+	<!-- inline scripts related to this page -->
+
+	<!-- 引入 -->
+	<!--引入属于此页面的js map地图-->
+	<script type="text/javascript" src="${base}/static/js/myjs/map.js"></script>
+
+	<link
+		href="${base}/plugins/umeditor1.2.2/themes/default/css/umeditor.css"
+		type="text/css" rel="stylesheet">
+	<script type="text/javascript" charset="utf-8"
+		src="${base}/plugins/umeditor1.2.2/umeditor.config.js"></script>
+	<script type="text/javascript" charset="utf-8"
+		src="${base}/plugins/umeditor1.2.2/umeditor.min.js">
+		
+	</script>
+	<!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+	<!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+	<script type="text/javascript" charset="utf-8"
+		src="${base}/plugins/umeditor1.2.2/lang/zh-cn/zh-cn.js"></script>
+
+	<!-- layer 弹出框处理 -->
+	<script type="text/javascript" src="${base}/plugins/layer2.0/layer.js"></script>
+
+	<script type="text/javascript">
+		var um = UM.getEditor('editor');
+		$(function() {
+			$("#form-radio-show label input").on('click', function() {
+				$("#marked").val($(this).val());
+			});
+
+			$("#editBotton").on(
+					'click',
+					function() {
+						$("#longtitude").val($("#ZUOBIAO_Y2").val());
+						$("#latitude").val($("#ZUOBIAO_X2").val());
+
+						//获取选中场地时间段id
+						var $chk = $("[name = checkBoxId]:checkbox");
+						if ($chk.length > 0) {
+							var jsonClasss = '[';
+							var i = 0;
+							var len = $chk.length;
+							var ids = "";
+							$chk.each(function() {
+								var id = $(this).attr("obj-id");
+								if (i < len - 1) {
+									ids += id + ",";
+								} else {
+									ids += id + ",";
+								}
+								i++;
+							});
+							$("#timeIdTrain").val(ids);
+						}
+						var content = UM.getEditor('editor').getContent();
+						var micro_pic = $("#id-input-file-3").parent().find(
+								"img:first").css("background-image");
+						$("#content").val(content);
+						$("#microPic").val(micro_pic);
+						
+						//验证
+			            var place = $("[name=place]").val();
+						var districtId = $("[name=districtId]").val();
+						var address =$("[name=address]").val();
+						var longtitude =$("[name=longtitude]").val();
+						var latitude =$("[name=latitude]").val();
+						if(place ==null || place == "" || place == undefined ){
+							layer.msg("场地信息不完善~~");
+							return;
+						}
+						if(districtId ==null || districtId == "" || districtId == undefined ){
+							layer.msg("区域信息不完善~~");
+							return;
+						}
+						if(address ==null || address == "" || address == undefined ){
+							layer.msg("地址信息不完善~~");
+							return;
+						}
+						if(longtitude ==null || longtitude == "" || longtitude == undefined ||
+								latitude ==null || latitude == "" || latitude == undefined){
+							layer.msg("经纬度信息不完善~~");
+							return;
+						}
+						
+						var ajaxParams = $("#submitForm").serialize();
+						$.ajax({
+							type : "POST",
+							url : "${base}/spaceInfo/edit.do",
+							data : ajaxParams,
+							datatype : "json",// "xml", "html", "script", "json", "jsonp", "text".
+							beforeSend : function() {
+								$("#msg").html("logining");
+							},
+							success : function(data) {// 成功返回之后调用的函数
+								var jsondata = data;// eval('(' + data + ')');
+								if (data.success) {
+									parent.layer.msg(data.msg, {
+										shade : [ 0.9, '#000' ],
+										icon : 6,
+										time : 1500
+									//2秒关闭（如果不配置，默认是3秒）
+									}, function() {
+										parent.reload_page();
+										var index = parent.layer
+												.getFrameIndex(window.name); //获取窗口索引
+										parent.layer.close(index);
+									});
+								} else {
+									parent.layer.msg(data.msg, {
+										shade : [ 0.9, '#000' ],
+										icon : 6,
+										time : 1500
+									//2秒关闭（如果不配置，默认是3秒）
+									}, function() {
+									});
+								}
+							},
+							complete : function(XMLHttpRequest, textStatus) {// 调用执行后调用的函数
+
+							},
+							error : function() {// 调用出错执行的函数
+							}
+						});
+					});
+
+			$('#id-input-file-1 , #id-input-file-2').ace_file_input({
+				no_file : 'No File ...',
+				btn_choose : 'Choose',
+				btn_change : 'Change',
+				droppable : false,
+				onchange : null,
+				thumbnail : false
+			//| true | large
+			//whitelist:'gif|png|jpg|jpeg'
+			//blacklist:'exe|php'
+			//onchange:''
+			//
+			});
+
+			$('#id-input-file-3').ace_file_input({
+				style : 'well',
+				btn_choose : '点击上传图片文件',
+				btn_change : null,
+				no_icon : 'icon-cloud-upload',
+				droppable : true,
+				onchange : null,
+				thumbnail : 'small',
+				before_change : function(files, dropped) {
+					return true;
+				}
+			}).on('change', function() {
+			});
+		});
+		// chkItem事件
+		function bindCheck() {
+			var $chk = $("[name = checkBoxId]:checkbox");
+			$chk.on("click", function() {
+				$("#check-all").attr("checked",
+						$chk.length == $chk.filter(":checked").length);
+			})
+		}
+
+		// 删除场地
+		$("#deletes").on(
+				"click",
+				function() {
+					var $chk = $("[name = checkBoxId]:checkbox").filter(
+							":checked");
+					var count = $chk.length;
+					if (count > 0) {
+						//信息框-例2
+						layer.confirm('你确定删除场地吗？', {
+							icon : 3
+						}, function(index) {
+							layer.close(index);
+							$chk.each(function() {
+								var tr = $(this).parent().parent().parent();
+								tr.remove();
+							});
+							$chk = $("[name = checkBoxId]:checkbox").filter(
+									":checked");
+							if ($chk.length == 0) {
+								$("#check-all").attr("checked", false);
+							}
+						});
+					}
+				});
+		//复选框 
+		$("#check-all").on("click", function() {
+			if ($(this).prop('checked')) {
+				$("[name = checkBoxId]:checkbox").prop("checked", true);
+			} else {
+				$("[name = checkBoxId]:checkbox").prop("checked", false);
+			}
+		});
+		$('#close').click(function(){
+			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+			parent.layer.close(index);
+		});
+	</script>
+</body>
+</html>

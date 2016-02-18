@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+	<script src="/static/js/competition.js"></script>
+	<link href="/static/css/competition.css" rel="stylesheet" />
+	<#include "/common/head.htm"/>
+	<body>
+	<#include "/common/topbar.htm"/>
+		<div class="youth-bg">
+			<div class="wrapper">
+				<div class="youth-title">
+					<img class="youth-ico" src="${(sportTeamDto.logo)!}" />
+					<span class="youth-name">${(sportTeamDto.name)!}</span>
+					<div class="youth-banner">
+						<ul class="youth-banner-ul">
+							<li class="youth-banner-li index" to="/tc/index/${(sportTeamDto.id)!}.htm">球队首页</li>
+							<li class="youth-banner-li team-info" to="/tc/team/${(sportTeamDto.id)!}.htm">球队信息</li>
+							<li class="youth-banner-li pic" to="/tc/pic/${(sportTeamDto.id)!}.htm">相册</li>
+							<li class="youth-banner-li video" to="/tc/video/${(sportTeamDto.id)!}.htm">视频</li>
+							<li class="youth-banner-li herald" to="/tc/herald/${(sportTeamDto.id)!}.htm">比赛预告</li>
+							<li class="youth-banner-li history" to="/tc/history/${(sportTeamDto.id)!}.htm">历史战绩</li>
+							<li class="youth-banner-li honor cur" to="/honor/findPage.htm?${(sportTeamDto.id)!}">荣誉</li>
+						</ul>
+					</div>
+				</div>
+				<div class="youth-honor-manage">
+					<div class="manage-honor">
+						<a class="bt" href="/honor/toAddHonorView.htm?teamId=${(honor.teamId)!}&page=${(pageList.currPage)!}"><img src="/static/img/youth-edit-icon.png" alt="" />写荣誉</a>
+					</div>
+					<h1 class="youth">全部公告</h1>
+					<ul class="youth-honor-ul manage">
+						<#if pageList ??>
+							<#list pageList.results as honor>
+								<li class="youth-honor-li manage">
+									<p class="contents">${(honor.title)!}</p>
+									<a class="edit bt" href="/honor/toUpdateHView.htm?honorId=${(honor.id)!}&page=${(pageList.currPage)!}">编辑</a>
+									<a class="delete bt" href="##" onclick="deleteHonor('${(honor.id)!}');">删除</a>
+								</li>
+							</#list>
+						</#if>
+					</ul>
+				</div>
+				<#include '../../common/page.htm'>
+			</div>
+		</div>
+
+		<#include "/common/footer.htm"/>
+		<script src="/static/js/competition.js"></script>
+		<script type="text/javascript">
+			$(function(){
+				
+			/* 	$(".youth-honor-ul.manage").on("click",".delete",function(e){
+					e.preventDefault();
+					$(this).parent("li").remove();
+				}); */
+			});
+			
+			//删除
+			function deleteHonor(ids){
+				var curPage = ${(pageList.currPage)!};
+				$.ajax({
+					type : "POST",
+					data:{ids:ids},
+					url : "/honor/deleteHonor.htm",
+					datatype : "json",
+					success : function(data){
+						//console.log(data);
+						if(data.status==200){
+							layer.msg(data.message, {
+								shade: [0.9, '#000'],
+							    icon: 6,
+							    time: 2000 //2缁夋帒鍙ч梻顓ㄧ礄婵″倹鐏夋稉宥夊帳缂冾噯绱濇妯款吇閺勶拷缁夋帪绱�							}, function(){
+								findPage(curPage);
+							}); 
+							
+						}
+					}
+				});
+			};
+			
+			// reload data
+			function findPage(curPage){
+				window.location.href="/honor/findPage.htm?page="+curPage;
+			};
+			
+			// 跳转页面
+			function gotoPage(page){
+				window.location.href="/honor/findPage.htm?page="+curPage;
+			}
+			
+			
+		</script>
+	</body>
+
+</html>

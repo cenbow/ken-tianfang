@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<#include "/common/head.htm"/>
+
+<link href="/static/plugins/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/static/plugins/uploadify/swfobject.js"></script>
+<script type="text/javascript" src="/static/plugins/uploadify/jquery.uploadify.v2.1.4.min.js"></script>	
+
+<link type="text/css" href="/static/plugins/layerModel/layerModel.css" rel="stylesheet"/>
+<script type="text/javascript" src="/static/plugins/layerModel/jquery.layerModel.js"></script>
+<body>
+	<#include "/common/topbar.htm"/>
+	<div class="goalkeeper">
+		<img src="/static/img/banner596485.jpg" /><a target="_blank" href="/online/goalie.htm">点击进入</a>
+	</div>
+	<div class="site_nav"><a href="/index.htm">首页</a> > <a href="/online/index.htm">在线培训</a></div>
+	<div class="fs_mycourse_box">
+		<h3><span>文档</span><i></i>
+			<a href="###" onclick="changeRandom()">按时间</a>
+			<a href="###" onclick="changeRandom()">按课程</a>
+			<a class="cur" href="###" onclick="changeRandom()">全部</a>		
+		</h3>
+		<div id="containerPic" class="container">
+			<ul id="pic">
+				<#if pageList ??>
+					<#list pageList.getResults() as page>
+						<#if user ??>
+							<#if page.courseImg ??>
+								<li><a target="_blank" obj-id="${(page.id)!}" href="/online/view.htm?vId=${(page.id)!}"><img src="${(page.courseImg)!}" border="0"><p>${(page.courseName)!}</p></a></li>
+							<#else>
+								<li><a href="#"><img src="/static/img/defaultPic.jpg" border="0"><p>${(page.courseName)!}</p></a></li>
+							</#if>								
+						<#else>
+							<li><a href="#" onclick="open_login();"><img src="${(page.courseImg)!}" border="0"><p>${(page.courseName)!}</p></a></li>
+						</#if>
+					</#list>
+				<#else>
+				</#if>
+			</ul>
+		</div>
+		<#include "/common/page.htm"/>
+	</div>
+	<div class="fs_myvid_box">
+		<h3>
+			<span>视频</span><i></i>
+			<a href="###" onclick="changeRandomV()">按时间</a>
+			<a href="###" onclick="changeRandomV()">按课程</a>
+			<a class="cur" href="###" onclick="changeRandomV()">全部</a>			
+		</h3>
+		<div class="container" id="containerVid">
+			<ul id="video">
+				<#if dataList ??>
+					<#list dataList.getResults() as page>
+						<#if user ??>
+							<#if page.courseImg ??>
+								<li><a href="###" obj-id="${(page.id)!}" class="younth_video"><img src="${(page.courseImg)!}" border="0"><p>${(page.courseName)!}</p><i></i></a></li>
+							<#else>
+								<li><a><img src="/static/img/defaultPic.jpg" border="0"><p>${(page.courseName)!}</p><i></i></a></li>
+							</#if>
+						<#else>
+							<li><a href="###" onclick="open_login();"><img src="${(page.courseImg)!}" border="0"><p>${(page.courseName)!}</p><i></i></a></li>							
+						</#if>
+					</#list>
+				</#if>
+			</ul>
+		</div>
+		<#assign fun_click = 1>
+		<#include "/common/page_t.htm"/>
+	</div>
+	
+	<script type="text/javascript" src="/static/js/youth_page.js"></script>
+	<script type="text/javascript" src="/static/sport/youth_vip_video.js"></script>
+	<#include "/common/footer.htm"/>
+	<script type="text/javascript">
+	function changeRandom(){
+		$("#pic li").each(function(){
+			if(parseInt(Math.random()*2)==0){
+				$(this).prependTo($(this).parent());
+			}	
+		});				
+	};
+	function changeRandomV(){
+		$("#video li").each(function(){
+			if(parseInt(Math.random()*2)==0){
+				$(this).prependTo($(this).parent());
+			}	
+		});				
+	};
+	$(function(){
+		//导航标记
+		nav_mark('futurestar');
+
+		//选择标签
+		$('h3').on('click','a', function(){
+			$(this).addClass('cur').siblings('a').removeClass('cur')	
+		});		
+		
+	});
+	//相片
+	function gotoPage(page){
+		$.ajax({
+			url:'/online/ajaxPage.htm',
+			data:{picPage:page,courseType:1,columnId:'${(params.columnId)!}'},
+			type:'post',
+			datatype:'json',
+			success:function(data){
+				var result = data.data.results;
+				$('#containerPic').nextAll().remove();
+				$('#containerPic').remove();
+				var textPic = "";
+				textPic += "<div id=\"containerPic\" class=\"container\">";
+				textPic += "<ul id=\"pic\">";
+				for (var i = 0; i < result.length; i++) {
+					<#if user ??>
+					if(result[i].courseImg==null || result[i].courseImg =="" ||result[i].courseImg== undefined){
+						if(result[i].courseName==null || result[i].courseName =="" ||result[i].courseName== undefined){
+							textPic += "<li><a obj-id="+result[i].id+" href='/online/view.htm?vId="+result[i].id+"'><img src=\"/static/img/defaultPic.jpg\" border=\"0\"><p></p></a></li>"
+						}else{
+							textPic += "<li><a obj-id="+result[i].id+" href='/online/view.htm?vId="+result[i].id+"'><img src=\"/static/img/defaultPic.jpg\" border=\"0\"><p>"+result[i].courseName+"</p></a></li>"							
+						}
+					}else{
+						if(result[i].courseName==null || result[i].courseName =="" ||result[i].courseName== undefined){
+							textPic += "<li><a obj-id="+result[i].id+" href='/online/view.htm?vId="+result[i].id+"'><img src='"+result[i].courseImg+"' border=\"0\"><p></p></a></li>"
+						}else{
+							textPic += "<li><a obj-id="+result[i].id+" href='/online/view.htm?vId="+result[i].id+"'><img src='"+result[i].courseImg+"' border=\"0\"><p>"+result[i].courseName+"</p></a></li>"							
+						}
+					}
+					<#else>
+						textPic += "<li><a href='#' onclick='open_login();'><img src='"+result[i].courseImg+"' border='0'><p>"+result[i].courseName+"</p></a></li>";
+					</#if>
+				}
+				textPic += "</ul>"
+				textPic += "</div>"
+				$('.fs_mycourse_box').append(textPic)
+				$('.fs_mycourse_box').append(pageInfo(data.data))
+			}
+		})
+		//window.location.href = '/star/footballfan.htm?picPage='+page;
+	}
+	//视频
+	function gotoPageVideo(page){
+		$.ajax({
+			url:'/online/ajaxPage.htm',
+			data:{picPage:page,courseType:1,columnId:'${(params.columnId)!}'},
+			//data:{videoPage:page,courseType:2},
+			type:'post',
+			datatype:'json',
+			success:function(data){
+				var result = data.data.results;
+				$('#containerVid').nextAll().remove();
+				$('#containerVid').remove();
+				var textVid = "";
+				textVid += "<div class=\"container\" id=\"containerVid\">"
+				textVid += "<ul id=\"video\">"
+				for (var i = 0; i < result.length; i++) {
+					<#if user ??>
+					if(result[i].courseImg==null || result[i].courseImg =="" ||result[i].courseImg== undefined){
+						if(result[i].courseName==null || result[i].courseName =="" ||result[i].courseName== undefined){
+							textVid +="<li><a href=\"###\" obj-id=\""+result[i].id+"\" class=\"younth_video\"><img src=\"/static/img/defaultPic.jpg\" border=\"0\"><p></p><i></i></a></li>"
+						}else{
+							textVid +="<li><a href=\"###\" obj-id=\""+result[i].id+"\" class=\"younth_video\"><img src=\"/static/img/defaultPic.jpg\" border=\"0\"><p>"+result[i].courseName+"</p><i></i></a></li>"
+						}
+					}else{
+						if(result[i].courseName==null || result[i].courseName =="" ||result[i].courseName== undefined){
+							textVid +="<li><a href=\"###\" obj-id=\""+result[i].id+"\" class=\"younth_video\"><img src='"+result[i].courseImg+"' border=\"0\"><p></p><i></i></a></li>"
+						}else{
+							textVid +="<li><a href=\"###\" obj-id=\""+result[i].id+"\" class=\"younth_video\"><img src='"+result[i].courseImg+"' border=\"0\"><p>"+result[i].courseName+"</p><i></i></a></li>"
+						}
+					}
+					<#else>
+						textVid += "<li><a href='###' onclick='open_login();'><img src='"+result[i].courseImg+"' border='0'><p>"+result[i].courseName+"</p><i></i></a></li>";
+					</#if>
+				}
+				textVid += "</ul>"
+				textVid += "</div>"
+				$('.fs_myvid_box').append(textVid);
+				$('.fs_myvid_box').append(pageInfoVid(data.data));
+				
+				loadShare();
+				
+			}
+		})
+		//window.location.href = '/star/footballfan.htm?videoPage='+page;
+	}
+
+	function loadShare(){
+	    var fileref2 = document.createElement('script');
+	    fileref2.setAttribute("type","text/javascript");
+	    fileref2.setAttribute("src","/static/sport/youth_vip_video.js");
+	    document.getElementsByTagName("body")[0].appendChild(fileref2);
+	}		
+	</script>
+</body>
+</html>

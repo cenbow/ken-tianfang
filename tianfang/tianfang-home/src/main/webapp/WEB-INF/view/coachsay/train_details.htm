@@ -1,0 +1,17 @@
+<html>
+<head>
+</head>
+<body>
+<div>
+	<#if data.microPic ??>
+		<div>
+			<img alt="" src="${(data.microPic)!}"/>
+		</div>	
+	</#if>
+	<div>
+		${(data.content)!}
+	</div>
+</div>
+
+</body>
+</html>

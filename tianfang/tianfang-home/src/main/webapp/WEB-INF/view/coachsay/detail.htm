@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<#include "/common/head.htm"/>
+<body>
+	<#include "/common/topbar.htm"/>
+	<div class="fs_banner"><img src="/static/img/fs_college_banner.jpg" border="0"></div>
+	<div class="fs_subbar">
+		<a class="fri" href="/coach/index.htm">教练介绍<span>INTRODUCTION</span></a>
+		<#if dataList ??>
+			<#list dataList as dl>
+				<#if dl.type == 3>
+					<#if dl.type == data.type>
+						<a class="sec cur" href="/coach/star/${(dl.id)!}.htm">课程内容<span>COURSES</span></a>
+					<#else>
+						<a class="sec" href="/coach/star/${(dl.id)!}.htm">课程内容<span>COURSES</span></a>
+					</#if>
+				<#elseif dl.type == 4>
+					<#if dl.type == data.type>
+						<a class="tri cur" href="/coach/star/${(dl.id)!}.htm">学院理念<span>COLLEGE IDEA</span></a>
+					<#else>
+						<a class="tri" href="/coach/star/${(dl.id)!}.htm">学院理念<span>COLLEGE IDEA</span></a>
+					</#if>				
+				</#if>		
+			</#list>
+		<#else>
+			<a class="sec" href="#">课程内容<span>COURSES</span></a>
+			<a class="tri" href="#">学院理念<span>COLLEGE IDEA</span></a>			
+		</#if>
+		<a class="" href="/coach/trains.htm">教练员培训<span>COACH EDUCATION</span></a>
+	</div>
+	<div class="wrapper">
+		<h1>${(data.title)!}</h1>
+		<div class="fs_coach">
+				${(data.content)!}
+		</div>
+	</div>
+	<#include "/common/footer.htm"/>
+	<script>
+	$(function(){		
+		//导航标记
+		nav_mark('futurestar')
+	});
+	</script>
+</body>
+</html>

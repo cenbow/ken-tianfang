@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<link href="/static/css/competition.css" rel="stylesheet" />
+<#include "/common/head.htm"/>
+
+	<body>
+		<#include "/common/topbar.htm"/>
+		<link type="text/css" href="/static/plugins/layerModel/layerModel.css" rel="stylesheet"/>
+		<script type="text/javascript" src="/static/plugins/layerModel/jquery.layerModel.js"></script>
+		<div class="wrapper">
+		<div class="content">
+			<h2><i class="ico-ball"></i><p>
+			<#if game ??>
+				<#if game.gameType ==2>
+					参赛明星球队
+				<#else>
+					知名俱乐部
+				</#if>
+			</#if>
+			</p><span class="js-more-team more-team"><!--更多球队 --></span></h2>
+			<div class="wrap team">
+				<#if game ??>
+					<#if game.gameType ==2>
+						<div class="star-team">
+							<div class="star-teams">
+								<div id="teamImg" class="star-teams-move" move=0>
+									<#if teamList ??>
+										<#list teamList as team>
+											<a href='/tc/index/${(team.id)!}.htm'><img class="pic-move" src="${(team.logo)!}" /></a>
+										</#list>
+									</#if>
+								</div>
+							</div>
+							<span class="star-left star-arr"></span>
+							<span class="star-right star-arr"></span>
+						</div>
+					</#if>
+				</#if>
+				<div class="introduce star">
+							<#if game ??>
+								<#if game.gameType ==1>
+									<div id="con" class="introduce-wrapper">				
+								<#else>
+									<div id="con" class="introduce-wrapper close">
+								</#if>
+							</#if>
+						${(game.content)!}
+<!-- 						<p>2006百事世界挑战赛是由百事可乐组织的全球性足球挑战赛。除了中国，还有很多来自世界各地的足球强国参与这次比赛，包括举世公认的足球王国巴西、现代足球的发源地英国、孕育了世纪球王马拉多纳的阿根廷、拥有“忧郁王子”巴乔的意大利等。每个国家要从成千上万的候选人中选出两位16-20岁的选手代表自己的国家参赛，也许我们将看到下一个贝克汉姆或者是第二个小罗。他们要接受一个又一个地由专家们精心设计的挑战，决出最后胜负。最后的前三名将进入AC米兰的主场圣西罗球场进行点球大赛，冠军队还将获得高达10万美元的奖金。</p>
+						<p>2006百事世界挑战赛是由百事可乐组织的全球性足球挑战赛。除了中国，还有很多来自世界各地的足球强国参与这次比赛，包括举世公认的足球王国巴西、现代足球的发源地英国、孕育了世纪球王马拉多纳的阿根廷、拥有“忧郁王子”巴乔的意大利等。每个国家要从成千上万的候选人中选出两位16-20岁的选手代表自己的国家参赛，也许我们将看到下一个贝克汉姆或者是第二个小罗。他们要接受一个又一个地由专家们精心设计的挑战，决出最后胜负。最后的前三名将进入AC米兰的主场圣西罗球场进行点球大赛，冠军队还将获得高达10万美元的奖金。</p>
+ -->					</div>
+					<a class="introduce-more" href="#">展开 ∨</a>
+				</div>
+				<!-- 校园联盟才需要展示 -->
+				<#if game ??>
+					<#if game.gameType ==2>
+						<div class="team-create">
+							<#if user ??>
+								<a class="team-create-bt" href="/team/addTeam.htm">创建球队</a>
+							<#else>
+								<a class="team-create-bt" href="###" onclick="open_login();">创建球队</a>
+							</#if>
+						</div>					
+					</#if>	
+				</#if>
+				<#if game ??>
+					<#if game.gameType ==2>
+						<h1>
+							精彩瞬间<span class="monents-title"><span class="monents-pics monents-cur">图集</span> 
+							<!--  | <span class="monents-videos">视频</span></span> -->
+						</h1>
+						<div class="team-pics">
+							<ul class="team-pics-ul">
+								<#if dataList ??>
+									<#list dataList as data>
+										<li class="team-pics-li">
+											<img src="${(data.thumbnail)!}" />
+											<#if data.title ??>
+												<p>${(data.title)!}</p>
+											<#else>
+												<p>精彩瞬间</p>
+											</#if>
+										</li>
+									</#list>
+								</#if>
+							</ul>
+						</div>			
+					</#if>
+				</#if>				
+
+				<div class="team-video hide">
+					<ul class="team-video-ul">
+						<li class="team-video-li" url="http://www.baidu.com">
+							<i></i>
+							<img src="/static/img/activity.jpg" />
+						</li>
+						<li class="team-video-li" url="http://www.baidu.com">
+							<i></i>
+							<img src="/static/img/activity.jpg" />
+						</li>
+						<li class="team-video-li" url="http://www.baidu.com">
+							<i></i>
+							<img src="/static/img/activity.jpg" />
+						</li>
+						<li class="team-video-li" url="http://www.baidu.com">
+							<i></i>
+							<img src="/static/img/activity.jpg" />
+						</li>
+						<li class="team-video-li" url="http://www.baidu.com">
+							<i></i>
+							<img src="/static/img/activity.jpg" />
+						</li>
+						<li class="team-video-li" url="http://www.baidu.com">
+							<i></i>
+							<img src="/static/img/activity.jpg" />
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		</div>
+		<#if game ??>
+			<#if game.gameType ==2>
+				<div class="ball">
+					<a href="/userMan/reg.htm"><img class="ball0" src="/static/img/ball0.png" /></a>
+					<a href="#" onclick="alertInfo();"><img class="ball1" src="/static/img/ball1.png" /></a>
+				</div>
+			</#if>	
+		</#if>
+
+		<#include "/common/footer.htm"/>
+		<script src="/static/js/competition.js"></script>
+		<!-- <script src="/static/sport/competition_team.js"></script> -->
+		<script type="text/javascript">
+			function alertInfo(){
+				layer.msg('暂无赛事可报名,敬请期待')
+			}
+			
+		
+			$(function() {
+				//球
+				var _offsetX = $('.wrap').offset().left + 1036;
+				var _offsetY = 220;
+				var _offsetY_b = $(".introduce").offset().top;
+				var $ball = $(".ball");
+				$ball.css({
+					"left": _offsetX + "px"
+				});
+				$(window).scroll(function() {
+					var _wscrollTop = $(window).scrollTop()
+					if (_wscrollTop > _offsetY) {
+						$ball.css({
+							'top': _wscrollTop + 40 + 'px'
+						})
+					} else if (_wscrollTop <= _offsetY) {
+						$ball.css({
+							'top': _offsetY + 'px'
+						})
+					}
+				});
+				//向左滚动
+				$(".star-right").on("click", function() {
+					var moved = $(".star-teams-move").attr("move");
+					var left = -moved * 165;
+					var num = $(".pic-move").length;
+					var len = (num - 5) * 165;
+					if (left > -len) {
+						left = left - 165;
+						$(".star-teams-move").css({
+							"left": left + "px"
+						}).attr("move", parseInt(moved, 10) + 1);
+					}
+				});
+				//向右滚动
+				$(".star-left").on("click", function() {
+					var moved = $(".star-teams-move").attr("move");
+					var left = -moved * 165;
+					if (left < 0) {
+						left = left + 165
+						$(".star-teams-move").css({
+							"left": left + "px"
+						}).attr("move", parseInt(moved, 10) - 1 < 1 ? 0 : parseInt(moved, 10) - 1);
+					}
+				});
+				/* $(".js-more-team").on("click",function(){
+					window.open("competition_team_list.html", "_blank");
+				}) */
+				$('.js-more-team').on('click',function(){
+					location.href = "/team/allTeamDetail.htm?gameId=${(game.id)!}";
+				})
+			})
+		</script>
+	</body>
+
+</html>

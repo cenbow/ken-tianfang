@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianfang.order.mapper.SportMOrderExMapper"> 
+	<select id="selectOrder" parameterType="com.tianfang.order.dto.SportMOrderDto" resultType="com.tianfang.order.dto.SportMOrderDto">
+			select 
+			o.id, o.order_no as orderNo, o.order_status as orderStatus, o.payment_status as paymentStatus, o.order_time as orderTime ,o.order_time as orderTime,
+			o.total_price as totalPrice  , o.user_id as userId ,o.shipping_address_id as shippingAddressId ,o.create_time as createTime,
+			o.last_update_time as lastUpdateTime 
+			,a.`name` as aname , a.address_info as addressInfo, u.cname as uname 
+			from sport_m_order o inner join  sport_user u on(o.user_id = u.id)
+			inner join sport_m_shipping_address a on (o.shipping_address_id = a.id)
+			where a.stat = '1' and o.stat = '1' and u.stat = '1'
+			<if test="orderDto.orderNo != null and orderDto.orderNo !='' ">
+				and o.order_no = #{orderDto.orderNo} 
+			</if>
+			order by o.create_time desc
+			limit  #{page.startNum}, #{page.pageSize}
+	</select>
+	
+	<select id="countOrder" parameterType="com.tianfang.order.dto.SportMOrderDto" resultType="java.lang.Long">
+			select count(*)
+			from sport_m_order o inner join  sport_user u on(o.user_id = u.id)
+			inner join sport_m_shipping_address a on (o.shipping_address_id = a.id)
+			where a.stat = '1' and o.stat = '1' and u.stat = '1'
+			<if test="orderDto.orderNo != null and orderDto.orderNo !='' ">
+				and o.order_no = #{orderDto.orderNo} 
+			</if>
+			<if test="orderDto.userId != null and orderDto.userId !='' ">
+				and o.user_id = #{orderDto.userId} 
+			</if>
+			order by o.create_time desc
+	</select>
+	
+	<select id="selectOrderInfo" parameterType="java.lang.String" resultType="com.tianfang.order.dto.SportMOrderInfoDto">
+			select i.id,i.order_info_no as orderInfoNo, i.order_id as orderId, i.order_status as orderStatus, i.product_sku_id as productSkuId,
+			i.number, i.sku_name as skuName,i.sku_product_price as skuProductPrice,i.product_stock as productStock,p.thumbnail,
+			i.create_time as createTime, i.last_update_time as lastUpdateTime,i.stat
+			from sport_m_order o 
+			left join sport_m_order_info i on i.order_id = o.id
+			left join sport_m_product_sku s on s.id = i.product_sku_id
+			left join sport_m_product_spu p on p.id = s.product_id
+			where o.stat = 1 and i.stat = 1 and s.stat = 1 and p.stat = 1
+			<if test="userId != null and userId !='' ">
+				and o.user_id = #{userId} 
+			</if>
+	</select>
+	
+	<select id="countUserOrder" parameterType="java.lang.String" resultType="java.lang.Long">
+			select count(*)
+			from sport_m_order o 
+			left join sport_m_order_info i on i.order_id = o.id
+			left join sport_m_product_sku s on i.product_sku_id = s.id
+			left join sport_m_product_spu p on s.product_id = p.id
+			where o.stat = 1 and i.stat = 1 and s.stat = 1 and p.stat = 1
+			<if test="userId != null and userId !='' ">
+				and o.user_id = #{userId} 
+			</if>
+	</select>
+</mapper>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<#include "/common/head.htm"/>
+	<meta charset="UTF-8">
+    <link rel="icon" type="image/gif" href="/static/img/favicon.ico">
+    <title>聚运动</title>
+	<script src="/static/js/login.js"></script>
+    <link href="/static/css/style.css" rel="stylesheet" />
+</head>
+<body>
+	<#include "/common/topbar.htm"/>
+	<form id="byCriteria" action="/m/Product/homeInfo.htm">
+		<input type="hidden" name="typeId" value="${(spuDto.typeId)!}" />
+		<input type="hidden" name="productName" value="${(spuDto.productName)!}" />
+		<input type="hidden" name="countEvaluate" value="${(spuDto.countEvaluate)!}" />
+		<input type="hidden" name="priceStat" value="${(spuDto.priceStat)!}" />
+		<input type="hidden" name="newStat" value="${(spuDto.newStat)!}" />
+		<input type="hidden" name="typeStat" value="${(spuDto.typeStat)!}" />
+	</form>
+	<div class="store_topbar">
+		<span>装备商店</span>
+		<div class="search_bar">
+			<input type="button" id="selectBy" value="">
+			<input type="text" id="productName" placeholder="请输入您要搜索的名称" value="${(spuDto.productName)!}"> 
+		</div>
+		<a class="btn_cart" href="/m/Product/getShoppingCard.htm">购物车</a>
+	</div>
+	<div id="store_slideBox" class="store_slideBox">
+		<div class="hd">
+			<ul><li></li><li></li></ul>
+		</div>
+		<div class="bd">
+			<ul>
+				<#if picList??>
+					<#list picList as pic>
+						<li><img src="${imgurl}${(pic.microPic)!}" border="0"></li>
+					</#list>
+				</#if>
+			</ul>
+		</div>
+	</div>
+	
+	<div class="store_box">
+		<div class="tabbar">
+		<#assign i=0/>
+			<#if typelist??>
+				<#list typelist as type>
+					<a href="###" <#if i ==spuDto.typeStat > class='cur' </#if> id="typeSpu" obj-id="${(type.id)!}" type-stat="${i}">${(type.typeName)!}</a>
+					<#assign i=(i+1)/>
+				</#list>
+			</#if>
+		</div>
+		<div class="indexs">
+			<a <#if spuDto.newStat??> <#if spuDto.newStat == 1 > class="cur" <#elseif spuDto.newStat == 2> class="cur up" </#if>  </#if> href="###" <#if spuDto.newStat??> obj_stat = '${(spuDto.newStat)!}' <#else> obj_stat = '1'</#if> obj_type="newStat">最新</a> | 
+			<a <#if spuDto.priceStat??> <#if spuDto.priceStat == 1 > class="cur" <#elseif spuDto.priceStat == 2> class="cur up" </#if>  </#if> href="###" <#if spuDto.priceStat??> obj_stat = '${(spuDto.priceStat)!}' <#else> obj_stat = '1' </#if>  obj_type="priceStat">价格</a> | 
+			<a <#if spuDto.countEvaluate??> <#if spuDto.countEvaluate == 1 > class="cur" <#elseif spuDto.countEvaluate == 2> class="cur up" </#if>  </#if> href="###" <#if spuDto.countEvaluate??> obj_stat = '${(spuDto.countEvaluate)!}' <#else> obj_stat = '1'</#if> obj_type="countEvaluate">评论数</a>
+			<div class="results">
+				为您搜索到 <span id="">${(dataList.total)!}</span> 个商品 <span id=""><i>${(dataList.currPage)!}</i>/${(dataList.totalPage)!}</span>
+				<a class="prev" href="###"></a>
+				<a class="next" href="###"></a>
+			</div>
+		</div>
+		<div class="goods">
+			<ul>
+			<#if dataList.results??>
+				<#list dataList.results as spu>
+					<a href="/estore/detail/getProduct.htm?id=${(spu.id)!}">
+						<li>
+							<img src="${(spu.thumbnail)!}" border="0">
+							<p class="price">￥${(spu.productPrice)!}</p>
+							<p class="des">${(spu.productName)!}</p>
+							<#if spu.star!=null>
+								<p class="rating"><img src="/static/img/star-${(spu.star)!}.png" border="0">评分${(spu.star)!}.0</p>
+							<#else>
+								<p class="rating"><img src="/static/img/star-1.png" border="0">暂无评分</p>
+							</#if>
+							<span>立即购买</span>
+						</li>
+					</a>
+				</#list>
+			</#if>				
+			</ul>
+		 </div>
+		</div>
+		<#assign fun_click = 1>
+		<#include "/common/page_t.htm"/>
+		<#include "/common/footer.htm"/>
+	<script>
+	$(function(){		
+		//导航标记
+		nav_mark('SportStore')
+		
+		$('.tabbar > a').on('click', function(){
+			$(this).addClass('cur').siblings().removeClass('cur')
+		})
+		$('.indexs > a').on('click', function(){
+			//if($(this).hasClass('cur')){
+				if($(this).attr("obj_stat")==1){
+					$(this).attr("obj_stat","2")
+					orderAction($(this).attr("obj_stat"),$(this).attr("obj_type"));
+					$(this).addClass('cur up');
+				}else if($(this).attr("obj_stat")==2){
+					$(this).attr("obj_stat","1")
+					orderAction($(this).attr("obj_stat"),$(this).attr("obj_type"));
+					$(this).addClass('cur');
+				}
+			//	$(this).toggleClass('up')
+			/* }else{
+				if($(this).attr("obj_stat")==1){
+					$(this).attr("obj_stat","2")
+				}else if($(this).attr("obj_stat")==2){
+					$(this).attr("obj_stat","1")
+				} 
+				$(this).addClass('cur').siblings().removeClass('cur').removeClass('up')
+			}*/
+		})
+		//轮播图
+		jQuery(".store_slideBox").slide({mainCell:".bd ul",autoPlay:true,interTime:3500});
+	})
+	
+	function orderAction(stat,type){
+		//清空所有选中状态 
+		$("[name=countEvaluate]").val("");
+		$("[name=priceStat]").val("");
+		$("[name=newStat]").val("");
+		$("[name="+type+"]").val(stat);
+		//为当前状态赋值 
+		document.getElementById("byCriteria").submit();
+	}
+	
+	$("#selectBy").on("click",function(){
+		var name = $("#productName").val().trim();
+		$('[name="productName"]').val(name);
+		document.getElementById("byCriteria").submit();
+		//window.location.href = '/m/Product/homeInfo.htm?productName='+name;
+	})
+	//页码跳转 
+	function gotoPageVideo(page){
+		window.location.href = '/m/Product/homeInfo.htm?page='+page;
+	}
+	
+	$(".tabbar #typeSpu").on("click",function(){
+		var stat = $(this).attr('type-stat');
+		$('[name=typeStat]').val(stat);
+		var id= $(this).attr("obj-id");
+	    $('[name="typeId"]').val(id);
+	    document.getElementById("byCriteria").submit();
+		//window.location.href='/m/Product/homeInfo.htm?typeId='+id; 
+	})
+	</script>
+</body>
+</html>

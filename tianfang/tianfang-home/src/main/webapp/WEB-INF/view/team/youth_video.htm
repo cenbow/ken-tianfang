@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<#include "/common/head.htm"/>
+<link href="/static/css/competition.css" rel="stylesheet" />
+<script src="/static/js/jquery.qrcode.min.js"></script>
+<link href="/static/plugins/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/static/plugins/uploadify/swfobject.js"></script>
+<script type="text/javascript" src="/static/plugins/uploadify/jquery.uploadify.v2.1.4.min.js"></script>	
+
+<link type="text/css" href="/static/plugins/layerModel/layerModel.css" rel="stylesheet"/>
+<script type="text/javascript" src="/static/plugins/layerModel/jquery.layerModel.js"></script>
+
+<body>
+	<#include "/common/topbar.htm"/>
+	<div class="login_box" id="picqrcode" onclick="closebg()">
+		<div class="picqrcode" id="code">
+			<span>分享到微信朋友圈</span>
+			<p>打开微信，点击底部的“发现”， 使用“扫一扫”即可将网页分享至朋友圈。</p>
+		</div>
+	</div>
+	<div class="youth-bg">
+		<div class="wrapper">
+			<div class="youth-title">
+				<!-- <h1>
+					<img src="/static/img/cooper1.png" class="youth-ico"></img>上海上港足球俱乐部主场
+				</h1> -->
+				<img class="youth-ico" src="${(sportTeamDto.logo)!}" />
+				<span class="youth-name">${(sportTeamDto.name)!}</span>
+				<div class="youth-banner">
+					<ul class="youth-banner-ul">
+						<li class="youth-banner-li index" to="/tc/index/${(sportTeamDto.id)!}.htm">球队首页</li>
+						<li class="youth-banner-li team-info" to="/tc/team/${(sportTeamDto.id)!}.htm">球队信息</li>
+						<li class="youth-banner-li pic" to="/tc/pic/${(sportTeamDto.id)!}.htm">相册</li>
+						<li class="youth-banner-li video cur" to="/tc/video/${(sportTeamDto.id)!}.htm">视频</li>
+						<li class="youth-banner-li herald" to="/tc/herald/${(sportTeamDto.id)!}.htm">比赛预告</li>
+						<li class="youth-banner-li history" to="/tc/history/${(sportTeamDto.id)!}.htm">历史战绩</li>
+						<li class="youth-banner-li honor" to="/tc/honor/${(sportTeamDto.id)!}.htm">荣誉</li>
+					</ul>
+				</div>
+			</div>
+		
+			<div class="youth-video">
+				<#if sportTeamDto.owner == true>
+					<div class="manage-pic">
+						<input class="uploadpic bt" type="button" id="" value="上传视频" />
+					</div>
+				</#if>				
+				<ul class="youth-video-ul" id="vediolist">
+					<#if pageList ??>
+						<#list pageList.getResults() as page>
+							<li class="youth-video-li"><i class="play" obj-id="${(page.id)!}"></i>
+								<#if page.videoThumb ??>
+									<img src="${(page.videoThumb)!}" class="younth_video" obj-id="${(page.id)!}"/>
+								<#else>
+									<img src="${(page.videoThumb)!}" class="younth_video" obj-id="${(page.id)!}"/>
+								</#if>
+								<div class="youth-video-info">
+									<p class='video-tip'>
+										${(page.videoName)!}<span>来自 <i>${(page.publishPeople)!}</i></span>
+									</p>
+									<div class='pics-share' style="float:rigth;">
+										<div class="jiathis_style_24x24"
+											style="margin: 7px 0 0 40px; width: 60%; height: 24px;">
+											<a class="jiathis_button_weixin"></a>
+											<a class="jiathis_button_qzone"></a>
+											<a class="jiathis_button_tsina"></a>
+											<a class="jiathis_button_tqq"></a>
+										</div>
+									</div>
+								</div>
+							</li>
+						</#list>
+					</#if>
+				</ul>
+			</div>
+<!-- 			<div id="videoHtml" style="display: none;">
+				<form id="submit_form">
+					<input id="videoUrl" type="text" name="video" value=""/>
+					<input type="hidden" name="publishPeople" value="${(user.userAccount)!}">
+					<input type="hidden" name="teamId" value="${(sportTeamDto.id)!}">				
+					视频名称：<input type="text" name="videoName" value=""/>
+					视频描述:<input type="text" value=""/>
+					<input type="button" id="uploadObj" value="上传"/>
+					<input type="button" id="saveObj" value="保存"/>				
+				</form>
+			</div> -->
+			
+			<div class="pop_box pop_pic_upload">
+				<div class="pop_w">
+					<form id="submit_form">
+						<input id="videoUrl" type="hidden" name="video" value=""/>
+						<input type="hidden" id="videoThumb" name="videoThumb" value="">
+						<input type="hidden" name="publish" value="${(user.userAccount)!}">
+						<input type="hidden" name="teamId" value="${(sportTeamDto.id)!}">
+						<input type="hidden" name="clickRate" value="0">
+						<input type="hidden" name="browseQuantity" value="0">						
+						<div class="bar">上传视频</div>
+						<div class="cont">
+							<ul class="pop-pic-upload">
+								<li class="">
+									<span>描述:</span>
+									<textarea name="described" class="inp" data-max=300></textarea>
+									<span class="count"><i>0</i>/300</span>
+									<input class="pic-ico" type="button" id="uploadObj" value="" />
+									<a id="saveObj" class="confirm" href="##">确定</a>
+								</li>
+							</ul>
+						</div>
+						<a class="close" href="###"></a>
+					</form>
+				</div>
+			</div>
+			<#include "/common/page.htm"/>
+
+		</div>
+	</div>
+	<#include "/common/footer.htm"/>
+	<script src="/static/js/competition.js"></script>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+	<script type="text/javascript" src="/static/js/youth_video.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			$(".uploadpic.bt").on("click", function() {
+				$(".pop_pic_upload").toggleClass("open");
+			});
+			//弹层关闭
+			$('.pop_box a.close').on('click', function() {
+					$(".inp").val("");
+					$(this).closest('.pop_box').removeClass('open')
+			});
+			/* $("#addVideo").on('click',function(){
+				//创建相册
+				$(".uploadpic.bt").on("click", function() {
+					$(".pop_box .bar").text("创建视频");
+					$(".pop_pic").toggleClass("open");
+				})				
+				/* //iframe层-父子操作
+				layer.open({
+				    type: 1,
+				    area: ['400px', '300px'],
+				    fix: true, //不固定
+				    maxmin: false,
+				    content: $('#videoHtml')
+				}); 
+			}); */
+			
+			$("#uploadObj").uploadify({
+	            'uploader': '/static/plugins/uploadify/uploadify.swf',
+	            'script':"/file/upload.htm",
+	            'cancelImg': '/static/plugins/uploadify/cancel.png',
+	            'queueID': 'fileQueue',
+	            'auto': true,
+	            'multi':true,
+	            'sizeLimit':1024*1024*10,
+	            'fileExt':'*.flv',
+	            'fileDesc':'请选择flv文件',
+	            'buttonText': 'select',
+	            'buttonImg':'/static/plugins/uploadify/video.png',
+	            'simUploadLimit' : 1,
+	            'queueSizeLimit' : 1,
+	            onComplete: function(event, queueID, fileObj, response, data) {
+	                	var dataObj = eval("("+response+")");
+	                	if(dataObj.status == 200){
+	                		parent.layer.msg('视频上传成功', {
+								shade: [0.9, '#000'],
+							    icon: 6,
+							    time: 800 //2秒关闭（如果不配置，默认是3秒）
+							}, function(){
+								$('#videoUrl').attr("value",dataObj.filePath);
+								if(dataObj.imageSavePath!=null && dataObj.imageSavePath!=""){
+									$('#videoThumb').attr("value",dataObj.imageSavePath);								
+								}
+							});
+	                	}else{
+	                		layer.alert("对不起," + fileObj.name + "上传失败!<br/>请选择小于10M的flv格式视频", {
+	    						shade: [0.9, '#000'],
+	    					    icon: 4,
+	    					    time: 3000 //2秒关闭（如果不配置，默认是3秒）
+	    					}); 
+	                	}
+	            },
+	            onSelect:function(){
+	            },
+	            onError: function(event, queueID, fileObj) {
+	                layer.alert("对不起," + fileObj.name + "上传失败!<br/>请选择小于10M的flv格式视频", {
+						shade: [0.9, '#000'],
+					    icon: 3,
+					    time: 3000 //2秒关闭（如果不配置，默认是3秒）
+					}); 
+	            }
+	        });				
+			
+			$('#saveObj').on('click',function(){
+				var ajaxParams = $("#submit_form").serialize();
+				$.ajax({
+					type : "POST",
+					url : "${base}/video/addVideo.htm",
+					data : ajaxParams,
+					datatype : "json",// "xml", "html", "script", "json", "jsonp", "text".
+					beforeSend : function() {
+						$("#msg").html("logining");
+					},
+					success : function(data) {// 成功返回之后调用的函数
+						var jsondata = data;// eval('(' + data + ')');
+						if(data.success){
+							layer.msg(data.msg, {
+								shade: [0.9, '#000'],
+							    icon: 1,
+							    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+							}, function(){
+								window.location.reload();//刷新当前页面
+							}); 							
+						}else{
+							layer.msg(data.msg, {
+								shade: [0.9, '#000'],
+							    icon: 6,
+							    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+							}, function(){
+								
+							}); 	
+						}
+					},
+					complete : function(XMLHttpRequest, textStatus) {// 调用执行后调用的函数
+						
+					},
+					error : function() {// 调用出错执行的函数
+					}
+				});				
+			});
+		});
+		function gotoPage(page){
+			window.location.href = '/tc/video/${(sportTeamDto.id)!}.htm?currPage='+page;
+		}
+	</script>	
+</body>
+</html>

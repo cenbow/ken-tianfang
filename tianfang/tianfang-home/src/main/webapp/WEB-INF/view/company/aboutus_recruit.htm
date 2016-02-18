@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<#include "/common/head.htm"/>
+<body>
+	<#include "/common/topbar.htm"/>
+	<div class="aboutus_banner"><img src="/static/img/aboutus.jpg" border="0"></div>
+	<div class="aboutus_box">
+		<div class="aboutus_menu">
+			<a href="/company/synopsis.htm">公司简介</a>
+			<a href="/company/event.htm">大事纪要</a>
+			<a class="cur" href="/company/recruit.htm">诚聘英才</a>
+			<a href="/company/contactus.htm">联系我们</a>
+		</div>
+		<div class="aboutus_main">
+			<h1>诚聘英才</h1>
+			<ul class="recruit_box">
+				<#if pageList??> 
+					<#list pageList.results as page>
+						<li class="close">
+							<div class="tabbar">${(page.title)!}</div><a class="act" href="###" switch="off">展开</a>
+							<div class="tabtext">
+								${(page.content)!}
+							</div>
+						</li>
+					</#list>
+				</#if>
+			</ul>
+			<#include "/common/page.htm"/>
+		</div>
+	</div>
+	<#include "/common/footer.htm"/>
+</body>
+
+<script>
+	$(function(){
+		$('.act').on('click', function(){
+			if($(this).parent().hasClass('close')){
+				$(this).parent().removeClass('close')
+				$(this).html('收起').addClass('cl')
+			}else{
+				$(this).parent().addClass('close')
+				$(this).html('展开').removeClass('cl')
+				$(this).attr('switch','off')
+			}
+		})
+		
+	})
+	function gotoPage(page){
+	window.location.href = '/company/recruit.htm?currPage='+page;
+}
+</script>
+</html>

@@ -1,0 +1,44 @@
+			<h1>用户中心</h1>
+			<div class="userinfo_box">
+				<#if userInfo.microPic ??>
+					<img src="${(userInfo.microPic)!}" border="0" style="width:98px;height:98px;">
+				<#else>
+					<img src="/static/img/topimg.jpg" border="0">
+				</#if>
+				<p class="username">${(userInfo.nickName)!} </p>
+				<p class="regtime">注册时间：${userInfo.createTime?string("yyyy-MM-dd HH:mm:ss")}</p>
+				<!-- <#if userInfo.lastUpdateTime ??>
+					<p class="lastlogin">上次登录时间：${userInfo.lastUpdateTime?string("yyyy-MM-dd HH:mm:ss")}</p>	
+				<#else>
+					<p class="lastlogin">上次登录时间：${userInfo.createTime?string("yyyy-MM-dd HH:mm:ss")}</p>
+				</#if> -->
+				
+					<!-- <p class="lastlogin">上次登录时间：${(userInfo.lastLoginTimeStr)!}</p> -->	
+				
+				<#if teamId ??>
+					<a class="createteam" href="/tc/index/${(teamId)!}.htm">我的球队</a>
+				<#else>
+					<a class="createteam" href="/team/addTeam.htm">创建球队</a>	
+				</#if>
+				
+			</div>
+			<div class="usercenter_box">
+			<div class="menu">
+				<ul>
+					<li class="title">用户中心</li>
+					<li><a class="icon1" href="/userMan/userInfo.htm">个人信息</a></li>
+					<li><a class="icon2" href="/userMan/toUserSenter.htm">账号安全</a></li>
+					<#if teamId ??>
+						<li><a class="icon3" href="/tc/index/${(teamId)!}.htm">我的球队</a></li>
+					<#else>
+						<li><a class="icon3" href="/team/addTeam.htm">我的球队</a></li>
+					</#if>
+					<!--<li><a class="icon4" href="###">我的学院</a></li>
+					<li><a class="icon5" href="###">报名支付</a></li> 
+					<li><a class="icon6" href="###">我的消息</a></li>-->
+					<li><a class="icon7" href="/pic/myPicList.htm">我的图片</a></li>
+					<li><a class="icon8" href="/video/myVidList.htm">我的视频</a></li>
+					<li><a class="icon9" href="/estore/detail/userOrder.htm?userId=${(user.id)!}">我的订单</a></li>
+				</ul>
+			</div>
+			

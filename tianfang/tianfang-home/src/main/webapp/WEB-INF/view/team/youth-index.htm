@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+	<link href="/static/css/competition.css" rel="stylesheet" />
+	<#include "/common/head.htm"/>
+<body>
+		<#include "/common/topbar.htm"/>
+		<div class="youth-bg">
+			<div class="wrapper">
+				<div class="youth-title">
+					<!-- <h1><img src="${(sportTeamDto.logo)!}" class="youth-ico"></img>${(sportTeamDto.name)!}</h1> -->
+					<img class="youth-ico" src="${(sportTeamDto.logo)!}" />
+					<span class="youth-name">${(sportTeamDto.name)!}</span>
+					<div class="youth-banner">
+						<ul class="youth-banner-ul">
+							<li class="youth-banner-li index cur" to="/tc/index/${(sportTeamDto.id)!}.htm">球队首页</li>
+							<li class="youth-banner-li team-info" to="/tc/team/${(sportTeamDto.id)!}.htm">球队信息</li>
+							<li class="youth-banner-li pic" to="/tc/pic/${(sportTeamDto.id)!}.htm">相册</li>
+							<li class="youth-banner-li video" to="/tc/video/${(sportTeamDto.id)!}.htm">视频</li>
+							<li class="youth-banner-li herald" to="/tc/herald/${(sportTeamDto.id)!}.htm">比赛预告</li>
+							<li class="youth-banner-li history" to="/tc/history/${(sportTeamDto.id)!}.htm">历史战绩</li>
+							<li class="youth-banner-li honor" to="/tc/honor/${(sportTeamDto.id)!}.htm">荣誉</li>
+						</ul>
+					</div>
+				</div>
+				<div class="index-content">
+					<div class="index-left">
+						<div class="announce">
+							<img src="${(sportTeamDto.pageCover)!}" alt="" />
+							<div class="announces dash-wrapper">
+									<h1 class="youth">公告<a class="more" href="/tc/notice/${(sportTeamDto.id)!}.htm">
+										<#if sportTeamDto.owner == true>
+											管理>>
+										<#else>
+											更多>>
+										</#if>
+									</a></h1>
+								<div class="dash"></div>
+								<#if objMap.noticeList ??>
+									<#list objMap.noticeList as notice>
+										<a class="notice_id" data-value-id="${(notice.id)!}">${(notice.title)!}</a>
+									</#list>
+								<#else>
+									<a>暂无公告</a>
+								</#if>
+							</div>
+						</div>
+						<#if objMap.raceList ??>
+							<div class="index-herald dash-wrapper index-box">
+								<h1 class="youth">比赛预告<a class="more" href="/tc/herald/${(sportTeamDto.id)!}.htm">更多>></a></h1>
+								<div class="dash"></div>
+								<#if objMap.raceList ??>
+									<ul class="youth-herald-ul">
+										<#list objMap.raceList as race>
+											<li class="youth-herald-li">
+												<p><span class="part1">${(race.homeTeamName)!}</span>VS<span class="part2">${(race.vsTeamName)!} </span></p>
+												<p class="timeplace"><i>${(race.raceTimeStr)!}</i>
+													<br><i>${(race.raceAddress)!}</i> </p>
+												<p>
+												<#list types as type>
+													<#if race.type == type.getIndex()>${type.getName()}</#if>
+												</#list>
+												</p>
+											</li>										
+										</#list>
+									</ul>
+								<#else>
+									<p class="no-info">暂无预告</p>
+								</#if>
+							</div>
+						</#if>
+						
+						<#if objMap.historyRaceList ??>
+							<div class="index-beats dash-wrapper index-box">
+								<h1 class="youth">历史战绩<a class="more" href="/tc/history/${(sportTeamDto.id)!}.htm">更多>></a></h1>
+								<div class="dash"></div>
+								<#if objMap.historyRaceList ??>
+									<ul class="youth-history-ul">
+								<#list objMap.historyRaceList.getResults() as page>
+									<li class="youth-history-li">
+										<p class="col1">${(page.index)!}</p>
+									    <#if page.homeTeamNumber gt page.vsTeamNumber> 
+											<p class="col2"><span class="team1 win">${(page.homeTeamName)!}</span><span class="splits"><i class="win">${(page.homeTeamNumber)!}</i>:<i>${(page.vsTeamNumber)!}</i></span><span class="team2">${(page.vsTeamName)!} </span></p>
+										</#if>
+										<#if page.homeTeamNumber lt page.vsTeamNumber>
+											<p class="col2"><span class="team1">${(page.homeTeamName)!}</span><span class="splits"><i>${(page.homeTeamNumber)!}</i>:<i class="win">${(page.vsTeamNumber)!}</i></span><span class="team2 win">${(page.vsTeamName)!} </span></p>
+										</#if> 
+										<#if page.homeTeamNumber == page.vsTeamNumber>
+											<p class="col2"><span class="team1">${(page.homeTeamName)!}</span><span class="splits"><i>${(page.homeTeamNumber)!}</i>:<i>${(page.vsTeamNumber)!}</i></span><span class="team2">${(page.vsTeamName)!} </span></p>
+										</#if> 
+										<p class="timeplace col3"><i>${(page.raceTimeStr)!}</i>
+											<br><i>${(page.raceAddress)!}</i> </p>
+										<p class="col4">
+											<#list types as type>
+												<#if page.type == type.getIndex()>${type.getName()}</#if>
+											</#list>
+										</p>
+									</li>
+								</#list> 
+							</ul>
+								<#else>
+									<p class="no-info">暂无战绩</p>	
+								</#if>
+							</div>
+						</#if>
+						<div class="index-pic dash-wrapper index-box">
+							<h1 class="youth">相册<a class="more" href="/tc/pic/${(sportTeamDto.id)!}.htm">
+							<#if sportTeamDto.owner == true>
+								管理>>
+							<#else>
+								更多>>
+							</#if>							
+							</a></h1>
+							<div class="ad-gallery">
+								<div class="ad-image-wrapper">
+								</div>
+								<div class="ad-nav">
+									<div class="ad-thumbs">
+										<ul class="ad-thumb-list">
+											<#if objMap.albumPicList ??>
+												<#list objMap.albumPicList as picObj>
+													<li>
+														<a href="${(picObj.pic)!}">
+															<img src="${(picObj.pic)!}" class="image0">
+														</a>
+													</li>
+												</#list>
+											</#if>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="index-right">
+						<div class="index-team-info">
+							<h1 class="youth">球队信息
+								<#if sportTeamDto.owner == true>
+									<a class="more" href="/tc/team/mg/${(sportTeamDto.id)!}.htm">管理>></a>
+								<#else>
+									<a class="more" href="/tc/team/${(sportTeamDto.id)!}.htm">详细>></a>
+								</#if>							 
+								
+							</h1>
+							<div class="team-detail">
+								<img src="${(sportTeamDto.logo)!}" alt="" />
+								<p class="team-info-name">${(sportTeamDto.name)!}</p>
+								<hr />
+								<p>地区：<span>${(addressMap[sportTeamDto.distruct])!}</span></p>
+								<p>成员：<span>${(sportTeamDto.members)!}人</span></p>
+								<p>创建人：<span>${(sportTeamDto.creater)!}</span></p>
+								<p>成立时间：<span>${(sportTeamDto.setUpTime?string("yyyy-MM-dd"))!}</span></p>
+								<hr />
+								<p>主场：<span>${(sportTeamDto.homeCourt)!}</span></p>
+								<p>等级：<span>${(sportTeamDto.grade)!}</span></p>
+							</div>
+						</div>
+						<div class="index-team-member">
+							<h1 class="youth">球队成员 <a class="more" href="/tc/team/${(sportTeamDto.id)!}.htm">详细>></a></h1>
+							<#if team.lineup ??>
+								<img src="/static/img/player/${formationMap[team.lineup]}" alt="" />
+							<#else>
+								<img src="/static/img/player/424.jpg" alt="" />
+							</#if>
+						</div>
+						<div class="index-team-beats">
+							<h1 class="youth">球队胜率</h1>
+							<div class="index-team-beats-rate win-rate">
+								<#assign allCount=(sportTeamDto.win!0)+(sportTeamDto.drew!0)+(sportTeamDto.lost!0)>
+								<#if sportTeamDto.win ??>
+								 	<#if allCount != 0>
+										<p class="win"><i>${(((sportTeamDto.win!0)/allCount)?string.percent)}</i>胜率</p>
+									<#else>
+										<p class="win"><i>0%</i>胜率</p>
+									</#if>
+								<#else>
+									<p class="win"><i>0%</i>胜率</p>
+								</#if>
+								
+							</div>
+							<hr />
+							<div class="beatball-beats">
+								<div class="beatball win">
+									<#if sportTeamDto.win ??>
+										<i>${(sportTeamDto.win)!}</i>
+									<#else>
+										<i>0</i>	
+									</#if>
+									<p>胜</p>
+								</div>
+								<div class="beatball equal">
+									<#if sportTeamDto.drew ??>
+										<i>${(sportTeamDto.drew)!}</i>
+									<#else>
+										<i>0</i>	
+									</#if>									
+									<p>平</p>
+								</div>
+								<div class="beatball lose">
+									<#if sportTeamDto.lost ??>
+										<i>${(sportTeamDto.lost)!}</i>
+									<#else>
+										<i>0</i>	
+									</#if>										
+									<p>负</p>
+								</div>
+							</div>
+						</div>
+						<div class="index-team-honor">
+							<h1 class="youth">荣誉
+								<#if sportTeamDto.owner == true>
+									<a class="more" href="/honor/findPage.htm?teamId=${(sportTeamDto.id)!}">管理>></a>
+								<#else>
+									<a class="more" href="/tc/honor/${(sportTeamDto.id)!}.htm">详细>></a>
+								</#if>
+							</h1>
+							<#if objMap.honorList ??>
+								<#list objMap.honorList.getResults() as honor>
+									<a>${(honor.title)!}</a>
+								</#list>
+							<#else>
+								<p class="no-info">暂无荣誉</p>
+							</#if>
+						</div>
+						<#if objMap.videoDto ??>
+							<div class="index-team-video">
+								<h1 class="youth">视频<a class="more" href="/tc/video/${(sportTeamDto.id)!}.htm">							
+								<#if sportTeamDto.owner == true>
+									管理>>
+								<#else>
+									更多>>
+								</#if></a></h1>
+								<div class="index-team-videos">
+										<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,19,0" width="318" height="290">
+										    <param name="movie" value="/static/video/splvplayer.swf" />
+										    <param name="quality" value="high" />
+										    <param name="allowFullScreen" value="true" />
+										    <param name="FlashVars" value="${(objMap.videoDto.video)!}" />
+										    <embed src="/static/video/splvplayer.swf" allowfullscreen="true" flashvars="${(objMap.videoDto.video)!}" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="318" height="290"></embed>
+										</object>
+								</div>
+							</div>						
+						</#if>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<#include "/common/footer.htm"/>
+		<script src="/static/js/competition.js"></script>
+		<script type="text/javascript">
+/* 			for (var i = 0; i < 8; i++) {
+				$(".announces").append($(".announces a:last").clone());
+			} */
+			$(function() {
+				
+				$(".notice_id").on("click",function(){
+					var noticeId = $(this).attr("data-value-id");
+					layer.open({
+					    type: 2,
+					    area: ['400px', '300px'],
+					    fix: false, //不固定
+					    maxmin: true,
+					    content: '/viewNotice.htm?noticeId='+noticeId
+					});
+				});
+				
+				
+				var galleries = $('.ad-gallery').adGallery({
+					update_window_hash: false,
+					thumb_opacity: 0.7,
+					start_at_index: 0,
+					slideshow: {
+						enable: true,
+						autostart: false,
+						speed: 2000,
+						stop_on_scroll: true,
+					},
+				});
+			});
+		</script>
+	</body>
+
+</html>

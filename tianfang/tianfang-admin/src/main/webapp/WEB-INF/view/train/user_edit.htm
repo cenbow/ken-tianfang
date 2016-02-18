@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Form Elements - Ace Admin</title>
+		<meta name="description" content="Common form elements and layouts" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<#include "../admin/head.htm"/>
+	</head>
+	<body>
+		<div class="container-fluid" id="main-container">
+			<div id="main-content" class="clearfix" style="margin-left:0px;">
+					<div id="page-content" class="clearfix">
+						<div class="row-fluid">
+							<!-- PAGE CONTENT BEGINS HERE -->
+							<form id="submitForm" class="form-horizontal" action="${base}/user/updateUser.do" method="POST">
+								
+								<input type="hidden" name="id" value="${(result.id)!}">
+								<input type="hidden" name="position" value="${(result.position)!}">
+								<input type="hidden" name="pic" value="${(result.pic)!}">
+								<input type="hidden" name="description" value="${(result.description)!}">
+								<input type="hidden" name="microPic" value="${(result.microPic)!}">
+								
+								<div class="control-group">
+									<label class="control-label" for="form-field-1">姓名</label>
+									<div class="controls">
+										<input type="text" name="pname" class="span10" id="form-field-1" placeholder="姓名" value="${(result.pname)!}">
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label" for="form-field-2">手机</label>
+									<div class="controls">
+										<input type="text" name="mobile" class="span10" id="form-field-1" placeholder="手机" value="${(result.mobile)!}">
+									</div>
+								</div>
+								
+								<div class="control-group">
+									<label class="control-label" for="form-field-2">所在地</label>
+									<div class="controls">
+										<input type="text" name="location" class="span10" id="form-field-1" placeholder="所在地" value="${(result.location)!}">
+									</div>
+								</div>
+								
+								<div class="control-group">
+									<label class="control-label" for="form-field-2">孩子姓名</label>
+									<div class="controls">
+										<input type="text" name="cname" class="span10" id="form-field-1" placeholder="所在地" value="${(result.cname)!}">
+									</div>
+								</div>
+								
+								<div class="control-group">
+									<label class="control-label" for="form-field-2">出生日期</label>
+									<div class="controls">
+										<input class="span10 date-picker" name="birthdayStr" id="createTimeE" value="${(result.birthdayStr)!}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="出生日期">
+										<!-- <input class="span10 date-picker" name="birthdayStr" id="createTimeS"  value="${(result.birthdayStr)!}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="出生日期" title="出生日期"/> -->
+									
+									</div>
+								</div>
+								
+								<div class="control-group">
+									<label class="control-label" for="form-field-2">原学校</label>
+									<div class="controls">
+										<input type="text" name="originSchool" class="span10" id="form-field-1" placeholder="原学校" value="${(result.originSchool)!}">
+									</div>
+								</div>
+
+								<input type="button" onclick="submitV()" value="提交" /> 
+							 </form>
+							<!-- PAGE CONTENT ENDS HERE -->
+						 </div><!--/row-->
+					</div><!--/#page-content-->
+			</div><!-- #main-content -->
+		</div><!--/.fluid-container#main-container-->
+		<a href="#" id="btn-scroll-up" class="btn btn-small btn-inverse">
+			<i class="icon-double-angle-up icon-only"></i>
+		</a>
+		<!-- basic scripts -->
+		<script src="${base}/static/1.9.1/jquery.min.js"></script>
+		<script type="text/javascript">
+		window.jQuery || document.write("<script src='${base}/static/js/jquery-1.9.1.min.js'>\x3C/script>");
+		</script>
+		
+		<script src="${base}/static/js/bootstrap.min.js"></script>
+		<!-- page specific plugin scripts -->
+		
+		<!--[if lt IE 9]>
+		<script type="text/javascript" src="${base}/static/js/excanvas.min.js"></script>
+		<![endif]-->
+		<script type="text/javascript" src="${base}/static/js/jquery-ui-1.10.2.custom.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/jquery.ui.touch-punch.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/chosen.jquery.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/fuelux.spinner.js"></script>
+		<script type="text/javascript" src="${base}/static/js/bootstrap-datepicker.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/bootstrap-timepicker.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/date.js"></script>
+		<script type="text/javascript" src="${base}/static/js/daterangepicker.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/bootstrap-colorpicker.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/jquery.autosize-min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/jquery.inputlimiter.1.3.1.min.js"></script>
+		<!-- ace scripts -->
+		<script src="${base}/static/js/ace-elements.min.js"></script>
+		<script src="${base}/static/js/ace.min.js"></script>
+		<!-- inline scripts related to this page -->
+
+    <script type="text/javascript" charset="utf-8" src="${base}/plugins/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="${base}/plugins/ueditor/ueditor.all.min.js"> </script>
+    <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+    <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+    <script type="text/javascript" charset="utf-8" src="${base}/plugins/ueditor/lang/zh-cn/zh-cn.js"></script>
+		
+		<!-- layer 弹出框处理 -->
+		<script type="text/javascript" src="${base}/plugins/layer2.0/layer.js"></script>
+		
+		<script type="text/javascript">
+		UE.getEditor('editor');
+		$(function() {
+			//日期框
+			$('.date-picker').datepicker();		
+			
+			$("#form-radio-show label input").on('click',function(){
+				$("#marked").val($(this).val());
+			});
+			$("#savebutton").on('click',function(){
+				var content = UE.getEditor('editor').getContent();
+				var micro_pic = $("#id-input-file-3").parent().find("img:first").css("background-image");
+				$("#content").val(content);
+				$("#microPic").val(micro_pic);
+				
+				var ajaxParams = $("#submitForm").serialize();
+				$.ajax({
+					type : "POST",
+					url : "${base}/newsInfo/update.do",
+					data : ajaxParams,
+					datatype : "json",// "xml", "html", "script", "json", "jsonp", "text".
+					beforeSend : function() {
+						$("#msg").html("logining");
+					},
+					success : function(data) {// 成功返回之后调用的函数
+						var jsondata = data;// eval('(' + data + ')');
+						if(data.success){
+							parent.layer.msg('保存成功', {
+								shade: [0.9, '#000'],
+							    icon: 6,
+							    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+							}, function(){
+								parent.reload_page();
+								var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+								parent.layer.close(index);
+							}); 							
+						}else{
+							parent.layer.msg('保存出错', {
+								shade: [0.9, '#000'],
+							    icon: 6,
+							    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+							}, function(){
+							}); 	
+						}
+						//console.log(data.success);
+					},
+					complete : function(XMLHttpRequest, textStatus) {// 调用执行后调用的函数
+						
+					},
+					error : function() {// 调用出错执行的函数
+					}
+				});
+			});
+							
+			$('#id-input-file-1 , #id-input-file-2').ace_file_input({
+				no_file:'No File ...',
+				btn_choose:'Choose',
+				btn_change:'Change',
+				droppable:false,
+				onchange:null,
+				thumbnail:false //| true | large
+				//whitelist:'gif|png|jpg|jpeg'
+				//blacklist:'exe|php'
+				//onchange:''
+				//
+			});
+			
+			$('#id-input-file-3').ace_file_input({
+				style:'well',
+				btn_choose:'点击上传图片文件',
+				btn_change:null,
+				no_icon:'icon-cloud-upload',
+				droppable:true,
+				onchange:null,
+				thumbnail:'small',
+				before_change:function(files, dropped) {
+					//console.log(files);
+					//console.log(dropped);
+					/**
+					if(files instanceof Array || (!!window.FileList && files instanceof FileList)) {
+						//check each file and see if it is valid, if not return false or make a new array, add the valid files to it and return the array
+						//note: if files have not been dropped, this does not change the internal value of the file input element, as it is set by the browser, and further file uploading and handling should be done via ajax, etc, otherwise all selected files will be sent to server
+						//example:
+						var result = []
+						for(var i = 0; i < files.length; i++) {
+							var file = files[i];
+							if((/^image\//i).test(file.type) && file.size < 102400)
+								result.push(file);
+						}
+						return result;
+					}
+					*/
+					return true;
+				}
+				/*,
+				before_remove : function() {
+					return true;
+				}*/
+			}).on('change', function(){
+				//console.log($(this).data('ace_input_files'));
+				//console.log($(this).data('ace_input_files'));
+				//console.log($(this).data('ace_input_method'));
+			});
+			
+			
+		});
+		</script>
+	</body>
+	
+	<script type="text/javascript">
+		function submitV(){
+			
+			var pname = $("input[name='pname']").val();
+			var mobile = $("input[name='mobile']").val();
+			var location = $("input[name='location']").val();
+			var cname = $("input[name='cname']").val();
+			var birthdayStr = $("input[name='birthdayStr']").val();
+			var originSchool = $("input[name='originSchool']").val();
+			
+			var flag = false;
+			//输入框校验	
+			if(pname=='' || (pname.length>20)){
+				alert("请正确输入姓名");
+			}
+			var telReg = !!mobile.match(/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/);
+			if(telReg==false || mobile.length=0){
+				alert("请输入正确的手机号");
+			}
+			if(location=='' || location.length>50){
+				alert("请填写正确的地址");
+			}
+			if(cname=='' || cname.length>50){
+				alert("请填写正确的孩子姓名");
+			}
+			if(birthdayStr==''){
+				alert("请选择日期");
+			}
+			if(originSchool=='' || originSchool.length>50){
+				alert("请填写正确的学校地址");
+			}
+			if((pname!='')&&(telReg)&&(location!='')&&(cname!='')&&(birthdayStr!='')&&(originSchool!='')){
+				flag=true;
+			}
+			
+			if(flag==false){
+				return false;
+			}
+			
+			var ajaxParams = $("#submitForm").serialize();
+			$.ajax({
+				type : "POST",
+				url : "${base}/user/updateUser.do",
+				data : ajaxParams,
+				datatype : "json",// "xml", "html", "script", "json", "jsonp", "text".
+				success : function(data) {// 成功返回之后调用的函数
+					
+					var json = eval("(" + data + ")");
+					
+					if(json.status=='200'){
+						parent.layer.msg('保存成功', {
+							shade: [0.9, '#000'],
+						    icon: 6,
+						    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+						}, function(){
+							parent.reload_page();
+							var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+							parent.layer.close(index);
+						}); 							
+					}else{
+						parent.layer.msg('保存出错', {
+							shade: [0.9, '#000'],
+						    icon: 6,
+						    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+						}, function(){
+						}); 	
+					}
+				},
+				error : function() {// 调用出错执行的函数
+				}
+			});
+		};
+	</script>
+</html>

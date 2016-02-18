@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianfang.company.mapper.SportCompanyRelatedExMapper" >
+  
+  <!-- 批量逻辑删除数据 -->
+  <update id="deleteByIds" parameterType="com.tianfang.company.pojo.SportCompanyRelated">
+  	UPDATE sport_company_related SET stat=0,last_update_time=#{updateTime} WHERE id in ${ids} 
+  
+  
+  </update>
+  
+</mapper>

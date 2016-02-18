@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<link href="/static/css/competition.css" rel="stylesheet" />
+	<#include "/common/head.htm"/>
+
+	<body>
+		<#include "/common/topbar.htm"/>
+		<div class="youth-bg">
+			<div class="wrapper">
+				<div class="youth-title">
+					<!-- <h1><img src="${(sportTeamDto.logo)!}" class="youth-ico"></img>${(sportTeamDto.name)!}</h1> -->
+					<img class="youth-ico" src="${(sportTeamDto.logo)!}" />
+					<span class="youth-name">${(sportTeamDto.name)!}</span>
+					<div class="youth-banner">
+						<ul class="youth-banner-ul">
+							<li class="youth-banner-li index" to="/tc/index/${(sportTeamDto.id)!}.htm">球队首页</li>
+							<li class="youth-banner-li team-info" to="/tc/team/${(sportTeamDto.id)!}.htm">球队信息</li>
+							<li class="youth-banner-li pic" to="/tc/pic/${(sportTeamDto.id)!}.htm">相册</li>
+							<li class="youth-banner-li video" to="/tc/video/${(sportTeamDto.id)!}.htm">视频</li>
+							<li class="youth-banner-li herald" to="/tc/herald/${(sportTeamDto.id)!}.htm">比赛预告</li>
+							<li class="youth-banner-li history" to="/tc/history/${(sportTeamDto.id)!}.htm">历史战绩</li>
+							<li class="youth-banner-li honor cur" to="/tc/honor/${(sportTeamDto.id)!}.htm">荣誉</li>
+						</ul>
+					</div>
+				</div>
+				<div class="youth-honor">
+					<ul class="youth-honor-ul">
+						<#list pageList.getResults() as page>
+							<li class="youth-honor-li">
+								<h2>${page.title}<#if page.honorStatus==0><span class="status unchecked">待审核</span><#elseif page.honorStatus==1><span class="status checked">审核通过</span><#elseif page.honorStatus==2><span class="status checked">审核未过</span></#if></h2>
+								<span class="info"><i class="publish-time">${page.createTime?string("yyyy-MM-dd HH:mm:ss")}</i></span>
+								<p class="contents">${page.content}</p>
+							</li>
+						</#list>
+					</ul>
+				</div>
+
+				<#include "/common/page.htm"/>
+
+			</div>
+		</div>
+
+		<#include "/common/footer.htm"/>
+		<script src="/static/js/competition.js"></script>
+		<script type="text/javascript">
+		function gotoPage(page){
+			window.location.href = '/tc/honor/${(sportTeamDto.id)!}.htm?currPage='+page;
+		}
+		</script>
+	</body>
+</html>

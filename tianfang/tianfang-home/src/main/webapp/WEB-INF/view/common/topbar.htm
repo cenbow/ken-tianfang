@@ -1,0 +1,142 @@
+
+<div class="header">
+	<div class="status_bar">
+		<a class="logo" href="/index.htm"></a> <a class="sina_login" title="关注我们" target="_" href="http://weibo.com/u/5587109056"></a> <a class="wechat_codes" href="###"><div class="wx_code"></div></a>
+		<!-- <a class="logo" href="/index.htm"></a> <a class="sina_login" title="关注我们" target="_" href="http://weibo.com/u/5587109056"></a> <a title="关注我们" class="wechat_login" href="###"></a> -->
+		<p class="status" id="loginStatus">
+			<a class="login_btn" href="###">登录</a> | <a href="/userMan/reg.htm" target="_blank">注册</a>
+		</p>
+	</div>
+	<ul class="nav_bar">
+		<#list s_menu as sm>
+			<#if sm_index == 1>
+				<li class="items com">
+			<#elseif sm_index == 2>
+				<li class="items act">
+			<#elseif sm_index == 3>
+				<li class="items fus">				
+			<#else>
+				<li class="items">
+			</#if>
+				<#if ((sm.sportHomeMenuDto.menuUrl == '') || ((sm.sportHomeMenuDto.activityType!-1) > -1))>
+					<a href="/menu/detail.htm?id=${(sm.sportHomeMenuDto.id)!}">${(sm.sportHomeMenuDto.cname)!}<br><span>${(sm.sportHomeMenuDto.ename)!}</span></a>
+				<#else>
+					<a href="${(sm.sportHomeMenuDto.menuUrl)!}">${(sm.sportHomeMenuDto.cname)!}<br><span>${(sm.sportHomeMenuDto.ename)!}</span></a>
+				</#if>
+				<#if (sm.secondList?? && (sm.sportHomeMenuDto.activityType!-1) == -1)>
+					<ul>
+						<li>				
+							<#list sm.secondList as ssm>
+								<#if ((ssm.menuUrl??) && (ssm.menuUrl != ''))>
+									<a href="${(ssm.menuUrl)!}">${(ssm.cname)!}</a>
+								<#else>
+									<a href="/menu/detail.htm?id=${(ssm.id)!}">${(ssm.cname)!}</a>
+								</#if>
+							</#list>
+						</li>
+					</ul>							
+				</#if>
+			</li>
+		</#list>
+		<!-- <li class="items"><a href="/index.htm">首页<br><span>Home</span></a></li>
+		<li class="items">青训对战<br><span>Competition</span>
+			<ul>
+				<li>
+					<a href="/game/toGame.htm">竞技对战</a> | <a href="###">移动产品</a> | <a href="###">赛事管理系统</a>
+				</li>
+			</ul>
+		</li>
+		<li class="items">资讯活动<br><span>Activity</span>
+			<ul>
+				<li><a href="/subject/index.htm">主题活动</a> | <a href="/newAndInfo/list.htm">专业资讯</a> | <a href="#">赛事管理系统</a></li>
+			</ul>
+		</li>
+		<li class="items"><a href="/star/index.htm">未来之星<br><span>Future Star</span></a>
+		</li> -->
+	</ul>
+</div>
+
+<!-- 登录弹出窗-->
+<div class="login_popup">
+	<div class="login_form">
+		<ul class="wclogin_box">
+			<div id="login_container"></div>
+		</ul>
+		<ul>
+			<li><label class="user"></label><input id="login_username" name="userAccount" type="text" placeholder="邮箱/手机"></li>
+			<li><label class="password"></label><input id="login_password" name="password" type="password" placeholder="登录密码"></li>
+			<!-- <li><label class="confirm"></label><input class="con" id="login_picCaptcha" name="login_picCaptcha" type="text" placeholder="图片验证码"><a href="###"><img
+					id="check_Code" src="/userMan/drawRandom.htm" onclick="freshImage()" border="0"><span onclick="freshImage()">看不清？</span></a></li> -->
+			<input id="re_pw" type="checkbox">&nbsp;&nbsp;
+			<label class="rem" for="re_pw">两周内自动登录</label>
+			<label><a href="/forget/password/forgot.htm" style="color: red;">忘记密码</a></label>
+			<input type="button" class="login_submit" value="登   录">
+			<p class="tip">
+				还不是聚运动会员，<a href="/userMan/reg.htm" target="_blank">立即注册</a>
+			</p>
+		</ul>
+		<div class="bottom_bar">
+			<!-- <a id="qqLoginBtn" class="qq" href="#">QQ</a> -->
+			<span>其它登录方式</span>
+			<a id="qqLoginBtn" class="tencent" onclick="openQQ()" href="javascript:void(0);">QQ登录</a> 
+			<a id="wb_connect_btn" class="sina" href="#"></a>
+			<a class="wechat" href="###"></a>
+			<!-- <div class="openqq" id="qqLoginBtn">QQ登录隐藏</div>  -->
+		</div>
+		<a class="close" href="###"></a>
+	</div>
+</div>
+<script type="text/javascript">
+<!-- QQ第三方登陆开始-->
+ 	//调用QC.Login方法，指定btnId参数将按钮绑定在容器节点中  
+	 QC.Login({
+		btnId : "qqLoginBtn",
+		scope : "all",
+		size : "A_XL"
+	}, function(reqData, opts) {//登录成功  
+		QC.Login.getMe(function(openId, accessToken) {
+		 	//alert("openId= " + openId +"accessToken = " + accessToken);
+			 $.post("/third/qqLogin.htm", {
+				"openid" : openId
+			}, function(data) {
+				var status = data.status;
+				if (status == 200) {
+					QC.Login.signOut();
+					location.href = "/userMan/userInfo.htm";
+				}
+			}); 
+		});
+
+	}, function(opts) {//注销成功  
+	});  
+	//打开QQ登录窗口	
+	  function openQQ() {
+		$(".openqq").click();
+	}  
+<!-- QQ第三方登陆结束-->
+
+<!-- 微信第三方登陆开始-->
+WB2.anyWhere(function (W) {
+    W.widget.connectButton({
+        id: "wb_connect_btn",
+        type: '3,2',
+        callback: {
+            login: function (o) {
+            		oid=o.id;
+					WB2.logout(function() {
+			            $.post("/third/sinaLogin.htm", {"openid" : oid}, function(data) {
+							var status = data.status;
+							if (status == 200) {
+								location.href = "/userMan/userInfo.htm";
+							}
+						});
+					});
+            },
+            logout: function () { //退出后的回调函数
+            	
+            }
+        }
+    });
+});
+<!-- 微信第三方登陆结束-->
+</script>

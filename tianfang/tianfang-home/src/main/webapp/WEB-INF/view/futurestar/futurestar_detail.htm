@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<#include "/common/head.htm"/>
+<link href="/static/css/competition.css" rel="stylesheet" />
+<script src="/static/js/jquery.qrcode.min.js"></script>
+<script type="text/javascript" src="/static/plugins/uploadify/swfobject.js"></script>
+<link type="text/css" href="/static/plugins/layerModel/layerModel.css" rel="stylesheet"/>
+<script type="text/javascript" src="/static/plugins/layerModel/jquery.layerModel.js"></script>
+<body>
+	<#include "/common/topbar.htm"/>
+	<div class="fs_banner">
+		<img src="/static/img/banner_fs.jpg" border="0">
+	</div>
+	<div class="fs_cgbox">
+		<h1>${(data.cname)!}</h1>
+		<div class="text">
+			${(data.content)!}
+		</div>
+		<#if ((data.videoType??) && (data.videoType > 0))>
+			<input type="hidden" id="videoType" value="${data.videoType}" />
+			<div class="youth-video">
+				<ul class="youth-video-ul" id="vediolist">
+				</ul>
+			</div>
+			<div class="pagenav herald">
+			</div>
+		</#if>
+	</div>
+	<#include "/common/footer.htm"/>
+	<#if ((data.videoType??) && (data.videoType > 0))>
+		<script type="text/javascript" src="/static/sport/seachVideo_ajax.js"></script>
+	</#if>
+	<script>
+		$(function() {
+			//导航标记
+			nav_mark('futurestar')
+		})
+	</script>
+</body>
+</html>

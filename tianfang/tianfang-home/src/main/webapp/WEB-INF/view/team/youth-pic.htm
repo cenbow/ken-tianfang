@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+<#include "/common/head.htm"/>
+<link href="/static/css/competition.css" rel="stylesheet" />
+<link href="/static/plugins/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/static/plugins/uploadify/swfobject.js"></script>
+<script type="text/javascript" src="/static/plugins/uploadify/jquery.uploadify.v2.1.4.min.js"></script>	
+	<body>
+		<div class="login_box" id="picqrcode" onclick="closebg()">
+			<div class="picqrcode" id="code">
+				<span>分享到微信朋友圈</span>
+				<p>打开微信，点击底部的“发现”， 使用“扫一扫”即可将网页分享至朋友圈。</p>
+			</div>
+		</div>
+		<#include "/common/topbar.htm"/>
+		<div class="youth-bg">
+			<div class="wrapper">
+				<div class="youth-title">
+					<!-- <h1><img src="${(sportTeamDto.logo)!}" class="youth-ico"></img>${(sportTeamDto.name)!}</h1> -->
+					<img class="youth-ico" src="${(sportTeamDto.logo)!}" />
+					<span class="youth-name">${(sportTeamDto.name)!}</span>
+					<div class="youth-banner">
+						<ul class="youth-banner-ul">
+							<li class="youth-banner-li index" to="/tc/index/${(sportTeamDto.id)!}.htm">球队首页</li>
+							<li class="youth-banner-li team-info" to="/tc/team/${(sportTeamDto.id)!}.htm">球队信息</li>
+							<li class="youth-banner-li pic cur" to="/tc/pic/${(sportTeamDto.id)!}.htm">相册</li>
+							<li class="youth-banner-li video" to="/tc/video/${(sportTeamDto.id)!}.htm">视频</li>
+							<li class="youth-banner-li herald" to="/tc/herald/${(sportTeamDto.id)!}.htm">比赛预告</li>
+							<li class="youth-banner-li history" to="/tc/history/${(sportTeamDto.id)!}.htm">历史战绩</li>
+							<li class="youth-banner-li honor" to="/tc/honor/${(sportTeamDto.id)!}.htm">荣誉</li>
+						</ul>
+					</div>
+				</div>
+<!-- 				<div>
+					<a id="addpic">上传相片</a>&nbsp;<a id="add">新增相册</a>&nbsp;
+				</div> -->
+				<div class="youth-pic">
+					<#if sportTeamDto.owner == true>
+						<div class="manage-pic">
+							<input class="uploadpic bt" type="button" id="" value="上传照片" />
+							<input class="creatpic bt" type="button" id="" value="创建相册" />
+						</div>
+					</#if>
+					<ul class="youth-pic-ul">
+					<#if pageList ??>
+						<#list pageList.getResults() as page>
+	 						<li class="youth-pic-li">
+	 							<a href="/pic/picList/${(page.id)!}.htm" target="_self">
+	 								<#if page.thumbnail ??>
+	 									<img src="${(page.thumbnail)!}" alt="" />
+	 								<#else>
+	 									<img src="/static/img/defaultPic.jpg" alt="" />
+	 								</#if>
+								</a>
+								<div class="pics-info">
+									<p class="pics-title"><span class="pics-name">${(page.title)!}</span><span class="pics-totle">共${(page.totalPic)!}张</span></p>
+									<!-- <p class="pics-from">来自<span class="pics-user">${(page.publisher)!}</span></p> -->
+									<p class="pics-update"><i><#if page.lastUpdateTime ??>${(page.lastUpdateTimeStr)!}<#else>${(page.createTimeStr)!}</#if></i>更新</p>
+									<p class="pics-update"><i>${(page.createTimeStr)!}</i>创建</p>
+									<#if sportTeamDto.owner == true>
+										<p class="manage-pic-edit">
+											<input class="edit bt" data-title="${(page.title)!}" data-desc="${(page.described)!}" data-ids="${(page.id)!}" type="button" value="编辑" />
+											<input class="delete bt" type="button" data-ids="${(page.id)!}" value="删除" />
+										</p>
+									</#if>
+									<p class='pics-share'>
+<div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a><a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a><a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a></div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{},"image":{"viewList":["qzone","tsina","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+									</p>
+								</div>
+							</li>
+						</#list>
+					</#if>
+					</ul>
+				</div>
+
+				<#include "/common/page.htm"/>
+
+			</div>
+		</div>
+		
+		<div class="pop_box pop_pic" style="z-index:999999">
+			<div class="pop_w">
+				<div class="bar">编辑相册信息</div>
+				<div class="conts">
+					<form id="submit_form">
+						<input type="hidden" name="publish" value="${(user.userAccount)!}">
+						<input type="hidden" name="teamId" value="${(sportTeamDto.id)!}">
+						<input type="hidden" id="alId" name="id" value="">
+						<ul>
+							<li class="pop-pic-1">
+								<span class="pic-name label">相册名称:</span>
+								<input class="inp" type="text" name="title" id="p-title" value="" data-max=30 />
+								<span class=""><i>0</i>/30</span>
+							</li>
+							<li class="pop-pic-2">
+								<span class="pic-desc label">相册描述:</span>
+								<textarea class="inp" name="described" id="p-desc" data-max=300></textarea>
+								<span class="count"><i>0</i>/300</span>
+								<a id="save_xiangce" class="confirm" href="##">确定</a>
+							</li>
+						</ul>
+					</form>
+				</div>
+				<a class="close" href="###"></a>
+			</div>
+		</div>
+		<div class="pop_box pop_pic_upload">
+			<div class="pop_w">
+				<form id="submit_pic_form">
+					<input type="hidden" name="publish" value="${(user.userAccount)!}">
+					<input type="hidden" name="teamId" value="${(sportTeamDto.id)!}">					
+					<div class="bar">上传图片到
+						<select class="pics-select" name="albumId" id="">
+							<#if albumList ??>
+								<#list albumList as album>
+									<option value="${(album.id)!}">${(album.title)!}</option>
+								</#list>
+							</#if>
+						</select>
+					</div>
+					<div class="cont">
+						<ul class="pop-pic-upload">
+							<li class="">
+								<span>描述:</span>
+								<textarea name="described" class="inp" data-max=300></textarea>
+								<span class="count"><i>0</i>/300</span>
+								<input class="pic-ico" type="button" id="uploadObj" value="" />
+								<a id="savePicObj" class="confirm" href="##">确定</a>
+							</li>
+							<li class="uploaded-pic-li" style="border:0px;">
+								<div id="pictureList" class="uploaded-pic-div">
+									
+								</div>
+							</li>							
+						</ul>
+					</div>
+					<a class="close" href="###"></a>
+				</form>
+			</div>
+		</div>
+		<#include "/common/footer.htm"/>
+		<script src="/static/js/competition.js"></script>
+		<!-- <script src="/static/sport/youth-pic.js"></script> -->
+		<script type="text/javascript">
+		$(function(){
+			//删除相册
+			$(".youth-pic-ul").on("click", ".delete.bt", function() {
+				if(confirm("是否删除该相册,删除相册对应的图片也会删除？")){
+					var albumId = $(this).attr("data-ids");
+					$(this).parents("li").remove();
+					$.ajax({
+						type : "POST",
+						url : "${base}/album/deletes.htm",
+						data : {"albumId":albumId},
+						datatype : "json",// "xml", "html", "script", "json", "jsonp", "text".
+						beforeSend : function() {
+							$("#msg").html("logining");
+						},
+						success : function(data) {// 成功返回之后调用的函数
+							parent.layer.msg('数据处理成功', {
+								shade: [0.9, '#000'],
+							    icon: 1,
+							    time: 800 //2秒关闭（如果不配置，默认是3秒）
+							}, function(){
+								window.location.reload();
+							}); 							
+						},
+						complete : function(XMLHttpRequest, textStatus) {// 调用执行后调用的函数
+						},
+						error : function() {// 调用出错执行的函数
+						}
+					});						
+					
+				}
+			})
+				//编辑相册
+			$(".youth-pic-ul").on("click", ".edit.bt", function() {
+					$(".pop_box .bar").text("编辑相册");
+					$(".pop_pic").toggleClass("open");
+					$("#alId").val($(this).attr("data-ids"));
+					$("#p-title").val($(this).attr("data-title"));
+					$("#p-desc").html($(this).attr("data-desc"));
+					//console.log($(this).attr("data-title"));
+				})
+				//弹层关闭
+			$('.pop_box a.close').on('click', function() {
+					$(".inp").val("");
+					$(this).closest('.pop_box').removeClass('open')
+				})
+			//创建相册
+			$(".creatpic.bt").on("click", function() {
+				$(".pop_box .bar").text("创建相册");
+				$(".pop_pic").toggleClass("open");
+			})
+			$(".pop_box .inp").on("keyup", function() {
+				var max = parseInt($(this).attr("data-max"), 10);
+				var write = $(this).val().length;
+				if (write <= max) {
+					$(this).parents("li").find("i").text(write);
+				} else {
+					$(this).val($(this).val().substr(0, max));
+				}
+			})
+			$(".uploadpic.bt").on("click", function() {
+				$(".pop_pic_upload").toggleClass("open");
+			})
+			$(".pop-pic-upload").on("click",".uploaded-pic-div a",function(){
+				$(this).parent().remove();
+				if($(".uploaded-pic-div").children().length==0){
+					$(".uploaded-pic-li").remove();
+				}
+			})
+			$(".pic-ico").on("click",function(){
+					var str = '<li class="uploaded-pic-li">'
+						+'<div class="uploaded-pic-div">'
+						+'   <div>'
+						+'		<img class="uploaded-pic" src="/static/img/activity.jpg" alt="" />'
+						+'		<a href="##"></a>'
+						+'	</div>'
+						+'	<div>'
+						+'		<img class="uploaded-pic" src="/static/img/activity.jpg" alt="" />'
+						+'		<a href="##"></a>'
+						+'	</div>'
+						+'	<div>'
+						+'		<img class="uploaded-pic" src="/static/img/activity.jpg" alt="" />'
+						+'		<a href="##"></a>'
+						+'	</div>'
+						+'	<div>'
+						+'		<img class="uploaded-pic" src="/static/img/activity.jpg" alt="" />'
+						+'		<a href="##"></a>'
+						+'	</div>'
+						+'</div>'
+					+'</li>';
+					$(".uploaded-pic-li").remove();
+					$(".pop-pic-upload").append(str);
+			});
+			
+			$("#uploadObj").uploadify({
+	            'uploader': '/static/plugins/uploadify/uploadify.swf',
+	            'script':"/file/upload.htm",
+	            'cancelImg': '/static/plugins/uploadify/cancel.png',
+	            'queueID': 'fileQueue',
+	            'auto': true,
+	            'multi':true,
+	            'buttonText': 'select',
+	            'buttonImg':'/static/plugins/uploadify/picture.png',
+	            'simUploadLimit' : 4,
+	            'queueSizeLimit' : 4,
+	            'sizeLimit':1024*1024*10,
+	            'fileExt': '*.gif;*.png;*.jpg',
+	            'fileDesc':'请选择gif,png,jpg文件',
+	            onComplete: function(event, queueID, fileObj, response, data) {
+	                var dataObj = eval("("+response+")");
+	                if(dataObj.status == 200){
+	                	parent.layer.msg('图片上传成功', {
+							shade: [0.9, '#000'],
+						    icon: 1,
+						    time: 800 //2秒关闭（如果不配置，默认是3秒）
+						}, function(){
+							$("<div><img class='uploaded-pic' style='width:100px;height:100px;' src='"+dataObj.filePath+"' alt=''/><a href='##'></a></div>").appendTo($(".uploaded-pic-div"));							
+							$("<input type='hidden' name='pictureList' value="+dataObj.filePath+">").appendTo($("#pictureList"));
+						});                
+	                	//console.log(dataObj.filePath);
+						$("#microPic").val(dataObj.filePath);
+	                }else{
+	                	layer.alert("对不起," + fileObj.name + "上传失败!<br/>请选择小于10M的正确格式的图片", {
+		    				shade: [0.9, '#000'],
+		    			    icon: 3,
+		    			    time: 4000 //2秒关闭（如果不配置，默认是3秒）
+		    			});
+	                }
+	            },
+	            onSelect:function(){
+	            },
+	            onError: function(event, queueID, fileObj) {
+	            	layer.alert("对不起," + fileObj.name + "上传失败!<br/>请选择小于10M的图片", {
+	    				shade: [0.9, '#000'],
+	    			    icon: 3,
+	    			    time: 3000 //2秒关闭（如果不配置，默认是3秒）
+	    			});
+	            }
+	        });				
+			$("#savePicObj").on("click",function(){
+				var ajaxParams = $("#submit_pic_form").serialize();
+				$.ajax({
+					type : "POST",
+					url : "${base}/pic/add.htm",
+					data : ajaxParams,
+					datatype : "json",// "xml", "html", "script", "json", "jsonp", "text".
+					beforeSend : function() {
+						$("#msg").html("logining");
+					},
+					success : function(data) {// 成功返回之后调用的函数
+						var jsondata = data;// eval('(' + data + ')');
+						if(data.status==200){
+							layer.msg(data.message, {
+								shade: [0.9, '#000'],
+							    icon: 1,
+							    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+							}, function(){
+								//window.location.reload();//刷新当前页面
+							}); 							
+						}else{
+							layer.msg(data.message, {
+								shade: [0.9, '#000'],
+							    icon: 6,
+							    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+							}, function(){
+								
+							}); 	
+						}
+					},
+					complete : function(XMLHttpRequest, textStatus) {// 调用执行后调用的函数
+						
+					},
+					error : function() {// 调用出错执行的函数
+					}
+				});	
+			})
+			$('#save_xiangce').on('click',function(){
+				var ajaxParams = $("#submit_form").serialize();
+				$.ajax({
+					type : "POST",
+					url : "${base}/album/add.htm",
+					data : ajaxParams,
+					datatype : "json",// "xml", "html", "script", "json", "jsonp", "text".
+					beforeSend : function() {
+						$("#msg").html("logining");
+					},
+					success : function(data) {// 成功返回之后调用的函数
+						var jsondata = data;// eval('(' + data + ')');
+						if(data.status==200){
+							layer.msg(data.message, {
+								shade: [0.9, '#000'],
+							    icon: 1,
+							    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+							}, function(){
+								window.location.reload();//刷新当前页面
+							}); 							
+						}else{
+							layer.msg(data.message, {
+								shade: [0.9, '#000'],
+							    icon: 6,
+							    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+							}, function(){
+								
+							}); 	
+						}
+					},
+					complete : function(XMLHttpRequest, textStatus) {// 调用执行后调用的函数
+						
+					},
+					error : function() {// 调用出错执行的函数
+					}
+				});				
+			});
+		});
+		function gotoPage(page){
+			window.location.href = '/tc/pic/${(sportTeamDto.id)!}.htm?currPage='+page;
+		}
+		</script>
+	</body>
+
+</html>

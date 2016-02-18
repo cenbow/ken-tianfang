@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<#include "/common/head.htm"/>
+
+<link href="/static/plugins/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/static/plugins/uploadify/swfobject.js"></script>
+<script type="text/javascript" src="/static/plugins/uploadify/jquery.uploadify.v2.1.4.min.js"></script>	
+
+<link type="text/css" href="/static/plugins/layerModel/layerModel.css" rel="stylesheet"/>
+<script type="text/javascript" src="/static/plugins/layerModel/jquery.layerModel.js"></script>
+<body>
+	<#include "/common/topbar.htm"/>
+	<div class="goalkeeper">
+		<img src="/static/img/banner596485.jpg" /><a target="_blank" href="/online/goalie.htm">点击进入</a>
+	</div>
+	<div class="fs_mycourse_box">
+		<h3><span>教练员培训课程</span><i></i>
+		</h3>
+		<div id="containerPic" class="container">
+			<ul id="pic">
+				<#if pageList ??>
+					<#list pageList.getResults() as page>
+						<#if page.courseImg ??>
+							<li><a style="cursor:pointer;" target="_blank" href="/online/columnlist.htm?columnId=${(page.id)!}" obj-column='${(page.columnName)!}' obj-id="${(page.id)!}"><img src="${(page.courseImg)!}" border="0"><p>${(page.columnName)!}</p></a></li>
+						<#else>
+							<li><a href="#"><img src="/static/img/defaultPic.jpg" border="0"><p>${(page.columnName)!}</p></a></li>
+						</#if>
+					</#list>
+				</#if>
+			</ul>
+		</div>
+		<#include "/common/page.htm"/>
+	</div>
+	
+	<script type="text/javascript" src="/static/js/youth_page.js"></script>
+	<script type="text/javascript" src="/static/sport/youth_vip_video.js"></script>
+	<#include "/common/footer.htm"/>
+	<script type="text/javascript">
+	
+	function changeRandom(){
+		$("#pic li").each(function(){
+			if(parseInt(Math.random()*2)==0){
+				$(this).prependTo($(this).parent());
+			}	
+		});				
+	};
+	function changeRandomV(){
+		$("#video li").each(function(){
+			if(parseInt(Math.random()*2)==0){
+				$(this).prependTo($(this).parent());
+			}	
+		});				
+	};
+	$(function(){
+		//导航标记
+		nav_mark('futurestar');
+	});
+	
+	function gotoPage(page){
+		window.location.href = '/online/index.htm?currPage='+page;
+	}
+	</script>
+</body>
+</html>

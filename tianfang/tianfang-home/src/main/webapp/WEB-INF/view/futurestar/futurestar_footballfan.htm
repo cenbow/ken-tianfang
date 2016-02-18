@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+<#include "/common/head.htm"/>
+
+<link href="/static/plugins/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/static/plugins/uploadify/swfobject.js"></script>
+<script type="text/javascript" src="/static/plugins/uploadify/jquery.uploadify.v2.1.4.min.js"></script>	
+
+<link type="text/css" href="/static/plugins/layerModel/layerModel.css" rel="stylesheet"/>
+<script type="text/javascript" src="/static/plugins/layerModel/jquery.layerModel.js"></script>
+<body>
+	<#include "/common/topbar.htm"/>
+	<div class="fs_footballfan"></div>
+	<div class="fs_mypic_box">
+		<h3><span>图片</span><i></i>
+			<a class="upload" tag="upload_pic" href="###">我要上传</a>
+			<a href="###" onclick="changeRandom()">其它</a>
+			<a href="###" onclick="changeRandom()">精选</a>
+			<a href="###" onclick="changeRandom()">热门</a>
+			<a class="cur" href="###" onclick="changeRandom()">全部</a>
+		</h3>
+		<div id="containerPic" class="container">
+			<ul id="pic">
+				<#if pageList ??>
+					<#list pageList.getResults() as page>
+						<#if page.pic ??>
+							<li><a href="#"><img src="${(page.pic)!}" border="0"><p>${(page.title)!}</p></a></li>
+						<#else>
+							<li><a href="#"><img src="/static/img/defaultPic.jpg" border="0"><p>${(page.title)!}</p></a></li>
+						</#if>		
+					</#list>
+				</#if>
+			</ul>
+		</div>
+		<#include "/common/page.htm"/>
+	</div>
+	<div class="fs_myvid_box">
+		<h3>
+			<span>视频</span><i></i>
+			<a class="upload" tag="upload_video" href="###">我要上传</a>
+			<a href="###" onclick="changeRandomV()">其它</a>
+			<a href="###" onclick="changeRandomV()">精选</a>
+			<a href="###" onclick="changeRandomV()">热门</a>
+			<a class="cur" href="###" onclick="changeRandomV()">全部</a>
+		</h3>
+		<div class="container" id="containerVid">
+			<ul id="video">
+				<#if dataList ??>
+					<#list dataList.getResults() as data>
+						<#if data.videoThumb ??>
+							<li><a href="###" obj-id="${(data.id)!}" class="younth_video"><img src="${(data.videoThumb)!}" border="0"><p>${(data.videoName)!}</p><i></i></a></li>
+						<#else>
+							<li><a><img src="/static/img/defaultPic.jpg" border="0"><p>${(data.videoName)!}</p><i></i></a></li>
+						</#if>		
+					</#list>
+				</#if>
+			</ul>
+		</div>
+		<#assign fun_click = 1>
+		<#include "/common/page_t.htm"/>
+	</div>
+	
+	<div class="pop_box pop_pic_upload">
+		<div class="pop_w">
+			<form id="submit_pic_form">
+				<input type="hidden" name="publish" value="${(user.userAccount)!}">
+				<input type="hidden" id="userId" name="userId" value="${(user.id)!}">					
+				<div class="bar">上传图片</div>
+				<div class="cont">
+						<li class="">
+							<span>描述:</span>
+							<textarea name="described" class="inp" data-max=300></textarea>
+							<a href="###">
+								<input class="pic-ico" type="button" id="uploadObj" value="" />
+							</a>
+							<a id="savePicObj" class="upload" href="###">确定</a>
+						</li>
+				</div>
+				<div id="pictureList" style="display: none;"></div>					
+				<a class="close" href="###"></a>
+			</form>
+		</div>
+	</div>
+	
+	<div class="pop_box pop_video_upload">
+		<div class="pop_w">
+			<form id="submit_form">
+				<input id="videoUrl" type="hidden" name="video" value=""/>
+				<input type="hidden" id="videoThumb" name="videoThumb" value="">
+				<input type="hidden" name="publish" value="${(user.userAccount)!}">
+				<input type="hidden" id="userId" name="userId" value="${(user.id)!}">				
+				<div class="bar">上传视频</div>
+				<div class="cont">
+						<li class="">
+							<span>描述:</span>
+							<textarea name="described" class="inp" data-max=300></textarea>
+							<input class="pic-ico" type="button" id="uploadVideoObj" value="" />
+							<a id="saveVideoObj" style="margin:10px 0;" class="upload" href="###">确定</a>
+						</li>
+				</div>
+				<a class="close" href="###"></a>
+			</form>
+		</div>
+	</div>	
+	<script type="text/javascript" src="/static/js/youth_page.js"></script>
+	<script type="text/javascript" src="/static/js/youth_video.js"></script>
+	<#include "/common/footer.htm"/>
+	<script type="text/javascript">
+	function changeRandom(){
+		$("#pic li").each(function(){
+			if(parseInt(Math.random()*2)==0){
+				$(this).prependTo($(this).parent());
+			}	
+		});				
+	};
+	function changeRandomV(){
+		$("#video li").each(function(){
+			if(parseInt(Math.random()*2)==0){
+				$(this).prependTo($(this).parent());
+			}	
+		});				
+	};
+	$(function(){
+		//导航标记
+		nav_mark('futurestar');
+		
+		//选择标签
+		$('h3').on('click','a', function(){
+			if($(this).attr('tag')=='upload_pic'){
+				<#if user ??>
+					$('.pop_pic_upload').addClass('open')
+				<#else>
+					open_login();	// 没有登陆的话跳转登陆页面
+				</#if>
+			}else if($(this).attr('tag')=='upload_video'){
+				<#if user ??>
+					$('.pop_video_upload').addClass('open')
+				<#else>
+					open_login();	// 没有登陆的话跳转登陆页面
+				</#if>
+			}else{
+				$(this).addClass('cur').siblings('a').removeClass('cur')	
+			}
+		});
+		
+		$('.pop_box a.close').on('click', function(){
+			$(this).closest('.pop_box').removeClass('open')
+		});
+		
+		$("#uploadObj").uploadify({
+            'uploader': '/static/plugins/uploadify/uploadify.swf',
+            'script':"/file/upload.htm",
+            'cancelImg': '/static/plugins/uploadify/cancel.png',
+            'queueID': 'fileQueue',
+            'auto': true,
+            'multi':true,
+            'buttonText': 'select',
+            'buttonImg':'/static/plugins/uploadify/picture.png',
+            'simUploadLimit' : 4,
+            'queueSizeLimit' : 4,
+            'sizeLimit':1024*1024*10,
+            'fileExt': '*.gif;*.png;*.jpg',
+            'fileDesc':'请选择gif,png,jpg文件',
+            onComplete: function(event, queueID, fileObj, response, data) {
+                var dataObj = eval("("+response+")");
+                if(dataObj.status == 200){
+                	parent.layer.msg('图片上传成功', {
+						shade: [0.9, '#000'],
+					    icon: 1,
+					    time: 800 //2秒关闭（如果不配置，默认是3秒）
+					}, function(){
+						$("<div><img class='uploaded-pic' style='width:100px;height:100px;' src='"+dataObj.filePath+"' alt=''/><a href='##'></a></div>").appendTo($(".uploaded-pic-div"));							
+						$("<input type='hidden' name='pictureList' value="+dataObj.filePath+">").appendTo($("#pictureList"));
+					});                
+                	//console.log(dataObj.filePath);
+					$("#microPic").val(dataObj.filePath);
+                }else{
+                	layer.msg("文件:" + fileObj.name + "上传失败");
+                }
+            },
+            onSelect:function(){
+            },
+            onError: function(event, queueID, fileObj) {
+                layer.msg("文件:" + fileObj.name + "上传失败");
+            }
+        });			
+		
+		$("#uploadVideoObj").uploadify({
+            'uploader': '/static/plugins/uploadify/uploadify.swf',
+            'script':"/file/upload.htm",
+            'cancelImg': '/static/plugins/uploadify/cancel.png',
+            'queueID': 'fileQueue',
+            'auto': true,
+            'multi':true,
+            'sizeLimit':1024*1024*10,
+            'fileExt':'*.flv',
+            'fileDesc':'请选择flv文件',
+            'buttonText': 'select',
+            'buttonImg':'/static/plugins/uploadify/video.png',
+            'simUploadLimit' : 4,
+            'queueSizeLimit' : 4,
+            onComplete: function(event, queueID, fileObj, response, data) {
+                var dataObj = eval("("+response+")");
+                if(dataObj.status == 200){
+                	parent.layer.msg('视频上传成功', {
+						shade: [0.9, '#000'],
+					    icon: 1,
+					    time: 800 //2秒关闭（如果不配置，默认是3秒）
+					}, function(){
+						$('#videoUrl').attr("value",dataObj.filePath);
+						if(dataObj.imageSavePath!=null && dataObj.imageSavePath!=""){
+							$('#videoThumb').attr("value",dataObj.imageSavePath);								
+					}					});                
+                	//console.log(dataObj.filePath);
+					$("#microPic").val(dataObj.filePath);
+                }else{
+                	layer.alert("对不起," + fileObj.name + "上传失败!<br/>请选择小于10M的flv格式视频", {
+    					shade: [0.9, '#000'],
+    				    icon: 3,
+    				    time: 3000 //2秒关闭（如果不配置，默认是3秒）
+    				}); 
+                }
+            },
+            onSelect:function(){
+            },
+            onError: function(event, queueID, fileObj) {
+            	layer.alert("对不起," + fileObj.name + "上传失败!<br/>请选择小于10M的flv格式视频", {
+					shade: [0.9, '#000'],
+				    icon: 3,
+				    time: 3000 //2秒关闭（如果不配置，默认是3秒）
+				}); 
+            }
+        });			
+		
+		$("#savePicObj").on("click",function(){
+			var ajaxParams = $("#submit_pic_form").serialize();
+			$.ajax({
+				type : "POST",
+				url : "${base}/pic/add.htm",
+				data : ajaxParams,
+				datatype : "json",// "xml", "html", "script", "json", "jsonp", "text".
+				beforeSend : function() {
+					$("#msg").html("logining");
+				},
+				success : function(data) {// 成功返回之后调用的函数
+					var jsondata = data;// eval('(' + data + ')');
+					if(data.status==200){
+						layer.msg(data.message, {
+							shade: [0.9, '#000'],
+						    icon: 1,
+						    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+						}, function(){
+							//window.location.reload();//刷新当前页面
+						}); 							
+					}else{
+						layer.msg(data.message, {
+							shade: [0.9, '#000'],
+						    icon: 6,
+						    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+						}, function(){
+							
+						}); 	
+					}
+				},
+				complete : function(XMLHttpRequest, textStatus) {// 调用执行后调用的函数
+					
+				},
+				error : function() {// 调用出错执行的函数
+				}
+			});	
+		});
+		
+		$('#saveVideoObj').on('click',function(){
+			if($("#videoThumb").val()=="" || $("#videoThumb").val()==null){
+				layer.msg("请上传视频后保存", {
+					shade: [0.9, '#000'],
+				    icon: 5,
+				    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+				}, function(){
+				});
+				return null;
+			}
+			var ajaxParams = $("#submit_form").serialize();
+			$.ajax({
+				type : "POST",
+				url : "${base}/video/addVideo.htm",
+				data : ajaxParams,
+				datatype : "json",// "xml", "html", "script", "json", "jsonp", "text".
+				beforeSend : function() {
+					$("#msg").html("logining");
+				},
+				success : function(data) {// 成功返回之后调用的函数
+					var jsondata = data;// eval('(' + data + ')');
+					if(data.success){
+						layer.msg(data.msg, {
+							shade: [0.9, '#000'],
+						    icon: 1,
+						    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+						}, function(){
+							window.location.reload();//刷新当前页面
+						}); 							
+					}else{
+						layer.msg(data.msg, {
+							shade: [0.9, '#000'],
+						    icon: 6,
+						    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+						}, function(){
+							
+						}); 	
+					}
+				},
+				complete : function(XMLHttpRequest, textStatus) {// 调用执行后调用的函数
+					
+				},
+				error : function() {// 调用出错执行的函数
+				}
+			});				
+		});		
+		
+		
+	});
+	//相片
+	function gotoPage(page){
+		$.ajax({
+			url:'/star/ajaxFootBallFanPic.htm',
+			data:{picPage:page},
+			type:'post',
+			datatype:'json',
+			success:function(data){
+				var result = data.data.results;
+				$('#containerPic').nextAll().remove();
+				$('#containerPic').remove();
+				var textPic = "";
+				textPic += "<div id=\"containerPic\" class=\"container\">"
+				textPic += "<ul id=\"pic\">"
+				for (var i = 0; i < result.length; i++) {
+					if(result[i].pic==null || result[i].pic =="" ||result[i].pic== undefined){
+						if(result[i].title==null || result[i].title =="" ||result[i].title== undefined){
+							textPic += "<li><a href=\"#\"><img src=\"/static/img/defaultPic.jpg\" border=\"0\"><p></p></a></li>"
+						}else{
+							textPic += "<li><a href=\"#\"><img src=\"/static/img/defaultPic.jpg\" border=\"0\"><p>"+result[i].title+"</p></a></li>"							
+						}
+					}else{
+						if(result[i].title==null || result[i].title =="" ||result[i].title== undefined){
+							textPic += "<li><a href=\"#\"><img src='"+result[i].pic+"' border=\"0\"><p></p></a></li>"
+						}else{
+							textPic += "<li><a href=\"#\"><img src='"+result[i].pic+"' border=\"0\"><p>"+result[i].title+"</p></a></li>"							
+						}
+					}
+				}
+				textPic += "</ul>"
+				textPic += "</div>"
+				$('.fs_mypic_box').append(textPic)
+				$('.fs_mypic_box').append(pageInfo(data.data))
+			}
+		})
+		//window.location.href = '/star/footballfan.htm?picPage='+page;
+	}
+	//视频
+	function gotoPageVideo(page){
+		$.ajax({
+			url:'/star/footBallFanByVideo.htm',
+			data:{videoPage:page},
+			type:'post',
+			datatype:'json',
+			success:function(data){
+				var result = data.data.results;
+				$('#containerVid').nextAll().remove();
+				$('#containerVid').remove();
+				var textVid = "";
+				textVid += "<div class=\"container\" id=\"containerVid\">"
+				textVid += "<ul id=\"video\">"
+				for (var i = 0; i < result.length; i++) {
+					if(result[i].videoThumb==null || result[i].videoThumb =="" ||result[i].videoThumb== undefined){
+						if(result[i].videoName==null || result[i].videoName =="" ||result[i].videoName== undefined){
+							textVid +="<li><a href=\"###\" obj-id=\""+result[i].id+"\" class=\"younth_video\"><img src=\"/static/img/defaultPic.jpg\" border=\"0\"><p></p><i></i></a></li>"
+						}else{
+							textVid +="<li><a href=\"###\" obj-id=\""+result[i].id+"\" class=\"younth_video\"><img src=\"/static/img/defaultPic.jpg\" border=\"0\"><p>"+result[i].videoName+"</p><i></i></a></li>"
+						}
+					}else{
+						if(result[i].videoName==null || result[i].videoName =="" ||result[i].videoName== undefined){
+							textVid +="<li><a href=\"###\" obj-id=\""+result[i].id+"\" class=\"younth_video\"><img src='"+result[i].videoThumb+"' border=\"0\"><p></p><i></i></a></li>"
+						}else{
+							textVid +="<li><a href=\"###\" obj-id=\""+result[i].id+"\" class=\"younth_video\"><img src='"+result[i].videoThumb+"' border=\"0\"><p>"+result[i].videoName+"</p><i></i></a></li>"
+						}
+					}
+				}
+				textVid += "</ul>"
+				textVid += "</div>"
+				$('.fs_myvid_box').append(textVid);
+				$('.fs_myvid_box').append(pageInfoVid(data.data));
+				
+				loadShare();
+				
+			}
+		})
+		//window.location.href = '/star/footballfan.htm?videoPage='+page;
+	}
+	
+	function loadShare(){
+	    var fileref2 = document.createElement('script');
+	    fileref2.setAttribute("type","text/javascript");
+	    fileref2.setAttribute("src","/static/js/youth_video.js");
+	    document.getElementsByTagName("body")[0].appendChild(fileref2);
+	}	
+	</script>
+</body>
+</html>

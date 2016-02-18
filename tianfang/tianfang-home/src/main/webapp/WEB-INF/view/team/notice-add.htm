@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+<#include "/common/head.htm"/>
+<link href="/static/css/competition.css" rel="stylesheet" />
+
+	<body>
+		<#include "/common/topbar.htm"/>
+		<div class="youth-bg">
+			<div class="wrapper edit">
+				<div class="youth-title">
+					<!--  <h1><img src="${(sportTeamDto.logo)!}" class="youth-ico"></img>${(sportTeamDto.name)!}</h1>-->
+					<img class="youth-ico" src="${(sportTeamDto.logo)!}" />
+					<span class="youth-name">${(sportTeamDto.name)!}</span>
+					<div class="youth-banner">
+						<ul class="youth-banner-ul">
+							<li class="youth-banner-li index" to="/tc/index/${(sportTeamDto.id)!}.htm">球队首页</li>
+							<li class="youth-banner-li team-info" to="/tc/team/${(sportTeamDto.id)!}.htm">球队信息</li>
+							<li class="youth-banner-li pic" to="/tc/pic/${(sportTeamDto.id)!}.htm">相册</li>
+							<li class="youth-banner-li video" to="/tc/video/${(sportTeamDto.id)!}.htm">视频</li>
+							<li class="youth-banner-li herald" to="/tc/herald/${(sportTeamDto.id)!}.htm">比赛预告</li>
+							<li class="youth-banner-li history" to="/tc/history/${(sportTeamDto.id)!}.htm">历史战绩</li>
+							<li class="youth-banner-li honor" to="/tc/honor/${(sportTeamDto.id)!}.htm">荣誉</li>
+						</ul>
+					</div>
+				</div>
+				
+					<div class="edit-info">
+						<form id="submitForm" method="POST">
+							<input type="hidden" id="content" name="content" value=""/>
+							<ul>
+								<li>
+									<label for="id12">标题</label>
+									<input class="title" type="text" name="title" id="title" value="" />
+								</li>
+								<li>
+									<label for="id1">摘要</label>
+									<input style="width: 450px;" type="text" name="subtract" id="subtract" value="" />
+								</li>
+								<li>
+									<label class="content">内容</label>
+									<script id="editor" type="text/plain" style="width:769px;height:300px;"></script>
+								</li>
+								<li>
+									<label for="id3">是否置顶</label>
+									<input type="radio" name="marked" value="1" checked="true" id="for-true" /><label class="for-true" for="for-true">是</label>
+									<input type="radio" name="marked" value="0" id="for-false"/><label class="for-false" for="for-false">否</label>
+								</li>
+							</ul>
+						</form>
+					</div>
+					<div class="bts edit-info">
+						<a class="save bt" href="javascript:toSubmit();">保存</a>
+						<a class="cancle bt" href="javascript:history.go(-1);">取消</a>&nbsp;&nbsp;<span style="color:red" id="msg"></span>
+					</div>
+			</div>
+		</div>
+		<#include "/common/footer.htm"/>
+		<script src="/static/js/competition.js"></script>
+		<link href="/plugins/umeditor1.2.2/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+	    <script type="text/javascript" charset="utf-8" src="/plugins/umeditor1.2.2/umeditor.config.js"></script>
+	    <script type="text/javascript" charset="utf-8" src="/plugins/umeditor1.2.2/umeditor.min.js"> </script>
+	    <script type="text/javascript">
+			var um = UM.getEditor('editor');
+			
+			function toSubmit(){
+				<#if user ??>
+				<#else>
+					open_login();	// 没有登陆的话跳转登陆页面
+					return;
+				</#if>
+				var content = UM.getEditor('editor').getContent();
+				$("#content").val(content);
+				if (null == $("#title").val() || '' == $("#title").val()) {
+					layer.msg("标题不能为空！", 1, 1);
+					return;
+				}
+				if (null == $("#subtract").val() || '' == $("#subtract").val()) {
+					layer.msg("摘要不能为空！", 1, 1);
+					return;
+				}
+				if (null == content || '' == content) {
+					layer.msg("内容不能为空！", 1, 1);
+					return;
+				}
+				
+				var ajaxParams = $('#submitForm').serialize();
+				$.ajax({
+					type : "POST",
+					url : "/tc/notice/${(sportTeamDto.id)!}/save.htm",
+					data : ajaxParams,
+					datatype : "json",// "xml", "html", "script", "json", "jsonp", "text".
+					beforeSend : function() {
+						$("#msg").html("logining...");
+					},
+					success : function(data) {// 成功返回之后调用的函数
+						var jsondata = data;// eval('(' + data + ')');
+						if(data.success){
+							layer.msg(data.msg, {
+								shade: [0.9, '#000'],
+							    icon: 6,
+							    time: 2000 //2秒关闭（如果不配置，默认是3秒）
+							}, function(){
+								window.location.href="/tc/notice/${(sportTeamDto.id)!}.htm";// 跳转公告列表
+							}); 
+						}else{
+							layer.msg(data.msg);
+						}
+					},
+					complete : function(XMLHttpRequest, textStatus) {// 调用执行后调用的函数
+						
+					},
+					error : function() {// 调用出错执行的函数
+					}
+				});
+			}
+	    </script>
+	</body>
+
+</html>

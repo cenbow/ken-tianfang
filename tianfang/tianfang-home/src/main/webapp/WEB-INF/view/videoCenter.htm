@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<#include "/common/head.htm"/>
+
+<link href="/static/plugins/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/static/plugins/uploadify/swfobject.js"></script>
+<script type="text/javascript" src="/static/plugins/uploadify/jquery.uploadify.v2.1.4.min.js?v=20151221"></script>	
+
+<link type="text/css" href="/static/plugins/layerModel/layerModel.css" rel="stylesheet"/>
+<script type="text/javascript" src="/static/plugins/layerModel/jquery.layerModel.js"></script>
+<body>
+	<#include "/common/topbar.htm"/>
+	<div class="wrapper">
+		<h1>视频中心</h1>
+		<div class="videocenter_box">
+			<div class="left">
+				<div class="title">
+					<a class="cur" href="/video/videoCenter.htm">全部</a> | <a href="/video/videoCenter.htm?videoType=1">Happy Football</a> | <a href="/video/videoCenter.htm?videoType=2">精英训练营</a> | <a href="/video/videoCenter.htm?videoType=3">原创视频</a>
+				</div>
+				<ul>
+					<#if pageList ??>
+						<#list pageList.getResults() as page>
+							<li>
+								<i class="play" obj-id="${(page.id)!}"></i>
+								<a href="###"><img class="younth_video" obj-id="${(page.id)!}" src="${(page.videoThumb)!}" border="0"><span></span></a>
+								<div class="dec">
+									<p>${(page.videoName)!}</p>
+									<#if page.publishPeople ??>
+										<span>来自 ${(page.publishPeople)!}</span>
+									<#else>
+										<span>来自 聚运动会员</span>
+									</#if>
+									
+								</div>
+							</li>											
+						</#list>
+					</#if>
+				</ul>
+				<div class="pagenav">
+					<#include "/common/page.htm"/>				
+				</div>
+			</div>
+			<div class="right">
+				<#if user ??>
+					<a class="upload_btn" href="###">我要上传</a>
+				<#else>
+					<a class="login_btn" style="width:290px;height:56px;color:#fff;font-size:24px;text-align:center;line-height:56px;background:#db434a;display:block;margin-bottom:20px" href="###">登录后上传</a>
+				</#if>
+				
+				<div class="search_box">
+				<form id="query_f" action="${base}/video/videoCenter.htm">
+					<input type="text" name="videoName" placeholder="请输入您要搜索视频的关键字"> <input onclick="queryData();" type="button" value="">
+				</form>	
+				</div>
+				<div class="hot_box">
+					<div class="title">热点视频排行</div>
+					<ul>
+						<#if dataList ??>
+							<#list dataList as data>
+								<#if data_index ==0>
+									<li class="cur showmore"><span>1</span><img class="play" obj-id="${(data.id)!}" src="${(data.videoThumb)!}" border="0"><a href="###">${(data.videoName)!}</a><i>${(data.clickRate)!} 次</i>
+									<p>${(data.described)!}</p>
+									</li>
+								<#elseif data_index ==1>
+									<#if data.videoName ??>
+										<li class="cur"><a class="play" obj-id="${(data.id)!}" href="###">${(data.videoName)!}</a><span>2</span></li>
+									<#else>
+										<li class="cur"><a href="###"><img class="play" obj-id="${(data.id)!}" src="${(data.videoThumb)!}" border="0" style="width:110px;height:40px;margin:5px;"></a><span>2</span></li>
+									</#if>
+								<#elseif data_index ==2>
+									<#if data.videoName ??>
+										<li class="cur"><a class="play" obj-id="${(data.id)!}" href="###">${(data.videoName)!}</a><span>3</span></li>
+									<#else>
+										<li class="cur"><a href="###"><img class="play" obj-id="${(data.id)!}" src="${(data.videoThumb)!}" border="0" style="width:110px;height:40px;margin:5px;"></a><span>3</span></li>
+									</#if>
+								<#else>
+									<#if data.videoName ??>
+										<li><a class="play" obj-id="${(data.id)!}" href="###">${(data.videoName)!}</a><span>${(data_index+1)!}</span></li>
+									<#else>
+										<li><a href="###"><img class="play" obj-id="${(data.id)!}" src="${(data.videoThumb)!}" border="0" style="width:110px;height:40px;margin:5px;"></a><span>${(data_index+1)!}</span></li>
+									</#if>													
+								</#if>
+							</#list>
+						</#if>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="pop_box">
+		<div class="pop_w">
+			<form id="submit_form">
+				<input id="videoUrl" type="hidden" name="video" value=""/>
+				<input type="hidden" id="videoThumb" name="videoThumb" value="">
+				<input type="hidden" name="publish" value="${(user.userAccount)!}">
+				<input type="hidden" name="userId" value="${(user.id)!}">
+				<input type="hidden" name="clickRate" value="0">
+				<input type="hidden" name="browseQuantity" value="0">
+				<div class="bar">上传视频</div>
+				<div class="cont">
+					<span>视频类型</span>
+					<select name="videoType" style="width:200px;height:25px;border:1px double black;">
+						<option value="1">Happy Football</option>
+						<option value="2">精英训练营</option>
+						<option value="3">原创视频</option>
+					</select>
+					<span style="margin-top:5px;">标题</span>
+					<input type="text" style="width:200px;height:25px;border:1px double black;" name="videoName" value=""/>
+					<span style="margin-top:5px;">描述</span>
+					<textarea placeholder="秀一段球技，花式足球~" name="described" style="min-height:40px;"></textarea>
+					<a class="vid" id="uploadObj" href="###">视频</a> <a class="upload" style="margin-top:3px;" id="saveObj" href="###">确定</a>
+				</div>
+				<a class="close" href="###"></a>			
+			</form>
+		</div>
+
+	</div>
+	<#include "/common/footer.htm"/>
+	<script type="text/javascript" src="/static/js/youth_video.js"></script>
+</body>
+
+<script>
+
+	function gotoPage(page){
+		window.location.href = '/video/videoCenter.htm?currPage='+page;
+	}
+
+	$(function() {
+		function GetQueryString(name)
+		{
+		     	var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+		     	var r = window.location.search.substr(1).match(reg);
+		     	if(r!=null)return  unescape(r[2]); return null;
+		}
+
+		var _vtype = GetQueryString("videoType")
+		if(_vtype != 0){
+		$('.videocenter_box > .left > .title').find('a').eq(_vtype).addClass('cur').siblings('a').removeClass('cur')
+		}
+		
+		$("#uploadObj").uploadify({
+            'uploader': '/static/plugins/uploadify/uploadify.swf',
+            'script':"/file/upload.htm",
+            'cancelImg': '/static/plugins/uploadify/cancel.png',
+            'queueID': 'fileQueue',
+            'auto': true,
+            'multi':true,
+            'sizeLimit':1024*1024*10,
+            'fileExt':'*.flv',
+            'fileDesc':'请选择flv文件',
+            'buttonText': 'select',
+            'buttonImg':'/static/plugins/uploadify/video.png',
+            'simUploadLimit' : 1,
+            'queueSizeLimit' : 1,
+            onComplete: function(event, queueID, fileObj, response, data) {
+                	var dataObj = eval("("+response+")");
+                	if(dataObj.status == 200){
+                		parent.layer.msg('视频上传成功', {
+    						shade: [0.9, '#000'],
+    					    icon: 1,
+    					    time: 800 //2秒关闭（如果不配置，默认是3秒）
+    					}, function(){
+    						$('#videoUrl').attr("value",dataObj.filePath);
+    						if(dataObj.imageSavePath!=null && dataObj.imageSavePath!=""){
+    							$('#videoThumb').attr("value",dataObj.imageSavePath);								
+    						}
+    					});
+                	}else{
+                		layer.alert("对不起," + fileObj.name + "上传失败!<br/>请选择小于10M的flv格式视频", {
+        					shade: [0.9, '#000'],
+        				    icon: 4,
+        				    time: 3000 //2秒关闭（如果不配置，默认是3秒）
+        				}); 
+                	}
+            },
+            onError: function(event, queueID, fileObj, errorObj) {
+            	layer.alert("对不起," + fileObj.name + "上传失败!<br/>请选择小于10M的flv格式视频", {
+					shade: [0.9, '#000'],
+				    icon: 3,
+				    time: 3000 //2秒关闭（如果不配置，默认是3秒）
+				}); 
+            },
+            onSelect: function(e, queueId, fileObj){
+/*                 alert("唯一标识:" + queueId + "\r\n" +
+                      "文件名：" + fileObj.name + "\r\n" +
+                      "文件大小：" + fileObj.size + "\r\n" +
+                      "创建时间：" + fileObj.creationDate + "\r\n" +
+                      "最后修改时间：" + fileObj.modificationDate + "\r\n" +
+                      "文件类型：" + fileObj.type
+                ); */
+            }
+        });	
+		
+		$('#saveObj').on('click',function(){
+			var ajaxParams = $("#submit_form").serialize();
+			$.ajax({
+				type : "POST",
+				url : "${base}/video/addVideo.htm",
+				data : ajaxParams,
+				datatype : "json",// "xml", "html", "script", "json", "jsonp", "text".
+				beforeSend : function() {
+					$("#msg").html("logining");
+				},
+				success : function(data) {// 成功返回之后调用的函数
+					var jsondata = data;// eval('(' + data + ')');
+					if(data.success){
+						layer.msg(data.msg, {
+							shade: [0.9, '#000'],
+						    icon: 1,
+						    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+						}, function(){
+							window.location.reload();//刷新当前页面
+						}); 							
+					}else{
+						layer.msg(data.msg, {
+							shade: [0.9, '#000'],
+						    icon: 6,
+						    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+						}, function(){
+							
+						}); 	
+					}
+				},
+				complete : function(XMLHttpRequest, textStatus) {// 调用执行后调用的函数
+					
+				},
+				error : function() {// 调用出错执行的函数
+				}
+			});				
+		});		
+		
+		$('.videocenter_box > .left > .title a').on('click', function() {
+			$(this).addClass('cur').siblings().removeClass('cur')
+		})
+		$('.hot_box ul li:even').addClass('bg')
+
+		$('.upload_btn').on('click', function() {
+			$('.pop_box').addClass('open')
+		})
+
+		$('.pop_box a.close').on('click', function() {
+			$(this).closest('.pop_box').removeClass('open')
+		})
+	})
+	
+	// 条件查询
+	function queryData(){
+		
+		$("#query_f").submit();
+	}
+	
+</script>
+</html>

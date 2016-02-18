@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianfang.train.mapper.CourseClassExMapper">
+
+	<select id="findByPage" resultType="com.tianfang.train.dto.CollegelessonDto">
+		SELECT a.id as courseId, c.id as addressId, b.id as classId,a.name,a.`course_time`,a.`tag_id`,a.`equip`,a.`micro_pic`,b.`price`,b.`open_date`,b.`startdate`,c.`place`,c.`address`,d.`tag_name` 
+		FROM `training_course` a 
+		LEFT JOIN `training_course_class` b ON
+		a.`id` = b.`course_id`
+		LEFT JOIN `training_address` c ON 
+		b.`address_id` = c.`id`
+		LEFT JOIN `training_course_tag` d ON 
+		a.`tag_id` = d.`id`
+		WHERE b.`actual_student` <![CDATA[<]]> b.`max_student`
+		<if test="marked ==1">
+		AND a.marked = #{marked,jdbcType=INTEGER}
+		</if>
+		AND a.`status`=1 
+		limit #{page.startNum}, #{page.pageSize}
+	</select>
+	
+	<select id="count" resultType="java.lang.Long">
+		select count(*) from (
+		SELECT a.name,a.`course_time`,a.`tag_id`,a.`equip`,a.`micro_pic`,b.`price`,b.`open_date`,b.`startdate`,c.`place`,c.`address`,d.`tag_name` 
+		FROM `training_course` a 
+		LEFT JOIN `training_course_class` b ON
+		a.`id` = b.`course_id`
+		LEFT JOIN `training_address` c ON 
+		b.`address_id` = c.`id`
+		LEFT JOIN `training_course_tag` d ON 
+		a.`tag_id` = d.`id`
+		WHERE b.`actual_student` <![CDATA[<]]> b.`max_student`   AND a.`status`=1 
+		<if test="marked == 1">
+		AND a.marked = #{marked,jdbcType=INTEGER}
+		</if>
+		) e
+	</select>
+	
+
+	<select id="findCourseClassByClassIds" resultType="com.tianfang.train.dto.LocaleClass" parameterType="java.util.List">
+	 select a.id as classId,b.day_of_week as week,b.start_time as startTime,b.end_time as endTime from training_course_class as a 
+ 	 left join training_time_district as b on a.time_district_id = b.id where a.status = 1 and a.id in
+	 <foreach collection="ids" item="id" index="index"
+            open="(" close=")" separator=",">
+            #{id}
+     </foreach>
+	</select>
+	
+	<select id="findAvailableCourseClassByClassId" resultType="com.tianfang.train.dto.CourseClassDto" parameterType="java.lang.Integer">
+	 select * from training_course_class  
+	 where id = #{id,jdbcType=VARCHAR} 
+	 and actual_student and  actual_student<![CDATA[<]]>max_student
+	</select>
+	
+	<select id="findSpaceByCourseId" resultType="com.tianfang.train.pojo.TrainingAddress" parameterType="java.lang.Integer">
+	 SELECT c.id,c.district_id as districtId,c.place,c.longtitude,c.latitude,c.address,c.create_time as createTime,c.update_time as updateTime,c.status,c.free_times as freeTimes  
+	 FROM training_course a LEFT JOIN  training_course_class b on a.id = b.course_id RIGHT JOIN training_address c on b.address_id = c.id   
+	 WHERE a.id = #{courseId,jdbcType=INTEGER} and a.status = 1 and b.status = 1 and c.status = 1
+	</select>
+	
+	<select id="findClassByCourseId" resultType="com.tianfang.train.dto.CourseClassRespDto" parameterType="java.lang.String">
+	 SELECT b.id id, a.id courseId,b.time_district_id timeDistrictId, b.price price,b.address_id addressId,b.max_student maxStudent,b.open_date openDate,
+	 d.place place,c.start_time startTime,c.end_time endTime, c.day_of_week dayOfWeek,b.deposit deposit,b.discount discount
+	 FROM training_course a 
+	 LEFT JOIN  training_course_class b on a.id = b.course_id 
+	 LEFT JOIN  training_time_district c on c.id = b.time_district_id
+	 LEFT JOIN  training_address d on d.id = b.address_id
+	 WHERE a.id = #{courseId,jdbcType=VARCHAR}
+	 and a.status = 1 
+	 and b.status = 1 
+	 and c.status = 1
+	 and d.status = 1
+	</select>
+	
+	<select id="findCourseClassByAssistantId" resultType="com.tianfang.train.dto.LocaleClass" parameterType="java.lang.Integer">
+	select c.id as classId,ad.id as addressId,b.assistant_id as assistantId,d.id as timeId, d.day_of_week as week,d.start_time as startTime, d.end_time as endTime,ad.place as place 
+	from training_course_class as c 
+	left join training_address_district_time as a  on a.district_time_id = c.time_district_id and a.address_id = c.address_id
+	left join training_assistant_address_time as b on
+	a.id = b.address_district_time_id 
+	left join training_time_district as d on d.id = c.time_district_id 
+	left join training_address as ad on ad.id = c.address_id
+	where c.status =1 and a.status=1 and b.status =1 and d.status=1 and ad.status=1 and b.assistant_id = #{assistantId}
+	</select>
+</mapper> 

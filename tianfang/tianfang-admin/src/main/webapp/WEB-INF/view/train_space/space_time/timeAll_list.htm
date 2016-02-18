@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Tables - Ace Admin</title>
+		<meta name="description" content="Static & Dynamic Tables" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<#include "../../admin/head.htm"/>
+	</head>
+	<body>
+		<!-- tophead start-->
+		<!-- tophead end-->
+		<div class="container-fluid" id="main-container">
+
+
+			<!-- left menu  end -->
+			<div id="main-content" class="clearfix">
+					<div id="page-content" class="clearfix">
+						<div class="row-fluid">
+<!-- PAGE CONTENT BEGINS HERE -->
+		<div class="row-fluid">
+			<form action="" method="post" name="submitForm" id="submitForm">
+				<table border="0">
+					<tbody>
+				</tbody></table>				
+				<table id="table_report" class="table table-striped table-bordered table-hover">
+					<thead>
+						<tr>
+							<th class="center">
+								<label><input id="check-all" type="checkbox"/><span class="lbl"></span></label>
+							</th>
+							<th>日期</th>
+							<th>开始时间</th>
+							<th>结束时间</th>
+						</tr>
+					</thead>
+											
+					<tbody>
+						<#if pageList??>
+							<#list pageList as page>
+								<tr>
+									<td class='center'>
+										<label><input name="checkBoxId" dayOfWeek="${(page.dayOfWeek)!}" startTime="${(page.startTime)!}" endTime="${(page.endTime)!}" obj-id="${(page.id)!}" type='checkbox' /><span class="lbl"></span></label>
+									</td>
+									<td><a href='#'>${(page.dayOfWeek)!}</a></td>
+									<td><a href='#'>${(page.startTime)!}</a></td>
+									<td><a href='#'>${(page.endTime)!}</a></td>
+								</tr>
+							</#list>
+						</#if>
+					</tbody>
+				</table>
+				<span id="saveTime" style="float:right;" class="btn btn-success btn-small tooltip-success" data-rel="popover" data-placement="right" title="<i class='icon-ok green'></i> Right Success" data-content="This is good, this is working and it's fine!">添加</span>
+			</form>
+		</div>
+ 	
+<!-- PAGE CONTENT ENDS HERE -->
+						 </div><!--/row-->
+					</div><!--/#page-content-->
+			</div><!-- #main-content -->
+		</div><!--/.fluid-container#main-container-->
+		<a href="#" id="btn-scroll-up" class="btn btn-small btn-inverse">
+			<i class="icon-double-angle-up icon-only"></i>
+		</a>
+		<!-- basic scripts -->
+		<script src="${base}/static/1.9.1/jquery.min.js"></script>
+		<script type="text/javascript">
+		window.jQuery || document.write("<script src='${base}/static/js/jquery-1.9.1.min.js'>\x3C/script>");
+		</script>
+		
+		<script src="${base}/static/js/bootstrap.min.js"></script>
+		<!-- page specific plugin scripts -->
+		
+		<script type="text/javascript" src="${base}/static/js/jquery.dataTables.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/jquery.dataTables.bootstrap.js"></script>
+		<!-- ace scripts -->
+		<script src="${base}/static/js/ace-elements.min.js"></script>
+		<script src="${base}/static/js/ace.min.js"></script>
+		<!-- inline scripts related to this page -->
+		
+		<script type="text/javascript" src="${base}/static/js/chosen.jquery.min.js"></script><!-- 下拉框 -->
+		<script type="text/javascript" src="${base}/static/js/bootstrap-datepicker.min.js"></script><!-- 日期框 -->
+		<script type="text/javascript" src="${base}/static/js/bootbox.min.js"></script><!-- 确认窗口 -->
+		
+		<script type="text/javascript" src="${base}/plugins/layer2.0/layer.js"></script>
+		
+		<script type="text/javascript">
+		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+			$("#check-all").on("click", function () {
+				if ($(this).prop('checked')){
+					 $("[name = checkBoxId]:checkbox").prop("checked", true);
+				}else{
+					 $("[name = checkBoxId]:checkbox").prop("checked", false);
+				}
+	        });
+			
+			$("#saveTime").on("click",function(){
+				var $chk = $("[name = checkBoxId]:checkbox").filter(":checked");
+				var count = $chk.length;
+				if (count == 0){
+					layer.msg('请选择一个时间段', {icon: 5});
+					return;
+				}
+				
+				var pch = parent.$("[name = checkBoxId]:checkbox");
+				var html = '';
+				$chk.each(function() {
+					var day_of_week = $(this).attr("dayOfWeek");
+					var start_time = $(this).attr("startTime");
+					var end_time = $(this).attr("endTime");
+					var id = $(this).attr("obj-id");
+				    if (pch.length > 0){
+						var flag = false;
+						pch.each(function(){
+							if ($(this).attr("obj-id") == id){
+								flag = true;
+							}
+						});
+					} 
+					if(flag!=true){
+						html += '<tr> <th scope=\"row\"><label class=\'center\'><input name=\"checkBoxId\" obj-id=\"'+id+'\" dayOfWeek=\"'+day_of_week+'\" startTime=\"'+start_time+'\" endTime=\"'+end_time+'\" type=\"checkbox\" /><span class=\"lbl\"></span></label></th>';
+						html += '<td>'+day_of_week+'</td>'; 
+						html += '<td>'+start_time+'</td>'; 
+						html += '<td>'+end_time+'</td>'; 
+				        html += '</tr>';						
+					}
+				});
+			    parent.$('#item-body').append(html);
+			    parent.bindCheck();
+			    parent.layer.close(index);
+			})
+		</script>
+	</body>
+</html>

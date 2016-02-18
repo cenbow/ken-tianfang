@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<#include "/common/head.htm"/>
+<link href="/static/css/competition.css" rel="stylesheet" />
+<script src="/static/js/jquery.qrcode.min.js"></script>
+<script type="text/javascript" src="/static/plugins/uploadify/swfobject.js"></script>
+<link type="text/css" href="/static/plugins/layerModel/layerModel.css" rel="stylesheet"/>
+<script type="text/javascript" src="/static/plugins/layerModel/jquery.layerModel.js"></script>
+<body>
+	<#include "/common/topbar.htm"/>
+	<div class="wrapper">
+		${data.content}
+	</div>
+	<div class="fs_cgbox">
+		<#if ((data.videoType??) && (data.videoType > 0))>
+			<input type="hidden" id="videoType" value="${data.videoType}" />
+			<div class="youth-video">
+				<ul class="youth-video-ul" id="vediolist">
+				</ul>
+			</div>
+			<div class="pagenav herald">
+			</div>
+		</#if>
+	</div>
+	<#include "/common/footer.htm"/>
+	<#if ((data.videoType??) && (data.videoType > 0))>
+		<script type="text/javascript" src="/static/sport/seachVideo_ajax.js"></script>
+	</#if>
+	<script>
+		$(function() {
+			//导航标记
+			nav_mark('activity')
+		})
+	</script>
+</body>
+</html>

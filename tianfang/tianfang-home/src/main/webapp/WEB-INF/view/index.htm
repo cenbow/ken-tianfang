@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<#include "/common/head.htm"/>
+<body>
+	<#include "/common/topbar.htm"/>
+	<div id="slideBox" class="slideBox">
+		<div class="hd">
+			<ul>
+				<#if homeList??>
+					<#list homeList as home >
+						<#if home.type ==1>
+							<li></li>
+						</#if>
+					</#list>
+				<#else>
+					<li></li><li></li>	
+				</#if>
+			</ul>
+		</div>
+		<div class="bd">
+			<ul>
+				<#if homeList??>
+					<#list homeList as home >
+						<#if home.type ==1>
+							<li>
+								<#if home.hrefUrl ??>
+									<a href="${(home.hrefUrl)!}"><img src="${(home.microPic)!}" /></a>	
+								<#else>
+									<img src="${(home.microPic)!}" />
+								</#if>
+								
+							</li>
+						</#if>
+					</#list>
+				<#else>
+					<li><img src="/img/banner1.jpg" /></li>
+					<li><img src="/img/banner2.jpg" /></li>
+				</#if>
+			</ul>
+		</div>
+	</div>
+
+	<div class="catalogs">
+		<ul>
+		<#if homeList??>
+			<#list homeList as home>
+				<#if home.type ==9>
+					<li><p><img src="${(home.microPic)!}" border="0"></p><!-- <span></span> --><a class="more" href="${(home.hrefUrl)!}">${(home.title)!}</a></li>
+				</#if>
+			</#list>
+		</#if>
+		</ul>
+	</div>
+	
+	<#if homeList??>
+		<#list homeList as home>
+			<#if home.type ==5>
+				<div class="videos">
+					<div id="videoClick" class="mask" onclick="videoPlay_do();"><i style="cursor:pointer;background:url('/static/img/playIndex.png')no-repeat center center;"></i><img style="width:600px;height:350px;" src="${(home.microPic)!}"/ border="0"></div>
+					<!-- <div class="mask"><img src="/static/img/play1.png"/><img src="/static/img/play1.png"/></div> -->
+					<object id="videoPlay" style="display: none;" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,19,0" width="600" height="350">
+					    <param name="movie" value="/static/video/splvplayer.swf" />
+					    <param name="quality" value="high" />
+					    <param name="allowFullScreen" value="true" />
+					    <param name="FlashVars" value="vcastr_file=${(home.picVideoUrl)!}&LogoText=www.jujusports.cn&BufferTime=3&IsAutoPlay=1" />
+					    <embed src="/static/video/splvplayer.swf" allowfullscreen="true" flashvars="vcastr_file=${(home.picVideoUrl)!}&LogoText=www.jujusports.cn&BufferTime=3&IsAutoPlay=1" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="600" height="350"></embed>
+					</object>
+					<a href="/video/videoCenter.htm">更多视频</a>
+				</div>
+				<script type="text/javascript">
+					function videoPlay_do(){
+						$("#videoClick").css("display","none");
+						$("#videoPlay").css("display","");
+					}
+				</script>
+			</#if>
+		</#list>
+	</#if>
+	
+	<div class="events">
+		<div class="news">
+			<h1>专业资讯<a class="more" href="/info/list.htm?orderType=2">更多 >></a></h1>
+			<ul>
+				<#if infoList??>
+					<#list infoList as info >
+						<li>
+							<img src="${(info.microPic)!}" border="0">
+							<h4><a href="/info/details/${(info.id)!}.htm">${(info.title)!}</a></h4><span>${(info.subtract)!}</span>
+						</li>
+					</#list>
+				</#if>
+			</ul>
+		</div>
+		
+		<div class="news right">
+			<h1>媒体中心<a class="more" href="/news/findNewsInfo.htm?orderType=2">更多 >></a></h1>
+			<ul>
+				<#if newsList??>
+					<#list newsList as news >
+						<li>
+							<img src="${(news.microPic)!}" border="0">
+							<h4><a href="/news/details/${(news.id)!}.htm">${(news.title)!}</a></h4><span>${(news.subtract)!}</span>
+						</li>
+					</#list>
+				</#if>
+			</ul>
+		</div>
+	</div>
+	<#include "/common/footer.htm"/>
+</body>
+
+<script>
+	$(function(){		
+		//轮播图
+		var _img = $('.slideBox img')
+		_img.css('height',_img.width()/200*49 +'px')
+		
+		jQuery(".slideBox").slide({mainCell:".bd ul",autoPlay:true,interTime:3500});
+		//导航标记
+		nav_mark('home')
+		
+		//视频播放/暂停事件
+		var v = document.getElementById('video')
+		$('video').on('click',function(){
+			if(v.paused){                 
+				v.play()
+ 			}else{
+				v.pause()
+  			}
+		})
+		
+		//浮动栏设定
+		//<a class="bar4" href="#"><span>意见<br>反馈</span></a>
+		var _floatHtml = '<div class="float_bar"><a class="bar1" href="/game/toGame.htm"><span>青训<br>对战</span></a><a class="bar2" href="/menu/detail.htm?id=8"><span>未来<br>之星</span></a><a class="bar6" href="/SportStore.htm"><span>装备<br>商店</span></a><a class="bar4" target="_" href="/suggest.htm"><span>意见<br>反馈</span></a><a class="bar3" href="#"><span>微信<br>二维码</span><div class="wx_code"></div></a><a class="bar5" href="#"><span>返回<br>顶部</span></a></div>'
+		$('body').append(_floatHtml)
+		
+		var d = $('.float_bar')
+		var _offsetX = $('.catalogs').offset().left +1036
+		var _offsetY = $('.catalogs').offset().top
+		var _offsetY_b = $('.cooperate').offset().top
+		d.css({'top':_offsetY+'px','left':_offsetX+'px', 'opacity':'1', 'visibility':'visible'})
+		$(window).scroll(function() {
+			var _wscrollTop = $(window).scrollTop()
+			if(_wscrollTop > _offsetY && _wscrollTop < _offsetY_b - 324){
+				d.css({'top':_wscrollTop +20 +'px', 'transition': 'all .5s ease-out 0s'})
+			}else if(_wscrollTop <= _offsetY){
+				d.css({'top':_offsetY +'px', 'transition': 'all .5s ease-in 0s'})
+			}else{
+				d.css({'top':_offsetY_b - 306+'px', 'transition': 'all .5s ease-in 0s'})
+			}
+		$(window).on("resize", function() {
+			var _left = $('.catalogs').offset().left;
+			if (_left <= 172.5) {
+				d.hide();
+			}else {
+				d.show();
+			}
+			});	
+		});	
+		
+		$('.float_bar a.bar3').hover(function(){
+			$(this).find('.wx_code').addClass('show')
+    		},function(){
+			$(this).find('.wx_code').removeClass('show')
+		});
+
+
+	});
+</script>
+</html>

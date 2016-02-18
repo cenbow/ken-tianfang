@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<#include "/common/head.htm"/>
+<!-- <script type="text/javascript" src="/static/plugins/lightbox/jquery.min.js"></script>
+lightbox开始
+<link rel="stylesheet" type="text/css" href="/static/plugins/lightbox/jquery.lightbox.css" />
+[if IE 6]>
+<link rel="stylesheet" type="text/css" href="/static/plugins/lightbox/jquery.lightbox.ie6.css" />
+<![endif]
+<script type="text/javascript" src="/static/plugins/lightbox/jquery.lightbox.min.js"></script>
+<script type="text/javascript">
+	jQuery(document).ready(function($) {
+		$('.lightbox').lightbox();
+	});
+</script> -->
+<!--结束-->
+
+<body>
+	<#include "/common/topbar.htm"/>
+	<div class="fs_banner">
+		<img src="/static/img/fs_college_banner.jpg" border="0">
+	</div>
+	<div class="fs_subbar">
+		<a class="fri" href="/coach/index.htm">教练介绍<span>INTRODUCTION</span></a> <#list dataList as data> <#if data.type == 3> <a class="sec" href="/coach/star/${(data.id)!}.htm">课程内容<span>COURSES</span></a>
+		<#elseif data.type == 4> <a class="tri" href="/coach/star/${(data.id)!}.htm">学院理念<span>COLLEGE IDEA</span></a> </#if> </#list> <a class="cur" href="/coach/trains.htm">教练员培训<span>COACH
+				EDUCATION</span></a>
+	</div>
+	<div class="wrapper">
+		<div class="fs_speakers">
+			<#if coachList ??> <#list coachList as coach> <#if coach_index == 0>
+			<div class="coach_l">
+				<a coach-id='${(coach.id)!}' class="coachTrain" href="###"><img src="${(coach.papersPic)!}" border="0">
+				<p>
+						${(coach.cname)!}<span>${(coach.ename)!}</span>
+					</p></a>
+			</div>
+			<#elseif coach_index == 1>
+			<div class="coach_l sec">
+				<a coach-id='${(coach.id)!}' class="coachTrain" href="###"><img src="${(coach.papersPic)!}" border="0">
+				<p>
+						${(coach.cname)!}<span>${(coach.ename)!}</span>
+					</p></a>
+			</div>
+			<#else> </#if> </#list> </#if>
+			<div class="right"><#if trainList ??> <#list trainList as train_d> <#if train_d.trainType == 2> <#assign trainsId='${(train_d.id)!}'/> ${(train_d.subtract)!} </#if>
+				</#list> </#if></div>
+			<a class="more_lt" href="/coach/index.htm">更多 >></a> <a train-id='${(trainsId)!}' class="more_rt" href="###">更多 >></a>
+		</div>
+
+		<div class="fs_topsp_box">
+			<ul>
+				<#if trainList ??> <#assign indexSize = 0> <#list trainList as train> <#if train.trainType ==1> <#if indexSize % 2 == 0>
+				<li><#else>
+				<li class="odd"></#if>
+					<div class="dec_box">
+						<i>${indexSize+1}</i>
+						<div class="title">${(train.title)!}</div>
+						<div class="text">${(train.subtract)!}</div>
+						<a train-id='${(train.id)!}' href="###">更多</a>
+					</div> <img src="${(train.microPic)!}" border="0">
+				</li> <#assign indexSize = (indexSize+1)> </#if> </#list> </#if>
+			</ul>
+		</div>
+
+		<div class="fs_mypic_box noma">
+			<h1>图片</h1>
+			<div id="containerPic" class="container">
+				<ul id="pic" class="list clearfix">
+					<#if pagePicList ??>
+						<#list pagePicList.getResults() as pic>
+							<li class="picClick">
+								<a href="###" rel="list" albumId-id='${(pic.id)!}' class="lightbox"><img src="${(pic.thumbnail)!}" border="0">
+									<p>${(pic.title)!}</p>
+								</a>
+							</li>
+						</#list>
+					</#if>
+				</ul>
+			</div>
+		</div>
+
+		<div class="fs_myvid_box noma">
+			<h1>视频</h1>
+			<div class="container" id="containerVid">
+				<ul id="video">
+					<#if pageVideoList ??> <#list pageVideoList.getResults() as video>
+					<li><a href="###" obj-id="${(video.id)!}" class="younth_video"> <img src="${(video.videoThumb)!}" border="0">
+							<p></p>
+							<i></i>
+					</a></li> </#list> </#if>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<#include "/common/footer.htm"/>
+ 	<link type="text/css" href="/static/plugins/layerModel/layerModel.css" rel="stylesheet" />
+	<script type="text/javascript" src="/static/plugins/layerModel/jquery.layerModel.js"></script>	
+	<script type="text/javascript" src="/static/js/youth_video.js"></script>
+	<script>
+		$(function() {
+			//导航标记
+			nav_mark('futurestar');
+
+			$('.lightbox').each(function(index){
+				$(this).click(function() {
+					var albumId = $(this).attr('albumId-id');
+					$.getJSON('/coach/fpicList.htm?albumId='+albumId, function(json){
+						console.log(json);
+					    layer.photos({
+					        photos: json //格式见API文档手册页
+					    });
+					});
+				});
+			});
+			
+			
+			$('.fs_speakers .coachTrain').each(function(i) {
+				$(this).click(function() {
+									var coachId = $(this).attr('coach-id');
+									$(
+											'<iframe width="1000px" height="650px;" style="border:0px;" scrolling="yes" src="/coach/trains/coachdetails.htm?coachId='
+													+ coachId
+													+ '"></iframe>')
+											.layerModel({
+												title : '教练信息'
+											});
+									/* var index = layer.open({
+										type : 2,
+										title : '教练信息',
+										shadeClose : true,
+										//shade: false,
+										//maxmin: true, //开启最大化最小化按钮
+										area : [ '1000px', '650px' ],
+										content : '/coach/trains/coachdetails.htm?coachId='+ coachId
+									});
+									layer.iframeAuto(index); */
+								})
+			});
+
+			$('.more_rt, .fs_topsp_box a')
+					.each(
+							function(i) {
+								$(this)
+										.click(
+												function() {
+													var trainId = $(this).attr(
+															'train-id');
+													$(
+															'<iframe width="1000px" height="650px;" style="border:0px;" scrolling="yes" src="/coach/trains/details.htm?trainId='
+																	+ trainId
+																	+ '"></iframe>')
+															.layerModel({
+																title : '专栏信息'
+															});
+													/* 					var index = layer.open({
+													 type : 2,
+													 title : '专栏信息',
+													 shadeClose : true,
+													 shade: false,
+													 maxmin: true, //开启最大化最小化按钮
+													 area : [ '1000px', '650px' ],
+													 content : '/coach/trains/details.htm?trainId='+ trainId
+													 });
+													 layer.iframeAuto(index); */
+												})
+							});
+
+		})
+	</script>
+</body>
+</html>

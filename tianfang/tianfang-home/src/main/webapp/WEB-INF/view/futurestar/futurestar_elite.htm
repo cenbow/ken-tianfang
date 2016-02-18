@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<#include "/common/head.htm"/>
+<body>
+	<#include "/common/topbar.htm"/>
+	<div class="fs_elite_box">
+		<img src="/static/img/fs_elite.jpg" border="0">
+		<#if datas ??>
+			<#list datas as data>
+				<#if data_index == 0>
+					<#if ((data.menuUrl??) && (data.menuUrl != ''))>
+						<a class="football" href="${data.menuUrl}"></a>
+					<#else>
+						<a class="football" href="/menu/detail.htm?id=${data.id}"></a>
+					</#if>
+				<#elseif data_index == 1>
+					<#if ((data.menuUrl??) && (data.menuUrl != ''))>
+						<a class="train" href="${data.menuUrl}"></a>
+					<#else>
+						<a class="train" href="/menu/detail.htm?id=${data.id}"></a>
+					</#if>
+				<#elseif data_index == 2>
+					<#if ((data.menuUrl??) && (data.menuUrl != ''))>
+						<a class="college" href="${data.menuUrl}"></a>
+					<#else>
+						<a class="college" href="/menu/detail.htm?id=${data.id}"></a>
+					</#if>
+				</#if>
+			</#list>
+		</#if>
+	</div>
+
+	<#include "/common/footer.htm"/>
+	<script>
+	$(function(){
+		//导航标记
+		nav_mark('futurestar')
+	})
+	</script>
+</body>
+</html>

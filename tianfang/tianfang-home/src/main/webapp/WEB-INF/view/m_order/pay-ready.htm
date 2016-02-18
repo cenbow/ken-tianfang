@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<link rel="icon" type="image/gif" href="/static/img/favicon.ico">
+		<title>聚运动</title>
+		<#include "/common/head.htm"/>
+		<!-- <script src="/static/js/jquery-2.1.3.min.js"></script>
+		<script src="/static/js/common.js"></script>
+		<link href="/static/css/style.css" rel="stylesheet" /> -->
+		<link href="/static/css/eshop-detail.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<!-- <script src="/static/js/header.js"></script> -->
+		<#include "/common/topbar.htm"/>
+		<div class="wrapper">
+			<div class="pay-ready-a">
+				<div class="pay-ready-d">
+					<h1>订单已提交成功，请您尽快付款!</h1>
+					<p>请在提交订单后<i class="red">24小时</i>内完成支付，逾期系统会自动取消订单。
+						<br> 下单账号：<i class="red">${(user.mobile)!}</i><!--  初始密码：<i class="red">${(user.password)!}</i> -->
+						<br/> 您可登录此账号，在“订单管理”<a class="order-detail-pre1" href="/estore/detail/userOrder.htm?userId=${(user.id)!}">查看订单详情</a>
+					</p>
+				</div>
+
+			</div>
+			<div class="pay-info bg1">
+				<ul class="pay-info-ul">
+					<li>
+						<label>订单编号：</label>
+						<span>${(order.orderNo)!}</span>
+						<a class="order-detail-pre" href="/estore/detail/userOrder.htm?userId=${(user.id)!}">查看订单详情</a>
+					</li>
+					<li>
+						<label>订单金额：</label>
+						<span class="price">￥${(order.totalPrice)!}</span>
+					</li>
+					<li>
+						<label>支付方式：</label>
+						<span>货到付款（现金），请您在收货时提前准备好现金 </span>
+					</li>
+				</ul>
+			</div>
+			<div class="pay-choose">
+				<h2>网银支付</h2>
+				<ul>
+					<!-- <li><img class="status" src="/static/img/unselected.png"/> <img class="logo-pay" src="/static/img/zsyh.png" alt="" /></li> -->
+					<li><img class="status" src="/static/img/selected.png"/><img class="logo-pay" class="status" src="/static/img/zfb.png" alt="" /></li>
+					<!-- <li><img class="status" src="/static/img/unselected.png"/> <img class="logo-pay" src="/static/img/zsyh.png" alt="" /></li>
+					<li><img class="status" src="/static/img/unselected.png"/><img class="logo-pay" class="status" src="/static/img/zfb.png" alt="" /></li> -->
+				</ul>
+			</div>
+			<div class="bts pay-bts">
+				<a class="bt cur">确认支付</a>
+			</div>
+		</div>
+		<form id="orderInfo" action="">
+			<input name="out_trade_no" value="${(order.orderNo)!}" type="hidden" />
+			<input name="subject" type="hidden" value="123" />
+			<input name="total_fee" type="hidden" value="${(order.totalPrice)?replace(',','')}" /> 
+		</form>
+		<#include "/common/footer.htm"/>
+		<script>
+			$(function() {
+				//导航标记
+				nav_mark('SportStore');
+				//支付方式选择
+				$(".pay-choose").on("click","li",function(){
+					$(this).parents("ul").find(".status").attr("src","/static/img/unselected.png");
+					$(this).find(".status").attr("src","/static/img/selected.png");
+				})
+			});
+			<!-------- -->
+			$('.bt.cur').on("click",function(){
+				$.ajax({
+					url:'/pay/index.htm',
+					type:'post',
+					dataType:'json',
+					data:$("#orderInfo").serialize(),
+					success:function(data){
+						$('.wrapper').append(data);
+					}
+				})
+				//document.getElementById('orderInfo').submit();
+			})
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<#include "/common/head.htm"/>
+<body>
+	<#include "/common/topbar.htm"/>
+	<script src="/static/js/AjaxUpload.js"></script>
+	<div class="wrapper">
+		<#include "/common/usercentertop.htm"/>
+			<div class="main_box">
+				<h5><span class="info1">基本资料</span><a class="edit" status="off" href="###">编辑>></a></h5>
+				<form id="subFrom" action="">
+					<div class="row_info">
+						    <input type="hidden" name="id" value="${(userInfo.id)!}"/>
+							<input type="hidden" name="microPic" />
+							<input type="hidden" id="provinceId" value="${(userInfo.province)!}"/>
+							<input type="hidden" id="dicId" value="${(userInfo.location)!}"/>
+						<ul id="baseinfo">
+							<li><label>登录名</label><input disabled id="login_name" name="cname" type="text" value="${(userInfo.cname)}"><span></span></li>
+							<li class="pra">
+								<label>头像</label>
+								<div class="preview">
+									<#if userInfo.microPic!="">
+										<img id="imgShow" src="${(userInfo.microPic)!}" border="0"/>
+									<#else>
+										<img id="imgShow" src="/static/img/p_sim.png" border="0"/>
+									</#if>
+									<input id="team-flag" type="button" value=""><input type="hidden" id="hidImgName" /> 
+								</div>
+								<!-- <div id="preview" class="preview"> 
+									<#if userInfo.microPic!="">
+										<img id="imgShow" src="${(userInfo.microPic)!}" border="0"/>
+									<#else>
+										<img id="imgShow" src="/static/img/p_sim.png" border="0"/>
+									</#if>
+									<input disabled="disabled" id="team-flag" type="input">
+									<input type="hidden" id="hidImgName"/>
+								</div> -->
+							</li>
+							<li><label>昵称</label><input disabled id="nick_name" name="nickName" class="closed" type="text" value="${(userInfo.nickName)!}"><span></span></li>
+							<li><label>性别</label><i style="left:475px"></i><select disabled id="gender" name="gender"><#if userInfo.gender == '1'><option selected="selected" value="1">男</option><option value="0" >女</option><#else><option value="1" >男</option><option selected="selected" value="0">女</option> </#if></select></li>
+							<li><label>所在地</label><i style="left:330px"></i><i style="left:475px"></i><select disabled id="dic" name="province" class="area province" onchange="doDistrict();" ><option value="">省份</option><#if result?? >	<#list result as page><option value="${(page.id)?replace(',','')}">${(page.name)!}</option></#list></#if></select><select disabled class="area city" id="area" name="location"></select></li> 
+						</ul>
+						<input class="save_info" type="button" value="保 存">
+					</div>
+				</form>
+				<h5><span class="info2">收货地址</span><a class="setting" status="off" href="###">设置>></a></h5>
+				<form id="shipingFrom" action="">
+					<div class="row_info">
+						<input name="id" type="hidden" value="${(userShipping.id)!}" />
+						<ul id="address">
+							<li><label>新增收货地址</label><input disabled name="locationDetails" id="address" class="address" type="text" value="${(userShipping.locationDetails)!}"></li>
+							<li><label>收货人姓名</label><input disabled name="userName" id="real_name" type="text" value="${(userShipping.userName)!}"></li>
+							<li><label>证件类型</label><i style="left:475px"></i><select disabled id="idType" name="idType"><option value="1">身份证</option><option value="2">护照</option><option value="3">学生证</option><option value="4">教练证</option></select></li>
+							<li><label>证件号码</label><input disabled name="idNumber" id="id_number" type="text" value="${(userShipping.idNumber)!}"></li>
+							<!-- <li><label>登录密码</label><input name="" id="password" type="text" value="12345678"><span></span></li> -->
+						</ul>
+						<input class="save_address" type="button" value="保 存">
+					</div>
+				</form>
+				<!-- <input class="save" type="button" value="保 存"> -->
+			</div>
+		</div>
+	</div>
+	<#include "/common/footer.htm"/>
+</body>
+
+<script>
+	$(function(){
+		if("${(userShipping.idType)!}"!=null && "${(userShipping.idType)!}"!=""){
+			document.getElementById('idType').value= "${(userShipping.idType)!}";  
+		}
+		//mark_left_menu
+		$('.menu .icon1').addClass('cur')
+		
+		$('.edit').on('click', function(){
+			if($(this).attr('status') == 'off'){
+				$('#baseinfo input[type=text], #baseinfo select').css('border-color','#ccc').removeAttr('disabled')
+				$(this).attr('status','on')
+				$('.save_info').addClass('show')
+				$('#baseinfo li i').css('display','none');
+				$('#team-flag').attr("type","button");
+				$('#team-flag, #cre').css('display','block')
+			}else if($(this).attr('status') == 'on'){
+				$('#baseinfo input[type=text], #baseinfo select').css('border-color','#fff').attr('disabled','disabled')
+				$(this).attr('status','off')
+				$('.save_info').removeClass('show')
+				$('#baseinfo li i').css('display','block')
+				$('#team-flag').attr("type","");
+				$('#team-flag, #cre').css('display','none')
+			}
+		})
+		$('.setting').on('click', function(){
+			if($(this).attr('status') == 'off'){
+				$('#address input[type=text], #address select').css('border-color','#ccc').removeAttr('disabled')
+				$(this).attr('status','on')
+				$('.save_address').addClass('show')
+				$('#address li i').css('display','none')
+			}else if($(this).attr('status') == 'on'){
+				$('#address input[type=text], #address select').css('border-color','#fff').attr('disabled','disabled')
+				$(this).attr('status','off')
+				$('.save_address').removeClass('show')
+				$('#address li i').css('display','block')
+			}
+		})
+		
+		//取消错误提示
+		$('input[type=text], input[type=password]').keyup(function(){
+			$(this).siblings('span').html('').removeClass('warning')
+		})
+	});
+	
+	function updateImg(){
+		$('.preview > img').attr('src','/static/img/simple4.jpg')
+	}
+	
+	//发送验证码按钮 倒数90秒方法
+	var wait=90; 
+	function time(sendObj) {
+		if (wait == 0) {
+			//sendObj.attr("disabled",false);
+			//sendObj.val("获取验证码");
+			sendObj.removeAttribute("disabled");         
+			sendObj.value="获取验证码"; 
+			wait = 90; 
+		} else {
+			//sendObj.attr("disabled",true);
+			//sendObj.val("请等待"+wait+"秒");			
+			sendObj.setAttribute("disabled", true); 
+			sendObj.value="请等待"+wait+"秒"; 
+			wait--; 
+			setTimeout(function() { 
+				time(sendObj) 
+			}, 1000) 
+		} 
+	} 
+		
+	//验证表单错误提示
+	function alert_redtext(d,t){
+		$('#' +d).focus().siblings('span').html(t).addClass('warning')
+	}
+	window.onload = function() {
+	    init();  //初始化
+	    document.getElementById('dic').value ="${(userInfo.province)!}";
+	    doDistrict(); //获取省份下区域信息  
+	    document.getElementById('area').value="${(userInfo.location)!}"; 
+	} 
+</script>
+<script type="text/javascript" src="/static/js/usercenter.js" ></script>
+</html>

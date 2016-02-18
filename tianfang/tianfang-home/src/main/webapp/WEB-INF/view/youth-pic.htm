@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<#include "/common/head.htm"/>
+
+	<body>
+		<#include "/common/topbar.htm"/>
+		<div class="youth-bg">
+			<div class="wrapper">
+				<div class="youth-title">
+					<img src="/static/img/cooper1.png" class="youth-ico"></img>
+					<h1>上海上港足球俱乐部主场</h1>
+				</div>
+				<div class="youth-banner">
+					<ul class="youth-banner-ul">
+						<li class="youth-banner-li" to="">球队首页</li>
+						<li class="youth-banner-li">球队信息</li>
+						<li class="youth-banner-li cur" to="list.htm">相册</li>
+						<li class="youth-banner-li">视频</li>
+						<li class="youth-banner-li" to="youth-herald.html">比赛预告</li>
+						<li class="youth-banner-li">历史战绩</li>
+						<li class="youth-banner-li">荣誉</li>
+					</ul>
+				</div>
+				<div class="youth-pic">
+					<ul class="youth-pic-ul">
+						<li class="youth-pic-li">
+							<img src="/static/img/youth-pic-1.png" alt="" />
+							<div class="pics-info">
+								<p class="pics-title"><span class="pics-name">全家福</span><span class="pics-totle">共30张</span></p>
+								<p class="pics-from">来自<span class="pics-user">jeckery</span></p>
+								<p class="pics-update"><i>2015-10-10</i>更新</p>
+								<p class="pics-update"><i>2015-10-10</i>创建</p>
+								<p class='pics-share'><i>分享</i>
+									<a class="weibo" href="#"></a>
+									<a class="qqSpace" href="#"></a>
+									<a class="tence" href="#"></a>
+									<a class="wechart" href="#"></a>
+								</p>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="youth-footer">
+					<p class="page">共计：<i>80</i>个 分为
+						<i>20</i>页 每页
+						<i>9</i>条 [
+						<a href="">1</a>
+						<a href="">2</a>
+						<a href="">3</a>
+						<a href="">4</a>
+						<a href="">5</a>
+						<a href="">6</a>
+						<a href="">7</a>
+						<a href="">8</a>
+						<a href="">9</a>
+						]
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<#include "/common/footer.htm"/>
+		<script src="/static/js/competition.js"></script>
+		<script type="text/javascript">
+			for (var i = 0; i < 5; i++) {
+				$(".youth-pic-ul").append($(".youth-pic-li:last").clone());
+			}
+		</script>
+	</body>
+
+</html>

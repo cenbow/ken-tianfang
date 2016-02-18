@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+	<#include "/common/head.htm"/>
+		<meta charset="UTF-8">
+		<link rel="icon" type="image/gif" href="/static/img/favicon.ico">
+		<title>聚运动</title>
+		<link href="/static/css/eshop-detail.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<#include "/common/topbar.htm"/>
+		<div class="store_topbar">
+			<span>订单确认信息</span>
+		</div>
+		<div class="wrapper">
+			<div class="addr-list">
+				<ul class="addr-list-ul">
+					<#list shippingLis as shippingLis>
+						<li><label><input <#if shippingLis.maker == 1 >checked="checked"</#if> type="radio" name="address" id="" value="${(shippingLis.id)!}" />${(shippingLis.addressInfo)!}</label><a class="delete" object-id="${(shippingLis.id)!}" >删除</a></li>
+					</#list>
+				</ul>
+			</div>
+			<div class="addbt">
+				<a class="bt add-addr">新增地址</a>
+			</div>
+			<div class="add-address">
+				<h2>新增地址</h2>
+				<div class="must-fill">
+				<form id="formSub" action="">
+				<input  type="hidden" name="maker" id="" value="" />
+					<ul class="fill-ul">
+						<li>
+							<label><span  class="must">*</span>收货人姓名</label>
+							<input  type="text" name="name" id="" value="" />
+						</li>
+						<li>
+							<label><span class="must">*</span>省份</label>
+							<select id="province" class="area province" name="province" onchange="changeForm(this.value)">
+								<option>省份</option>
+								<#if dicLis??>
+									<#list dicLis as dic >
+										<option value="${(dic.id)?replace(',','')}">${(dic.name)!}</option>	
+									</#list>
+								</#if>
+							</select>
+							<select id="area" class="area city" name="area" onchange="changeFormCity(this.value)">
+									<#if areaAdd??>
+										<option value="${(areaAdd.id)?replace(',','')}">${(areaAdd.name)!}</option>
+									<#else>
+										<option value="">市区</option>
+									</#if>
+							</select>
+							<select id="areaCounty" name="distruct" class="area county">
+							        <#if distructAdd??>
+										<option value="${(distructAdd.id)?replace(',','')}">${(distructAdd.name)!}</option>
+									<#else>
+										<option value="">区域</option>
+									</#if>
+							</select>
+						</li>
+						<li>
+							<label><span class="must">*</span>详细地址</label>
+							<input  id="" type="text" name="addressInfo" value="" >
+						</li>
+						<li>
+							<label><span class="must">*</span>手机号码</label>
+							<input  id="" type="text" name="phone" value="">
+						</li>
+						<!-- <li>
+							<label>邮箱地址</label>
+							<input id="" type="text" name="email" value="">
+						</li> -->
+						<li>
+							<label>邮政编码</label>
+							<input  id="" type="text" name="coding" value="">
+						</li>
+						<!-- <li>
+							<label>地址别名</label>
+							<input  id="" type="text" name="addressEntryName" value="">
+						</li> -->
+						<li>
+							<label></label>
+							<input class="setDefault" type="checkbox" name="" value="" id="t1">
+							<label class="setDefault"for="t1" >设为默认地址</label>
+						</li>
+						<li>
+							<label></label>
+							<a class="bt save">保存</a>
+							<a class="bt cancle">取消</a>
+						</li>
+					</ul>
+				</form>
+				</div>
+			</div>
+		</div>
+			
+	<div class="cart_box">
+		<h4>商品详情</h4>
+		<div class="bar">
+			<!-- <i tag="none"></i> -->
+			<span class="choose"><!-- 全选 --></span>
+			<span class="goodsname">商品</span>
+			<span class="price">单价</span>
+			<span class="amount">数量</span>
+			<span class="total_price">小计</span>
+			<span class="stock"><!-- <select><option>上海</option><option>上海</option><option>上海</option><option>上海</option><option>上海</option></select> --></span>
+			<span class="action">操作</span>
+		</div>
+		<ul>
+			<#assign countTotal = 0 />
+			<#if carList??>
+				<#list carList as car>
+					<li class="no-sel">
+						<!-- <i object-id="${(car.id)!}"></i> -->
+						<a href="###"><img class="pic" src="${(car.imgUrl)!}" border="0">
+						<span class="goodsname">${(car.productName)!}</span></a>
+						<span class="price">￥${(car.price)!}</span>				
+						<span class="amount"><a class="minus" href="###"><!-- - --></a><input class="amt" disabled="disabled" car_id="${(car.id)!}" sku_id="${(car.skuId)!}" sin_price="${(car.price)?replace(',','')}" data_max="${(car.productStock)!}" value="${(car.numberOf)?replace(',','')}"><a class="plus" href="###"><!-- + --></a></span>
+						<span class="total_price">￥${(car.price*car.numberOf)}</span>
+						<span class="stock">有货</span>
+						<span class="action"><a href="###" object-id="${(car.id)!}">删除</a></span>
+						<#assign countTotal = countTotal+(car.price*car.numberOf) />
+					</li>
+				</#list>
+			</#if>			
+		</ul>
+		<!-- <div class="b_bar"><a class="del_all" href="###">删除购车商品</a><a href="###">继续购物</a></div>
+		<div class="total_box">共计（不含运费）：<span>￥0</span></div> -->
+		<div class="total_box">共计（不含运费）：<span>￥${(countTotal)!}</span></div>
+		<#if user??>
+			<div class="submit"><a href="###" id="sub">确认结算</a></div>
+		<#else>
+			<div class="submit"><a href="###" onclick="open_login();">确认结算</a></div>
+		</#if>
+		
+		<form id="addOrder" action="/order/addOrder.htm">
+			<input name="price" type="hidden" />
+			<input name="number" type="hidden"/>
+			<input name="skuId" type="hidden"/>
+			<input name="sId" type="hidden"/>
+			<input name="carId" type="hidden"/>
+		</form>
+	</div>
+	<#include "/common/footer.htm"/>
+		<script>
+			$(function() {
+				//导航标记
+				nav_mark('SportStore');
+				
+				$(".add-addr").on("click",function(){
+					$(".add-address").css("display","block");
+				});
+				
+				$(".add-address").on("click",".bt",function(){
+					$(".add-address").css("display","none");
+				});
+			});
+		
+			<!-- -------------   分割线       ---------------------------------------------------------->
+			//获取省份信息
+			function changeForm(val){
+				$.ajax({
+					type : "POST",
+					url : "${base}/m_shipping/getAddressByCriteria.htm",
+					data: {parentId:val.replace(',',''),level:2},
+					datatype : "json",
+					success : function(datas){
+						var data = datas.data;
+						console.log(data);
+						$("#area").empty();
+						var categoryId = document.getElementById("area");
+						categoryId[0] =new Option("全部","");
+						var i=0;
+						if (data.length > 0) {
+							for(var o in data){
+								if(data[o].name == undefined ||data[o].name == '' || data[o].name == null ){
+									continue;
+								}
+								i++;
+								categoryId[i] =new Option(data[o].name,data[o].id);
+							}
+						} else {
+							$("#area").empty(); 
+							categoryId[0] =new Option("全部","");
+						}
+					}
+				})
+			}
+			//获取区域信息 
+			function changeFormCity(val){
+				$.ajax({
+					type : "POST",
+					url : "${base}/m_shipping/getAddressByCriteria.htm",
+					data: {parentId:val.replace(',',''),level:3},
+					datatype : "json",
+					success : function(datas){
+						var data = datas.data;
+						console.log(data);
+						$("#areaCounty").empty();
+						var categoryId = document.getElementById("areaCounty");
+						categoryId[0] =new Option("全部","");
+						var i=0;
+						if (data.length > 0) {
+							for(var o in data){
+								if(data[o].name == undefined ||data[o].name == '' || data[o].name == null ){
+									continue;
+								}
+								i++;
+								categoryId[i] =new Option(data[o].name,data[o].id);
+							}
+						} else {
+							$("#areaCounty").empty(); 
+							categoryId[0] =new Option("全部","");
+						}
+					}
+				})
+			}
+			
+			$(".bt.save").on("click",function(){
+				//收货人姓名
+				var name = $("[name='name']").val().trim();
+				if(name.length >0){
+					if(name.length < 3 || name.length > 18){
+						layer.msg("收货人姓名格式不正确,一般为3-18个字符~~");
+						return;
+					}
+				}else{
+					layer.msg("收货人姓名不能为空~~");
+					return;
+				}
+				//省份
+				var distruct = $("[name ='distruct']").val();
+				if(distruct.length < 1 || distruct==""){
+					layer.msg("请完善省份信息~~");
+					return;
+				}
+				//详细地址 
+				var addressInfo = $("[name = 'addressInfo']").val();
+				if(addressInfo.length >1){
+					if(addressInfo.length <3 || addressInfo.length >50){
+						layer.msg("地址详情3-50个字符~~");
+						return;
+					}
+				}else{
+					layer.msg("地址详情不能是空~~");
+					return;
+				}
+				var phone_reg  = /(^13\d{9}$)|(^14)[5,7]\d{8}$|(^15[0,1,2,3,5,6,7,8,9]\d{8}$)|(^17)[6,7,8]\d{8}$|(^18\d{9}$)/g ;
+				var phone = $("[name='phone']").val();
+				if (!phone_reg.test(phone)) {
+					layer.msg("手机格式不正确~~");
+					return;
+				}
+				
+				/* var email = $("[name='email']").val();
+				var mail_reg = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
+				if(email.length > 1){
+					if (!mail_reg.test(email)) {
+						layer.msg("邮箱格式不正确~~");
+						return;
+					}			
+				} */
+				
+				var coding = $("[name='coding']").val();
+				var re= /^[1-9]\d{5}$/;
+				if(coding.length > 1){
+					if(!re.test(coding)){
+						layer.msg("邮编不正确~~");
+						return;
+					}			
+				}
+				
+				/* var addressEntryName = $("[name = 'addressEntryName']").val();
+				if(addressEntryName.length >1){
+					if(addressEntryName.length <3 || addressEntryName.length >50){
+						layer.msg("地址别名3-50个字符~~");
+						return;
+					}
+				} */
+				/* else{
+					layer.msg("地址别名不能是空~~");
+					return;
+				} */
+				
+				if(document.getElementById('t1').checked){
+					$("[name='maker']").val("1")
+				}else{
+					$("[name='maker']").val("0")
+				}
+			    var formSub =$("#formSub").serialize();
+				$.ajax({
+					type:"post",
+					url:"${base}/m_shipping/save.htm",
+					datatype:"json",
+					data:formSub,
+					success:function(data){
+						if(data.success == true){
+							alert(data.msg);
+						}else{
+							alert(data.msg);
+						}
+						location.reload() ;
+					}
+				})
+			})
+			
+			$(".delete").on("click",function(){
+				var id = $(this).attr("object-id");
+				$.ajax({
+					url:'/m_shipping/delete.htm',
+					data:{id:id},
+					datatype:'json',
+					type:'post',
+					success:function(data){
+						if(data.success == true){
+							alert(data.msg);
+							location.reload();
+						}else{
+							alert(data.msg);
+						}
+					}
+				})
+			})
+			
+			$('#sub').on("click",function(){
+				//获取收货地址
+				var sId= "";
+				$('[name=address]').each(function(){
+					if($(this).prop("checked")){
+						sId = $(this).val();
+					}
+				})
+				
+				//获取商品的参数 
+				var number ="";
+				var prices = "";
+				var skuId = "";
+				var carId ="";
+				$('.amt').each(function(){
+					number +=  $(this).val() +",";
+					prices +=  $(this).attr("sin_price")+',';
+					skuId  +=  $(this).attr("sku_id")+',';
+					carId  +=  $(this).attr("car_id")+',';
+				})
+			  //提取参数值 
+			  $('[name=price]').val(prices);		
+			  $('[name=number]').val(number);
+			  $('[name=skuId]').val(skuId);
+			  $('[name=sId]').val(sId);
+			  $('[name=carId]').val(carId);
+			  document.getElementById('addOrder').submit();			  
+			})
+		</script>
+	</body>
+
+</html>

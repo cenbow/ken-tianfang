@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<#include "/common/head.htm"/>
+<body>
+	<#include "/common/topbar.htm"/>
+	<div class="wrapper">
+		<h1>资讯中心</h1>
+		<div class="news_box">
+			<ul>
+				<#if pageList ??>
+					<#list pageList.getResults() as page>
+						<li>
+							<img src="${(page.microPic)!}" border="0">
+							<p class="title">${(page.title)!}</p>
+							<p class="desc">${(page.subtract)!}</p>
+							<a href="/info/details/${(page.id)!}.htm">阅读全文 >></a>
+						</li>
+					</#list>
+				</#if>
+			</ul>
+		</div>
+		
+		<#include "/common/page.htm"/>
+		
+	</div>
+	<#include "/common/footer.htm"/>
+	<script>
+		function gotoPage(page){
+			window.location.href = '/info/list.htm?currPage='+page;
+		}	
+		$(function() {
+			//导航标记
+			nav_mark('activity')
+			//双数行样式变换
+			$('.fs_box').find('li:odd').addClass('n2x')
+		})
+	</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<#include "/common/head.htm"/>
+<body>
+	<#include "/common/topbar.htm"/>
+	<div class="fs_banner"><img src="/static/img/banner_fs.jpg" border="0"></div>
+	
+	<ul class="fs_box">
+		<#if datas??>
+			<#list datas as data>
+				<li>
+					<img src="${data.picture}" style="height:400px;width:1000px" border="0">
+					<p class="title">${data.cname}</p>
+					<p class="desc">${data.summary}</p>
+					<a target="_" <#if data.menuUrl == ''>href="/menu/detail.htm?id=${data.id}"<#else>href="${data.menuUrl}"</#if>>${data.cname}</a>
+				</li>
+			</#list>
+		</#if >
+		<!-- 
+		<li><img src="/static/img/fs_item1.jpg" border="0"><p class="title">升学与职业通道升学与职业通道升学与职业通道升学与职业通道升学与职业通道升学与职业通道</p><p class="desc">升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍升学与职业通道的总结介绍</p><a href="futurestar_detail.html">我要成为足球精英 >></a></li>
+		<li><img src="/static/img/fs_item2.jpg" border="0"><p class="title">升学与职业通道</p><p class="desc">升学与职业通道的总结介绍，渠道解决户籍等政策与内容文案，升学与职业通道的总结介绍，渠道解决户籍等政策与内容文案，升学与职业通道的总结介绍，渠道解决户籍等政策与内容文案，升学与职业通道的总结介绍，渠道解决户籍等政策与内容文案。升学与职业通道的总结介绍，渠道解决户籍等政策与内容文案，升学与职业通道的总结介绍，渠道解决户籍等政策与内容文案，升学与职业通道的总结介绍，渠道解决户籍等政策与内容文案，升学与职业通道的总结介绍，渠道解决户籍等政策与内容文案。</p><a href="futurestar_detail.html">我要成为足球精英 >></a></li>
+		<li><img src="/static/img/fs_item3.jpg" border="0"><p class="title">升学与职业通道</p><p class="desc">升学与职业通道的总结介绍，渠道解决户籍等政策与内容文案，升学与职业通道的总结介绍，渠道解决户籍等政策与内容文案，升学与职业通道的总结介绍，渠道解决户籍等政策与内容文案，升学与职业通道的总结介绍，渠道解决户籍等政策与内容文案。升学与职业通道的总结介绍，渠道解决户籍等政策与内容文案，升学与职业通道的总结介绍，渠道解决户籍等政策与内容文案，升学与职业通道的总结介绍，渠道解决户籍等政策与内容文案，升学与职业通道的总结介绍，渠道解决户籍等政策与内容文案。</p><a href="futurestar_detail.html">我要成为足球精英 >></a></li>
+		-->
+	</ul>
+	<#include "/common/footer.htm"/>
+	<script>
+	$(function(){		
+		//导航标记
+		nav_mark('futurestar')
+		//双数行样式变换
+		$('.fs_box').find('li:odd').addClass('n2x')
+	})
+	</script>
+</body>
+</html>

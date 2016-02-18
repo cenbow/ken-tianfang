@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianfang.order.mapper.SportMTypeSpecExMapper"> 
+	<select id="findSpecByTypeId" parameterType="java.lang.String" resultType="com.tianfang.order.dto.SportMSpecDto">
+		select b.id,b.spec_name as specName
+		from sport_m_type_spec a 
+		LEFT JOIN sport_m_spec b on a.spec_id = b.id
+		WHERE a.stat = '1' and b.stat='1'
+		<if test="typeId != null and typeId !='' ">
+			and a.type_id = #{typeId} 
+		</if>
+	</select>
+	
+	<select id="selectTypeSpec" parameterType="com.tianfang.order.dto.SportTypeSpecExDto" resultType="com.tianfang.order.dto.SportTypeSpecExDto">
+		select 
+		tp.id as id,
+		tp.spec_id as specId , 
+		tp.type_id as typeId ,
+		tp.create_time as createTime ,
+		tp.last_update_time as lastUpdateTime ,
+	    spec.spec_name as specName ,
+		spec.spec_order as specOrder ,
+		type.type_name as typeName ,
+		type.type_order as typeOrder
+		from sport_m_type_spec as tp inner join sport_m_spec as spec on (tp.spec_id = spec.id)
+		inner join sport_m_type as type on (tp.type_id = type.id)
+		where tp.stat = '1'  and type.stat = '1' and spec.stat = '1'
+		<if test="spexDto.specName != null and spexDto.specName !='' ">
+			and spec.spec_name like #{spexDto.specName} 
+		</if>
+		<if test="spexDto.typeName != null and spexDto.typeName !='' ">
+			and type.type_name like #{spexDto.typeName} 
+		</if>
+		<if test="spexDto.start != null and spexDto.limit != null ">
+			limit #{spexDto.start},#{spexDto.limit}
+		</if>
+	</select>
+	
+	<select id="countTypeSpec" parameterType="com.tianfang.order.dto.SportTypeSpecExDto" resultType="java.lang.Long">
+		select  count(*)
+		from sport_m_type_spec as tp inner join sport_m_spec as spec on (tp.spec_id = spec.id)
+		inner join sport_m_type as type on (tp.type_id = type.id)
+		where tp.stat = '1'  and type.stat = '1' and spec.stat = '1'
+		<if test="spexDto.specName != null and spexDto.specName !='' ">
+			and spec.spec_name like #{spexDto.specName} 
+		</if>
+		<if test="spexDto.typeName != null and spexDto.typeName !='' ">
+			and type.type_name like #{spexDto.typeName} 
+		</if>
+		<if test="spexDto.start != null and spexDto.limit != null ">
+			limit #{spexDto.start},#{spexDto.limit}
+		</if>
+	</select>
+</mapper>

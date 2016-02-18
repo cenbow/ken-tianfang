@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+	<#include "/common/head.htm"/>
+		<script src="//apps.bdimg.com/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+		<link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.9.2/themes/base/minified/jquery-ui.min.css">
+		<script src="/static/js/datepicker-zh.js"></script>
+		<link href="/static/css/competition.css" rel="stylesheet" />
+
+		<link rel="stylesheet" type="text/css" href="/static/css/jquery-ui-timepicker-addon.css" />
+		<script type="text/javascript" src="/static/js/jquery-ui-timepicker-addon.js"></script>
+	<body>
+		<#include "/common/topbar.htm"/>
+		<div class="youth-bg">
+			<div class="wrapper">
+				<div class="youth-title">
+					<!-- <h1><img src="${(sportTeamDto.logo)!}" class="youth-ico"></img>${(sportTeamDto.name)!}</h1> -->
+					<img class="youth-ico" src="${(sportTeamDto.logo)!}" />
+					<span class="youth-name">${(sportTeamDto.name)!}</span>
+					<div class="youth-banner">
+						<ul class="youth-banner-ul">
+							<li class="youth-banner-li index" to="/tc/index/${(sportTeamDto.id)!}.htm">球队首页</li>
+							<li class="youth-banner-li team-info" to="/tc/team/${(sportTeamDto.id)!}.htm">球队信息</li>
+							<li class="youth-banner-li pic" to="/tc/pic/${(sportTeamDto.id)!}.htm">相册</li>
+							<li class="youth-banner-li video" to="/tc/video/${(sportTeamDto.id)!}.htm">视频</li>
+							<li class="youth-banner-li herald cur" to="/tc/herald/${(sportTeamDto.id)!}.htm">比赛预告</li>
+							<li class="youth-banner-li history" to="/tc/history/${(sportTeamDto.id)!}.htm">历史战绩</li>
+							<li class="youth-banner-li honor" to="/tc/honor/${(sportTeamDto.id)!}.htm">荣誉</li>>
+						</ul>
+					</div>
+				</div>
+				<div class="youth-herald">
+					<ul class="youth-herald-ul">
+						<li class="youth-herald-li title">
+							<p class="title">对阵双方</p>
+							<p class="title">时间地点</p>
+							<p class="title">赛事类型</p>
+						</li>
+							<#list pageList.results as page>
+								<li class="youth-herald-li edit">
+									<div class="youth-herald-info">
+										<p><span class="part1">${(page.homeTeamName)!}</span>VS<span class="part2">${(page.vsTeamName)!} </span></p>
+										<p class="timeplace"><i>${(page.raceTimeStr)!}</i>
+											<br><i>${(page.raceAddress)!}</i> </p>
+										<p>
+											<#list types as type>
+												<#if page.type == type.getIndex()>${type.getName()}</#if>
+											</#list>
+										</p>
+											<#if sportTeamDto.owner == true>
+											<a class="edit" race-id="${(page.id)!}" race-type="${(page.type)!}" race-home="${(page.homeTeam)!}"
+											 race-vs="${(page.vsTeam)!}" race-address="${(page.raceAddress)!}" race-time="${(page.raceTimeStr)!}" href="javascript:;">[编辑]</a>
+											</#if>
+									</div>
+								</li>
+							</#list>
+					</ul>
+					<#if sportTeamDto.owner == true>
+						<div class="herald-edit-div hide">
+						<form id="submitForm" method="POST">
+							<input type="hidden" name="id" id="id" value="" />
+							<h4>对战双方</h4>
+									<select class="team1" name="homeTeam" id="homeTeam">
+										<#if allTeam??> 
+											<#list allTeam as team>
+												<option value="${(team.id)!}">${(team.name)!}</option>
+											</#list>
+										</#if>
+									</select>VS
+									<select class="team2" name="vsTeam" id="vsTeam">
+										<#if allTeam??> 
+											<#list allTeam as team>
+												<option value="${(team.id)!}">${(team.name)!}</option>
+											</#list>
+										</#if>
+									</select>
+							<a class="delete" race-id="" href="##">[删除]</a>
+							<h4>时间</h4>
+							<input class="time datepicker" type="text" name="raceTimeStr" id="raceTimeStr" value="" />
+							<h4>地点</h4>
+							<input class="place" type="text" name="raceAddress" id="raceAddress" value="" />
+							<h4>赛事类型</h4>
+									<select class="team1" name="type" id="type">
+										<#list types as type>
+											<option value="type.getIndex()">${type.getName()}</option>
+										</#list>
+									</select>
+							<div class="bts">
+								<a class="bt" href="javascript:toSubmit();">保存</a>
+								<a class="bt cancle" href="javascript:cancel();">取消</a>
+							</div>
+							</form>
+						</div>
+					</#if>
+				</div>
+				
+				<#include "/common/page.htm"/>
+
+			</div>
+		</div>
+
+		<#include "/common/footer.htm"/>
+		<script src="/static/js/competition.js"></script>
+		<script type="text/javascript">
+			$(function() {
+				$(".youth-herald-ul").on("click", ".youth-herald-li .edit", function(e) {
+					e.preventDefault();
+					$(".js_open").text("[编辑]").removeClass("js_open");
+					var _cur = $(this).parent().parent().find(".herald-edit-div").length > 0;
+					var $editDiv = $(".herald-edit-div");
+					if (_cur) {
+						$(this).text("[编辑]").removeClass("js_open");
+						$editDiv.insertAfter(".youth-herald");
+						$editDiv.addClass("hide");
+					} else {
+						$(this).text("收起  ∨").addClass("js_open");
+						$(this).parent().parent().append($editDiv);
+						var id = $(this).attr("race-id");
+						var type = $(this).attr("race-type");
+						var home = $(this).attr("race-home");
+						var vs = $(this).attr("race-vs");
+						var address = $(this).attr("race-address");
+						var time = $(this).attr("race-time");
+						
+						$(".herald-edit-div #raceTimeStr").val(time);
+						$(".herald-edit-div #raceAddress").val(address);
+						$(".herald-edit-div .delete").attr("race-id",id);
+						$(".herald-edit-div #type").val(type);
+						$(".herald-edit-div #homeTeam").val(home);
+						$(".herald-edit-div #vsTeam").val(vs);
+						$(".herald-edit-div #id").val(id);
+						$editDiv.removeClass("hide");
+					}
+				});
+				
+				$(".datepicker").datetimepicker();
+				
+				$(".herald-edit-div .delete").on("click",function(){
+					var id = $(this).attr("race-id");
+					<#if user ??>
+					<#else>
+						open_login();	// 没有登陆的话跳转登陆页面
+						return;
+					</#if>
+					if(confirm("确认删除吗")){
+						$.ajax({
+							type : "POST",
+							url : "/tc/herald/${(sportTeamDto.id)!}/delete.htm",
+							data : {id:id},
+							datatype : "json",// "xml", "html", "script", "json", "jsonp", "text".
+							beforeSend : function() {
+							},
+							success : function(data) {// 成功返回之后调用的函数
+								var jsondata = data;// eval('(' + data + ')');
+								if(data.success){
+									layer.msg(data.msg, {
+										shade: [0.9, '#000'],
+									    icon: 6,
+									    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+									}, function(){
+										window.location.reload();//刷新当前页面
+									}); 
+								}else{
+									layer.msg(data.msg);
+								}
+							},
+							complete : function(XMLHttpRequest, textStatus) {// 调用执行后调用的函数
+								
+							},
+							error : function() {// 调用出错执行的函数
+							}
+						});
+					}
+				});
+			});
+			
+			function gotoPage(page){
+				window.location.href = '/tc/herald/${(sportTeamDto.id)!}.htm?currPage='+page;
+			}
+			
+			function toSubmit(){
+				<#if user ??>
+				<#else>
+					open_login();	// 没有登陆的话跳转登陆页面
+					return;
+				</#if>
+				
+				if (null == $("#raceTimeStr").val() || '' == $("#raceTimeStr").val()) {
+					layer.msg("时间不能为空！", 1, 1);
+					return;
+				}
+				if (null == $("#raceAddress").val() || '' == $("#raceAddress").val()) {
+					layer.msg("地点不能为空！", 1, 1);
+					return;
+				}
+				if ('${(sportTeamDto.id)!}' != $("#homeTeam").val() && '${(sportTeamDto.id)!}' != $("#vsTeam").val()) {
+					layer.msg("对战双方没有本队！", 1, 1);
+					return;
+				}
+				if ($("#homeTeam").val() == $("#vsTeam").val()) {
+					layer.msg("对战双方不能为同一队！", 1, 1);
+					return;
+				}
+				
+				var ajaxParams = $('#submitForm').serialize();
+				$.ajax({
+					type : "POST",
+					url : "/tc/herald/${(sportTeamDto.id)!}/update.htm",
+					data : ajaxParams,
+					datatype : "json",// "xml", "html", "script", "json", "jsonp", "text".
+					beforeSend : function() {
+						layer.msg("logining...", 1, 1);
+					},
+					success : function(data) {// 成功返回之后调用的函数
+						var jsondata = data;// eval('(' + data + ')');
+						if(data.success){
+							layer.msg(data.msg, {
+								shade: [0.9, '#000'],
+							    icon: 6,
+							    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+							}, function(){
+								window.location.reload();//刷新当前页面
+							}); 
+						}else{
+							layer.msg(data.msg);
+						}
+					},
+					complete : function(XMLHttpRequest, textStatus) {// 调用执行后调用的函数
+						
+					},
+					error : function() {// 调用出错执行的函数
+					}
+				});
+			}
+			
+			function cancel(){
+				$(".js_open").text("[编辑]").removeClass("js_open");
+				var $editDiv = $(".herald-edit-div");
+				$editDiv.insertAfter(".youth-herald");
+				$editDiv.addClass("hide");
+			}
+		</script>
+	</body>
+
+</html>

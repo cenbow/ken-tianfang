@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianfang.train.mapper.TraingAddressExMapper">
+	<select id="getAllAddressInfo" resultType="com.tianfang.train.dto.TrainingAddressDto" parameterType="java.lang.String">
+	 	select tra_t.id as tratimeaddress, tra_a.id as addressId,tra_dt.id as timeId, tra_a.place ,tra_a.longtitude ,tra_a.latitude ,tra_a.address,tra_d.city,tra_d.`name`,tra_dt.day_of_week,tra_dt.start_time,tra_dt.end_time from training_address as tra_a, training_address_district_time as tra_t , training_district as tra_d , training_time_district as tra_dt 
+where tra_a.id = tra_t.address_id  and tra_dt.id = tra_t.district_time_id and tra_d.id = tra_a.district_id 
+		<if test="id!=null">
+			and tra_a.id = #{id} 
+		</if>
+		   and tra_a.status = 1 and tra_t.status = 1 and tra_dt.status =1 and  tra_d.status = 1 
+	</select>
+	
+	<insert id="insert" parameterType="com.tianfang.train.pojo.TrainingAddress" useGeneratedKeys="true" keyProperty="id">
+	
+	<selectKey resultType="java.lang.String" order="BEFORE" keyProperty="id">
+		select UUID() from dual
+	</selectKey>
+	
+    insert into training_address
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <!-- <if test="id != null" >
+        id,
+      </if> -->
+      <if test="districtId != null" >
+        district_id,
+      </if>
+      <if test="place != null" >
+        place,
+      </if>
+      <if test="longtitude != null" >
+        longtitude,
+      </if>
+      <if test="latitude != null" >
+        latitude,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="freeTimes != null" >
+        free_times,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <!-- <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if> -->
+      <if test="districtId != null" >
+        #{districtId,jdbcType=INTEGER},
+      </if>
+      <if test="place != null" >
+        #{place,jdbcType=VARCHAR},
+      </if>
+      <if test="longtitude != null" >
+        #{longtitude,jdbcType=DECIMAL},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=DECIMAL},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="freeTimes != null" >
+        #{freeTimes,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="update" parameterType="java.lang.String" >
+    	UPDATE training_address_district_time SET STATUS = 0 where address_id = #{id};
+  </update>
+  
+  <select id="findAllSpace" resultType="com.tianfang.train.dto.SpaceDto">
+		select b.id as addressDistrictTimeId,c.place,a.day_of_week as week,a.start_time as startTime,a.end_time as endTime,c.id as addressId from 
+	training_time_district as a left join training_address_district_time as b
+	on a.id = b.district_time_id left join training_address as c on c.id = b.address_id where a.status = 1 AND
+	b.status = 1 and c.status =1
+	</select>
+  
+</mapper>

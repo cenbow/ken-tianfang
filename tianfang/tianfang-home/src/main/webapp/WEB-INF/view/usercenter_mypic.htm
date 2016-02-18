@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<#include "/common/head.htm"/>
+<body>
+	<#include "/common/topbar.htm"/>
+	<script src="/static/js/AjaxUpload.js"></script>
+	<script src="/static/js/usercenter_mypic.js"></script>
+	<div class="wrapper">
+		<#include "/common/usercentertop.htm"/>
+			<div class="main_box">
+				<h5><span class="info1">我的图片</span></h5>
+				<div class="bars">
+					<a class="footballfan" href="/star/footballfan.htm" target="_blank"></a>
+				</div>
+				<div class="row_item">
+					<ul>
+						<!-- <li>
+							<img class="banner" src="/static/img/pic_simple.jpg" border="0">
+							<a class="del" href="###"></a>
+							<div id="title" class="title show">
+								<input type="text" value="足球青训百年大计" disabled>
+								<a class="edit_title show" href="###"></a>
+								<a class="save_btn" href="###">保存</a>
+								<a class="cancel_btn" href="###">取消</a>
+							</div>
+							<div id="dec" class="dec show">
+								<textarea disabled>中国足球已经制定了以校园足球的发展方向,我们已经走在了正确的道路上</textarea>
+								<a class="edit_dec show" href="###"></a>
+								<a class="save_btn" href="###">保存</a>
+								<a class="cancel_btn" href="###">取消</a>
+							</div>
+						</li> -->
+						<#if pageList ??>
+						<#list pageList.getResults() as page>
+						<li>
+							<img class="banner" src="${(page.pic)!}" border="0">
+							<a class="del" href="###" pid="${(page.id)!}"></a>
+							<div id="title" class="title show">
+								<input type="text" pid="${(page.id)!}" value="${(page.title)!}" disabled>
+								<a class="edit_title show" href="###"></a>
+								<a id="updateTitle" class="save_btn" href="###" >保存</a>
+								<a class="cancel_btn" href="###">取消</a>
+								
+							</div>
+							<div id="dec" class="dec show">
+								<textarea disabled pid="${(page.id)!}">${(page.described)!}</textarea>
+								<a class="edit_dec show" href="###"></a>
+								<a id="updateDescribe" class="save_btn" href="###">保存</a>
+								<a class="cancel_btn" href="###">取消</a>
+							</div>
+						</li>
+						</#list>
+						</#if>
+					</ul>
+					<!-- <div class="pagenav">
+						<a href="###">首页</a>
+						<a href="###">上一页</a>
+						<a class="cur" href="###">1</a>
+						<a href="###">2</a>
+						<a href="###">3</a>
+						<a href="###">4</a>
+						<a href="###">下一页</a>
+						<a href="###">末页</a>
+					</div> -->
+					<#include "/common/page.htm"/>
+				</div>
+			</div>
+		</div>
+	</div>
+	<#include "/common/footer.htm"/>
+	<script type="text/javascript">
+	//mark_left_menu
+	$('.menu .icon7').addClass('cur')
+			function gotoPage(page){
+				window.location.href = '/pic/myPicList.htm?currPage='+page;
+			}
+	</script>
+</body>
+</html>

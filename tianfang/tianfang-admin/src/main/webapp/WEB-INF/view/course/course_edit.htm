@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Form Elements - Ace Admin</title>
+		<meta name="description" content="Common form elements and layouts" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />		
+		<#include "../admin/head.htm"/>
+		<link href="${base}/static/css/course.css" rel="stylesheet" type="text/css" />
+		<link href="${base}/plugins/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
+		<!-- <script type="text/javascript" src="${base}/plugins/uploadify/jquery-1.3.2.min.js"></script> -->
+ 		<script type="text/javascript" src="${base}/plugins/uploadify/swfobject.js"></script>
+		<script type="text/javascript" src="${base}/plugins/uploadify/jquery.uploadify.v2.1.4.min.js"></script>	
+	</head>
+	<body>
+		<div class="container-fluid" id="main-container">
+			<div id="main-content" class="clearfix" style="margin-left:0px;">
+					<div id="page-content" class="clearfix">
+						<div class="row-fluid">
+							<!-- PAGE CONTENT BEGINS HERE -->
+							<form id="submitForm" class="form-horizontal" action="${base}/train/saveNew.do" method="POST">
+								<input type="hidden" id="microPic" name="microPic" value=""/>
+								<input type="hidden" id="video" name="video" value=""/>	
+								<input type="hidden" id="pic" name="pic" value=""/>	
+								<input type="hidden" id="id" name="id" value="${(trainingCourseReqDto.id)!}"/>	
+								<div class="control-group">
+									<div class="span4">
+										<label class="course_add_label" for="form-field-1">课程标题</label>
+										<div class="course_add_input">
+											<input type="text" name="name" style="width:200px;" id="form-field-1" value="${(trainingCourseReqDto.name)!}" placeholder="课程标题">
+										</div>
+									</div>
+									<div class="span3">
+										<label class="course_add_label" for="form-field-1">总课时</label>
+										<div class="course_add_input">
+												<input type="text" name="courseTime" style="width:100px;" id="form-field-1" value="${(trainingCourseReqDto.courseTime)!}"  placeholder="总课时">
+										</div>
+									</div>
+									<div class="span3">
+										<input class="span10 date-picker" name="startTime" id="createTimeS"  value="${(trainingCourseReqDto.startTime)!}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:100px;" placeholder="周期开始日期" title="开班周期"/>
+										<input class="span10 date-picker" name="endTime" id="createTimeE" value="${(trainingCourseReqDto.endTime)!}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:100px;" placeholder="周期结束日期">
+									</div> 
+									<div class="span2">			
+									 	<select class="" name="tagId" id="tagId" data-placeholder="标签" style="vertical-align:top;width: 100px;">
+										<option value="">课程标签</option>
+										<!-- <#if datas??>
+											<#list datas as page>
+												<option value="${(page.id)!}">${(page.tagName)!}</option>
+											</#list>
+										</#if>
+										<option value="">全部</option>  -->
+										<#if datas??> 
+											<#list datas as page> 
+											<#if trainingCourseReqDto.tagId == page.id>
+												<option selected value="${(page.id)!}">${(page.tagName)!}</option>
+											<#else>
+												<option value="${(page.id)!}">${(page.tagName)!}</option>
+											</#if> 
+											</#list> 
+										</#if>
+										</select>
+									    <!-- <div id="dropdown1" class="dropdown"  style="margin-left:0px;">
+									      <div class="btn-group">
+									      <a style="font-size:14px;" class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+									        选中option之后，要在这里显示选中值，类似原始select里面的文本框    
+									        <span class="placeholder">选择课程标签</span>
+									        <span class="caret"></span>
+									      </a>
+									      <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+									      <#if datas??>
+									      	<#list datas as page>
+									        	<li role="presentation" value="1"><a role="menuitem" tabindex="1" href="javascript:void(0);">${(page.tagName)!}</a></li>
+									        </#list>
+									      </#if>
+									      </ul>
+									      </div>
+									    </div> -->
+									</div>
+								</div>
+								<div class="control-group">
+									<div class="span3">
+										<label class="course_add_label" for="form-field-1">人数上限</label>
+										<div class="course_add_input">
+												<input type="text" name="maxStudent" style="width:80px;" id="form-field-1" value="${(trainingCourseReqDto.maxStudent)!}" placeholder="人数上限">
+										</div>
+									</div>
+									<div class="span3">		
+										<label class="course_add_label" style="margin-right:10px;" for="form-input-readonly">孩子姓名</label>
+										<div class="course_add_left" id="isneedCname">
+											<label class="span3">
+											<#if trainingCourseReqDto.isneedCname == 1> 
+												<input name="isneedCname" checked="checked" type="radio" value="1"/><span class="lbl">需要</span>
+												<#else>
+												<input name="isneedCname" type="radio" value="1"/><span class="lbl">需要</span>
+											</#if>
+											</label>
+											<label class="span4">
+											<#if trainingCourseReqDto.isneedCname == 0> 
+												<input name="isneedCname" checked="checked" type="radio" value="0"/><span class="lbl">不需要</span>
+												<#else>
+												<input name="isneedCname"  type="radio" value="0"/><span class="lbl">不需要</span>
+											</#if>
+											</label>
+										</div>
+									</div>
+									<div class="span3">	
+										<label class="course_add_label"  style="margin-right:10px;" for="form-input-readonly">首页显示</label>
+											<div class="course_add_left" id="marked">
+												<label class="span3">
+												<#if trainingCourseReqDto.marked == 1> 
+													<input name="marked" checked="checked" type="radio" value="1"/><span class="lbl">显示</span>
+													<#else>
+													<input name="marked"  type="radio" value="1"/><span class="lbl">显示</span>
+												</#if>
+												</label>
+												<label class="span4">
+												<#if trainingCourseReqDto.marked == 0> 
+													<input name="marked" checked="checked" type="radio" value="0"/><span class="lbl">不显示</span>
+													<#else>
+													<input name="marked"  type="radio" value="0"/><span class="lbl">不显示</span>
+												</#if>
+												</label>
+											</div>
+										</div>
+										<div class="span3">	
+										<label class="course_add_label" style="margin-right:10px;" for="form-input-readonly">开课</label>
+											<div class="course_add_left" id="isOpened">
+												<label class="span3">
+												<#if trainingCourseReqDto.isOpened == 1> 
+													<input name="isOpened" checked="checked" type="radio" value="1"/><span class="lbl">开</span>
+													<#else>
+													<input name="isOpened" type="radio" value="1"/><span class="lbl">开</span>
+												</#if>
+												</label>
+												<label class="span3">
+												<#if trainingCourseReqDto.isOpened == 0> 
+													<input name="isOpened" checked="checked" type="radio" value="0"/><span class="lbl">不开</span>
+													<#else>
+													<input name="isOpened" type="radio" value="0"/><span class="lbl">不开</span>
+												</#if>
+												</label>
+											</div>
+										</div>	
+								</div>								
+								<div class="control-group">
+									<label class="course_add_label" for="form-field-5">装备</label>
+									<div class="course_add_input">
+										<textarea name="equip" class="span12" id="form-field-8"  placeholder="装备">${(trainingCourseReqDto.equip)!}</textarea>
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="course_add_label" for="form-field-2">缩略图</label>
+									<div class="course_add_input">
+										<input name="microPic" multiple type="file" id="id-input-file-3"/>
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="course_add_label" for="form-field-2">课程图</label>
+									<div class="course_add_input">
+										<input name="pic" multiple type="file" id="id-input-file-4"/>
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="course_add_label" for="form-field-4">课程视频</label>
+									<div class="course_add_input">
+										<input name="video" type="file" name="uploadify" id="id-input-file"/>
+									</div>
+								</div>
+								
+								<!-- <div class="control-group">
+									<label class="control-label" for="form-field-5">摘要内容</label>
+									<div class="controls">
+										<textarea name="subtract" class="span12" id="form-field-8" placeholder="摘要内容"></textarea>
+									</div>
+								</div> -->
+								
+								<div class="control-group">
+									<label class="course_add_label">介绍</label>
+									<div class="course_add_input">
+										<script id="editor" name="description" type="text/plain" style="width:769px;height:300px;">${(trainingCourseReqDto.description)!}</script>
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="course_add_label" for="form-field-1">场地</label>
+									<input name="jsonClasss" id="jsonClasss" type="hidden"/>
+									<div class="course_add_input">
+									<a id="addPlace" class="btn btn-small btn-success">添加场地</a>
+									<a class="btn btn-small btn-danger" title="批量删除" id="delPlace"><i class="icon-trash"></i></a>
+										<table class="table table-bordered">
+											 <thead>
+										        <tr>
+										          <th><label><input
+												id="check-all" type='checkbox' /><span
+												class="lbl"></span></label></th>
+										          <th>场地名称</th>
+										          <th>周几</th>
+										          <th>开始时间</th>
+										          <th>结束时间</th>
+										          <th>单价</th>
+										          <th>定金</th>
+										          <th>折扣</th>
+										          <th>开班时间</th>
+										        </tr>
+										     </thead>
+										      <tbody id="item-body">
+										      <#if courseClassReqDtos??> 
+											      <#list courseClassReqDtos as courseClassReqDto>
+											      	<#if courseClassReqDto??>
+												      <tr>
+												          <th scope="row">
+												          <label><input name="checkBoxId" timeDistrictId="${(courseClassReqDto.timeDistrictId)!}" addressId="${(courseClassReqDto.addressId)!}" price="${(courseClassReqDto.price)!}" deposit="${(courseClassReqDto.deposit)!}" discount="${(courseClassReqDto.discount)!}" openDate="${(courseClassReqDto.openDate)!}"type="checkbox" /><span class="lbl"></span></label></th>
+												          <td>${(courseClassReqDto.place)!}</td>
+												          <td>${(courseClassReqDto.dayOfWeek)!}</td>
+												          <td>${(courseClassReqDto.startTime)!}</td>
+												          <td>${(courseClassReqDto.endTime)!}</td>
+												          <td>${(courseClassReqDto.price)!}</td>
+												          <td>${(courseClassReqDto.deposit)!}</td>
+												          <td>${(courseClassReqDto.discount)!}</td>
+												          <td>${(courseClassReqDto.openDate)!}</td>
+												        </tr>
+												     </#if>
+											      </#list> 
+										      </#if>
+										      </tbody>
+										</table>
+									</div>
+								</div>
+								<div class="form-actions">
+									<button id='savebutton' class="btn btn-info" type="button"><i class="icon-ok"></i>保存</button>
+									&nbsp; &nbsp; &nbsp;
+									<button id='cancel-button' class="btn" type="reset"><i class="icon-undo"></i>关闭</button>
+								</div>
+							 </form>
+							<!-- PAGE CONTENT ENDS HERE -->
+						 </div><!--/row-->
+					</div><!--/#page-content-->
+			</div><!-- #main-content -->
+		</div><!--/.fluid-container#main-container-->
+		<a href="#" id="btn-scroll-up" class="btn btn-small btn-inverse">
+			<i class="icon-double-angle-up icon-only"></i>
+		</a>
+		<!-- basic scripts -->
+		<!-- <script src="${base}/static/1.9.1/jquery.min.js"></script> -->
+		<script type="text/javascript">
+		window.jQuery || document.write("<script src='${base}/static/js/jquery-1.9.1.min.js'>\x3C/script>");
+		</script>
+		
+		<script src="${base}/static/js/bootstrap.min.js"></script>
+		<!-- page specific plugin scripts -->
+		
+		<!--[if lt IE 9]>
+		<script type="text/javascript" src="${base}/static/js/excanvas.min.js"></script>
+		<![endif]-->
+		<script type="text/javascript" src="${base}/static/js/jquery-ui-1.10.2.custom.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/jquery.ui.touch-punch.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/chosen.jquery.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/fuelux.spinner.js"></script>
+		<script type="text/javascript" src="${base}/static/js/bootstrap-datepicker.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/bootstrap-timepicker.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/date.js"></script>
+		<script type="text/javascript" src="${base}/static/js/daterangepicker.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/bootstrap-colorpicker.min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/jquery.autosize-min.js"></script>
+		<script type="text/javascript" src="${base}/static/js/jquery.inputlimiter.1.3.1.min.js"></script>
+		<!-- ace scripts -->
+		<script src="${base}/static/js/ace-elements.min.js"></script>
+		<script src="${base}/static/js/ace.min.js"></script>
+		<!-- inline scripts related to this page -->
+
+	<link href="${base}/plugins/umeditor1.2.2/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" charset="utf-8" src="${base}/plugins/umeditor1.2.2/umeditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="${base}/plugins/umeditor1.2.2/umeditor.min.js"> </script>
+    <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+    <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+    <script type="text/javascript" charset="utf-8" src="${base}/plugins/umeditor1.2.2/lang/zh-cn/zh-cn.js"></script>	
+    
+ 	<script type="text/javascript" src="${base}/static/js/chosen.jquery.min.js"></script><!-- 下拉框 -->
+		
+		<!-- layer 弹出框处理 -->
+		<script type="text/javascript" src="${base}/plugins/layer2.0/layer.js"></script>
+		<script type="text/javascript">
+		function customDropDown(ele){
+            this.dropdown=ele;
+            this.placeholder=this.dropdown.find(".placeholder");
+            this.options=this.dropdown.find("ul.dropdown-menu > li");
+            this.val='';
+            this.index=-1;//默认为-1;
+            this.initEvents();
+        }
+        customDropDown.prototype={
+            initEvents:function(){
+                var obj=this;
+                //这个方法可以不写，因为点击事件被Bootstrap本身就捕获了，显示下面下拉列表
+                obj.dropdown.on("click",function(event){
+                    $(this).toggleClass("active");
+                });
+                
+                //点击下拉列表的选项
+                obj.options.on("click",function(){
+                    var opt=$(this);
+                    obj.text=opt.find("a").text();
+                    obj.val=opt.attr("value");
+                    obj.index=opt.index();
+                    obj.placeholder.text(obj.text);
+                });
+            },
+            getText:function(){
+                return this.text;
+            },
+            getValue:function(){
+                return this.val;
+            },
+            getIndex:function(){
+                return this.index;
+            }
+        }
+        $(document).ready(function(){
+            
+        });
+        var um = UM.getEditor('editor');
+		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+		$(function() {
+			var mydropdown=new customDropDown($("#dropdown1"));
+			$('#menu').dropdown('toggle')  
+			//日期框
+			$('.date-picker').datepicker();	
+			$("#id-input-file").uploadify({
+	            'uploader': '${base}/plugins/uploadify/uploadify.swf',
+	            'script':"${base}/file/upload.htm;jsessionid=${sessionId!}",
+	            'cancelImg': '${base}/plugins/uploadify/cancel.png',
+	            'queueID': 'fileQueue',
+	            'auto': true,
+	            'buttonText': 'select',
+	            'simUploadLimit' : 1,
+	            'queueSizeLimit' : 1,
+	            'sizeLimit':1024*1024*10,
+	            'fileDesc' : 'video',
+	            'fileExt': '*.flv',//格式*.gif,*.png
+	            onComplete: function(event, queueID, fileObj, response, data) {
+	                var dataObj = eval("("+response+")");
+	                if(dataObj.status == 200){
+	                	parent.layer.msg('上传成功', {
+							shade: [0.9, '#000'],
+						    icon: 6,
+						    time: 800 //2秒关闭（如果不配置，默认是3秒）
+						}, function(){
+							$("#video").val(dataObj.filePath);						
+						});	
+	                } else {
+	                	layer.alert("对不起," + fileObj.name + "上传失败!<br/>请选择小于10M的flv格式的视频文件", {
+		    				shade: [0.9, '#000'],
+		    			    icon: 3,
+		    			    time: 3000 //2秒关闭（如果不配置，默认是3秒）
+		    			}); 
+	                }
+					
+	            },
+	            onSelect:function(){
+	            },
+	            onError: function(event, queueID, fileObj) {
+	            	layer.alert("对不起," + fileObj.name + "上传失败!<br/>请选择小于10M的flv格式的视频文件", {
+	    				shade: [0.9, '#000'],
+	    			    icon: 3,
+	    			    time: 3000 //2秒关闭（如果不配置，默认是3秒）
+	    			}); 
+	            }
+	        });			
+			//关闭iframe
+			$('#cancel-button').click(function(){
+				parent.layer.close(index);
+			});
+			$("#form-radio-show label input").on('click',function(){
+				$("#marked").val($(this).val());
+			});
+			$("#form-radio-shows label input").on('click',function(){
+				$("#markeds").val($(this).val());
+			});
+			$("#form-radio-showa label input").on('click',function(){
+				$("#markeda").val($(this).val());
+			});
+			
+			$("#savebutton").on('click',function(){
+				if (null == $("[name=name]").val() || '' == $("[name=name]").val()) {
+					layer.alert('课程标题不能为空~', { icon: 7 });
+					return;
+				}
+				if (null == $("[name=courseTime]").val() || '' == $("[name=courseTime]").val()) {
+					layer.alert('总课时不能为空~', { icon: 7 });
+					return;
+				}
+				if (null == $("[name=startTime]").val() || '' == $("[name=startTime]").val()) {
+					layer.alert('周期开始日期不能为空~', { icon: 7 });
+					return;
+				}
+				if (null == $("[name=endTime]").val() || '' == $("[name=endTime]").val()) {
+					layer.alert('周期结束日期不能为空~', { icon: 7 });
+					return;
+				}
+				if (null == $("[name=tagId]").val() || '' == $("[name=tagId]").val()) {
+					layer.alert('课程标签不能为空~', { icon: 7 });
+					return;
+				}
+				if (null == $("[name=maxStudent]").val() || '' == $("[name=maxStudent]").val()) {
+					layer.alert('人数上限不能为空~', { icon: 7 });
+					return;
+				}
+				if (null == $("[name=equip]").val() || '' == $("[name=equip]").val()) {
+					layer.alert('装备不能为空~', { icon: 7 });
+					return;
+				}
+				//var um = UM.getEditor('editor');
+				var content = UM.getEditor('editor').getContent();
+				var micro_pic = $("#id-input-file-3").parent().find("img:first").css("background-image");
+				var pic = $("#id-input-file-4").parent().find("img:first").css("background-image");
+				$("#description").val(content);
+				$("#microPic").val(micro_pic);
+				$("#pic").val(pic);				
+				var ajaxParams = $("#submitForm").serialize();
+				var maxStudent = $("input[name=maxStudent]").val();
+				var $chk = $("[name = checkBoxId]:checkbox").filter(":checked");
+	            if ($chk.length > 0){
+	            	var	jsonClasss = '[';
+				    	var i = 0;
+				    	var len = $chk.length;
+				    	$chk.each(function(){
+					    	var timeDistrictId = $(this).attr("timeDistrictId");
+					    	var addressId = $(this).attr("addressId");
+					    	var price = $(this).attr("price");
+					    	var deposit = $(this).attr("deposit");
+					    	var discount = $(this).attr("discount");
+					    	var openDate = $(this).attr("openDate");
+					    	if (i < len-1 ){
+					    		jsonClasss += '{\"timeDistrictId\":\"' + timeDistrictId + '\",' +
+	                             '\"addressId\":\"' + addressId  + '\",' + '\"price\":\"' + price  + '\",' + '\"deposit\":\"' + deposit  + '\",' + '\"discount\":\"' + discount  + '\",' + '\"openDate\":\"' + openDate  + '\",' + '\"maxStudent\":\"' + maxStudent  + '\"},';
+					    	}else{
+					    		jsonClasss += '{\"timeDistrictId\":\"' + timeDistrictId + '\",' +
+	                             '\"addressId\":\"' + addressId  + '\",' + '\"price\":\"' + price  + '\",' + '\"deposit\":\"' + deposit  + '\",' + '\"discount\":\"' + discount  + '\",' + '\"openDate\":\"' + openDate  + '\",' + '\"maxStudent\":\"' + maxStudent  + '\"}';
+					    	}
+					    });
+	                 jsonClasss += ']';
+				    
+				    $("#jsonClasss").val(jsonClasss);
+				    
+				    $.ajax({
+						type : "POST",
+						url : "${base}/course/edit.do",
+						data : ajaxParams,
+						datatype : "json",// "xml", "html", "script", "json", "jsonp", "text".
+						beforeSend : function() {
+							$("#msg").html("logining");
+						},
+						success : function(data) {// 成功返回之后调用的函数
+							var jsondata = data;// eval('(' + data + ')');
+							if(data.success){
+								parent.layer.msg('编辑成功', {
+									shade: [0.9, '#000'],
+								    icon: 6,
+								    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+								}, function(){
+									parent.reload_page();
+									var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+									parent.layer.close(index);
+								}); 							
+							}else{
+								parent.layer.msg('编辑出错', {
+									shade: [0.9, '#000'],
+								    icon: 6,
+								    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+								}, function(){
+								}); 	
+							}
+							//console.log(data.success);
+						},
+						complete : function(XMLHttpRequest, textStatus) {// 调用执行后调用的函数
+							
+						},
+						error : function() {// 调用出错执行的函数
+						}
+					});
+	            }else {
+	            	layer.confirm('确定不选择场地新建课程?', {icon: 7, title:'提示'}, function(index){
+	            		$.ajax({
+						type : "POST",
+						url : "${base}/course/edit.do",
+						data : ajaxParams,
+						datatype : "json",// "xml", "html", "script", "json", "jsonp", "text".
+						beforeSend : function() {
+							$("#msg").html("logining");
+						},
+						success : function(data) {// 成功返回之后调用的函数
+							var jsondata = data;// eval('(' + data + ')');
+							if(data.success){
+								parent.layer.msg('编辑成功', {
+									shade: [0.9, '#000'],
+								    icon: 6,
+								    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+								}, function(){
+									parent.reload_page();
+									var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+									parent.layer.close(index);
+								}); 							
+							}else{
+								parent.layer.msg('编辑出错', {
+									shade: [0.9, '#000'],
+								    icon: 6,
+								    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+								}, function(){
+								}); 	
+							}
+							//console.log(data.success);
+						},
+						complete : function(XMLHttpRequest, textStatus) {// 调用执行后调用的函数
+							
+						},
+						error : function() {// 调用出错执行的函数
+						}
+					});
+	            		return;
+	            	},function(index){
+					    return;
+					})
+	            }
+				
+				
+				
+			});
+				
+			$("#addPlace").on('click',function(){
+				//iframe层-父子操作
+				layer.open({
+				    type: 2,
+				    area: ['600px', '500px'],
+				    fix: false, //不固定
+				    maxmin: true,
+				    content: '${base}/course/addPlace.do?startTime='+$("[name=startTime]").val()+'&endTime='+$("[name=endTime]").val()
+				});
+			});
+			
+			// 删除场地
+			$("#delPlace").on("click",function(){
+				var $chk = $("[name = checkBoxId]:checkbox").filter(":checked");
+				var count = $chk.length;
+				if (count > 0){
+					//信息框-例2
+					layer.confirm('你确定删除场地吗？', {icon: 3}, function(index){
+					    layer.close(index);
+					    $chk.each(function() {
+					    	var tr = $(this).parent().parent().parent();
+					    	tr.remove();
+					    });
+					    $chk = $("[name = checkBoxId]:checkbox").filter(":checked");
+					    if ($chk.length == 0){
+					    	$("#check-all").attr("checked", false);
+					    }
+					});
+				}
+			});
+			
+			$('#id-input-file-1 , #id-input-file-2').ace_file_input({
+				no_file:'No File ...',
+				btn_choose:'Choose',
+				btn_change:'Change',
+				droppable:false,
+				onchange:null,
+				thumbnail:false //| true | large
+				//whitelist:'gif|png|jpg|jpeg'
+				//blacklist:'exe|php'
+				//onchange:''
+				//
+			});
+			
+			$('#id-input-file-3').ace_file_input({
+				style:'well',
+				btn_choose:'点击上传图片文件',
+				btn_change:null,
+				no_icon:'icon-cloud-upload',
+				droppable:true,
+				onchange:null,
+				thumbnail:'small',
+				before_change:function(files, dropped) {
+					//console.log(files);
+					//console.log(dropped);
+					/**
+					if(files instanceof Array || (!!window.FileList && files instanceof FileList)) {
+						//check each file and see if it is valid, if not return false or make a new array, add the valid files to it and return the array
+						//note: if files have not been dropped, this does not change the internal value of the file input element, as it is set by the browser, and further file uploading and handling should be done via ajax, etc, otherwise all selected files will be sent to server
+						//example:
+						var result = []
+						for(var i = 0; i < files.length; i++) {
+							var file = files[i];
+							if((/^image\//i).test(file.type) && file.size < 102400)
+								result.push(file);
+						}
+						return result;
+					}
+					*/
+					return true;
+				}
+				/*,
+				before_remove : function() {
+					return true;
+				}*/
+			}).on('change', function(){
+				//console.log($(this).data('ace_input_files'));
+				//console.log($(this).data('ace_input_files'));
+				//console.log($(this).data('ace_input_method'));
+			});
+			$('#id-input-file-4').ace_file_input({
+				style:'well',
+				btn_choose:'点击上传图片文件',
+				btn_change:null,
+				no_icon:'icon-cloud-upload',
+				droppable:true,
+				onchange:null,
+				thumbnail:'small',
+				before_change:function(files, dropped) {
+					//console.log(files);
+					//console.log(dropped);
+					/**
+					if(files instanceof Array || (!!window.FileList && files instanceof FileList)) {
+						//check each file and see if it is valid, if not return false or make a new array, add the valid files to it and return the array
+						//note: if files have not been dropped, this does not change the internal value of the file input element, as it is set by the browser, and further file uploading and handling should be done via ajax, etc, otherwise all selected files will be sent to server
+						//example:
+						var result = []
+						for(var i = 0; i < files.length; i++) {
+							var file = files[i];
+							if((/^image\//i).test(file.type) && file.size < 102400)
+								result.push(file);
+						}
+						return result;
+					}
+					*/
+					return true;
+				}
+				/*,
+				before_remove : function() {
+					return true;
+				}*/
+			}).on('change', function(){
+				//console.log($(this).data('ace_input_files'));
+				//console.log($(this).data('ace_input_files'));
+				//console.log($(this).data('ace_input_method'));
+			});
+			
+		});
+		
+		</script>
+	</body>
+</html>

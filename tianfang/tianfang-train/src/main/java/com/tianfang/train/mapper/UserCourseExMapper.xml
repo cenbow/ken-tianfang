@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianfang.train.mapper.UserCourseExMapper">
+	<select id="findApplyByPage" resultType="com.tianfang.train.dto.TrainApplyDto" parameterType="com.tianfang.train.dto.TrainApplyDto">
+	   SELECT b.name as courseName,c.place as spaceName,a.id,a.open_id as openId,a.user_id as userId,a.course_id as courseId,a.class_id as classId,a.used_time as usedTime,a.left_time as leftTime,a.apply_time as applyTime,a.description,a.toto_fee as totoFee,a.is_payed as isPayed,a.create_time as createTime,a.update_time as updateTime,a.deposit_ispayed as depositIspayed,a.mobile,a.course_name as courseName,a.pname,a.utype,a.cname,a.birthday,a.origin_school as originSchool,a.space_name as spaceName,a.order_no as orderNo,a.trade_no as tradeNo,a.status,a.day_of_week as dayOfWeek,a.space_id as spaceId, a.start_time as startTime,a.end_time as endTime FROM training_user_course a 
+	   LEFT JOIN training_course b ON a.course_id = b.id 
+	   LEFT JOIN training_address c on a.space_id = c.id  
+	   WHERE a.status =1 
+       <include refid="where_user_1"/> 
+      <!--  ORDER BY a.create_time desc  -->
+       limit  #{page.startNum}, #{page.pageSize}
+	</select>
+	
+	<sql id="where_user_1">
+		<if test="trainApplyDto.pname != null and trainApplyDto.pname != ''">
+			and a.pname like "%"#{trainApplyDto.pname}"%"
+		</if>
+		<if test="trainApplyDto.mobile != null and trainApplyDto.mobile != ''">
+			and a.mobile like "%"#{trainApplyDto.mobile}"%"
+		</if>
+		<if test="trainApplyDto.courseName != null and trainApplyDto.courseName != ''">
+			and b.name like "%"#{trainApplyDto.courseName}"%"
+		</if>
+		<if test="trainApplyDto.courseId != null and trainApplyDto.courseId != ''">
+			and b.id = #{trainApplyDto.courseId}
+		</if>
+		<if test="trainApplyDto.cname != null and trainApplyDto.cname != ''">
+			and a.cname like "%"#{trainApplyDto.cname}"%"
+		</if>
+		<if test="trainApplyDto.spaceName != null and trainApplyDto.spaceName != ''">
+			and c.place like "%"#{trainApplyDto.spaceName}"%"
+		</if>
+		<if test="trainApplyDto.spaceId != null and trainApplyDto.spaceId != ''">
+			and c.id = #{trainApplyDto.spaceId}
+		</if>
+		<if test="trainApplyDto.isPayed != null">
+			and a.is_payed = #{trainApplyDto.isPayed}
+		</if>
+		<if test="trainApplyDto.depositIspayed != null">
+			and a.deposit_ispayed = #{trainApplyDto.depositIspayed}
+		</if>
+		<if test="trainApplyDto.startTimeLong != null and trainApplyDto.startTimeLong != 0">
+	    <![CDATA[   and  apply_time >= #{trainApplyDto.startTimeLong}   ]]>
+	    </if>
+	    <if test="trainApplyDto.endTimeLong!=null and trainApplyDto.endTimeLong!=0">
+	    <![CDATA[ and  apply_time  <=  #{trainApplyDto.endTimeLong}    ]]>
+	    </if>
+	</sql>
+	<select id="countApply" resultType="java.lang.Long" parameterType="com.tianfang.train.dto.TrainApplyDto">
+			   SELECT count(*)  FROM training_user_course a 
+			   LEFT JOIN training_course b ON a.course_id = b.id 
+			   LEFT JOIN training_address c on a.space_id = c.id  
+			   WHERE a.status=1 
+		       <include refid="where_user_1"/>
+		      <!--  ORDER BY a.create_time desc  -->
+	</select>
+</mapper> 

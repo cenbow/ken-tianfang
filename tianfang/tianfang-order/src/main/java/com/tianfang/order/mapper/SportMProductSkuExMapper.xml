@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tianfang.order.mapper.SportMProductSkuExMapper" >
+	
+	<select id="selectProductSkuByPage" resultType="com.tianfang.order.dto.SportMProductSkuDto" parameterType="com.tianfang.order.dto.SportMProductSkuDto">
+	   SELECT a.id,a.product_id as productId,b.product_name as productName,b.brand_id as brandId,b.category_id as categoryId,
+	   b.type_id as typeId,a.product_price as productPrice,a.product_market_price as productMarketPrice,a.product_cost_price as productCostPrice,
+	   h.spec_id as specId, i.spec_values_id as specValuesId,a.spec_value as specValue, a.product_status as productStatus, a.product_stock as productStock, c.brand_name as brandName,
+	   d.category_name as categoryName, e.type_name as typeName, a.spec_name as specName,
+	   a.last_update_time as lastUpdateTime,a.create_time as createTime,a.stat
+	   FROM sport_m_product_sku a 
+	   LEFT JOIN sport_m_product_spu b on a.product_id = b.id  
+	   LEFT JOIN sport_m_product_spec h on a.id = h.product_sku_id 
+	   LEFT JOIN sport_m_product_spec_values i on a.id = i.product_sku_id   
+	   LEFT JOIN sport_m_brand c on b.brand_id = c.id
+	   LEFT JOIN sport_m_category d on b.category_id = d.id
+	   LEFT JOIN sport_m_type e on b.type_id = e.id
+	   LEFT JOIN sport_m_spec f on h.spec_id = f.id
+	   LEFT JOIN sport_m_spec_values g on i.spec_values_id = g.id
+	   WHERE a.stat =1 and b.stat = 1 and c.stat=1 and d.stat=1 and e.stat=1 and f.stat=1 and g.stat=1 and h.stat=1 and i.stat=1
+	   <include refid="where_productsku_bypage" />
+	   GROUP BY h.product_sku_id
+	   ORDER BY a.create_time desc	 
+       limit  #{page.startNum}, #{page.pageSize}
+	</select>	
+	
+	<sql id="where_productsku_bypage">		
+		<if test="sportMProductSkuDto.productName != null and sportMProductSkuDto.productName != ''">
+			and b.product_name like "%"#{sportMProductSkuDto.productName}"%"
+	   </if>
+	   <if test="sportMProductSkuDto.brandName != null and sportMProductSkuDto.brandName != ''">
+			and c.brand_name like #{sportMProductSkuDto.brandName}
+	   </if>
+	   <if test="sportMProductSkuDto.categoryName != null and sportMProductSkuDto.categoryName != ''">
+			and d.category_name like #{sportMProductSkuDto.categoryName}
+	   </if>
+	   <if test="sportMProductSkuDto.typeName != null and sportMProductSkuDto.typeName != ''">
+			and e.type_name like #{sportMProductSkuDto.typeName}
+	   </if>
+	   <if test="sportMProductSkuDto.productStatus != null and sportMProductSkuDto.productStatus != ''">
+			and a.product_status = #{sportMProductSkuDto.productStatus}
+	   </if>
+	</sql>
+	
+	
+	<select id="selectOrderBySpu" resultType="com.tianfang.order.dto.SportMOrderInfoDto" parameterType="java.lang.String">
+	   SELECT b.id,e.product_name as skuName,b.number,d.nick_name as nickName,b.create_time as createTime
+	   FROM sport_m_product_sku a 
+	   LEFT JOIN sport_m_product_spu e on a.product_id = e.id 
+	   LEFT JOIN sport_m_order_info b on a.id = b.product_sku_id 
+	   LEFT JOIN sport_m_order c on b.order_id = c.id  
+	   LEFT JOIN sport_user d on c.user_id = d.id 
+	   WHERE a.stat =1 and b.stat = 1 and c.stat = 1 and e.stat = 1 
+	   and b.order_status = 1
+	   <if test="productId != null and productId !='' ">
+	   		and a.product_id = #{productId}
+	   </if>	   
+	   ORDER BY a.create_time desc
+       limit  #{page.startNum}, #{page.pageSize}
+	</select>
+	
+	<select id="selectOrderBySpuCount" resultType="java.lang.Long" parameterType="java.lang.String">
+	   SELECT COUNT(*)
+	   FROM sport_m_product_sku a 
+	   LEFT JOIN sport_m_product_spu e on a.product_id = e.id 
+	   LEFT JOIN sport_m_order_info b on a.id = b.product_sku_id 
+	   LEFT JOIN sport_m_order c on b.order_id = c.id  
+	   LEFT JOIN sport_user d on c.user_id = d.id 
+	   WHERE a.stat =1 and b.stat = 1 and c.stat = 1 and e.stat = 1
+	   <if test="productId != null and productId !='' ">
+	   		and a.product_id = #{productId}
+	   </if>	   
+	</select>
+	
+	<select id="selectEvaluate" resultType="com.tianfang.order.dto.SportMEvaluateDto" parameterType="com.tianfang.order.dto.SportMEvaluateDto">
+	   SELECT b.id,b.star,b.evaluate_status as evaluateStatus,b.user_id as userId,b.evaluate_content as evaluateContent,c.nick_name as nickName,b.pic,
+	   c.pic as userPic,b.create_time as createTime,b.last_update_time as lastUpdateTime,b.stat
+	   FROM sport_m_product_sku a 
+	   LEFT JOIN sport_m_evaluate b on a.id = b.product_sku_id 
+	   LEFT JOIN sport_user c on b.user_id = c.id 
+	   WHERE a.stat =1 and b.stat = 1 and c.stat = 1
+	   <if test="sportMEvaluateDto.productSkuId != null and sportMEvaluateDto.productSkuId !='' ">
+	   		and a.product_id = #{sportMEvaluateDto.productSkuId}
+	   </if>	 
+	    <if test="sportMEvaluateDto.evaluateStatus != null and sportMEvaluateDto.evaluateStatus !='' ">
+	   		and b.evaluate_status = #{sportMEvaluateDto.evaluateStatus}
+	   </if>  
+	   <if test="sportMEvaluateDto.pic != null and sportMEvaluateDto.pic !='' ">
+	   		and b.pic is not null
+	   </if>
+	   ORDER BY a.create_time desc
+       limit  #{page.startNum}, #{page.pageSize}
+	</select>
+	
+	<select id="selectEvaluateCount" resultType="java.lang.Long" parameterType="com.tianfang.order.dto.SportMEvaluateDto">
+	   SELECT  COUNT(*)
+	   FROM sport_m_product_sku a 
+	   LEFT JOIN sport_m_evaluate b on a.id = b.product_sku_id 
+	   LEFT JOIN sport_user c on b.user_id = c.id 
+	   WHERE a.stat =1 and b.stat = 1 and c.stat = 1
+	   <if test="sportMEvaluateDto.productSkuId != null and sportMEvaluateDto.productSkuId !='' ">
+	   		and a.product_id = #{sportMEvaluateDto.productSkuId}
+	   </if>	 
+	    <if test="sportMEvaluateDto.evaluateStatus != null and sportMEvaluateDto.evaluateStatus !='' ">
+	   		and b.evaluate_status = #{sportMEvaluateDto.evaluateStatus}
+	   </if>  
+	   <if test="sportMEvaluateDto.pic != null and sportMEvaluateDto.pic !='' ">
+	   		and b.pic is not null
+	   </if>
+	</select>
+	
+	<select id="selectSkuSpecValues" resultType="com.tianfang.order.dto.SportMProductSkuSpecValuesDto" parameterType="String">
+		SELECT a.id as productSkuId,b.spec_id as specId,c.spec_name as specName,d.spec_values_id as specValuesId,e.spec_value as specValue
+		FROM sport_m_product_sku a
+		LEFt JOIN sport_m_product_spec b on a.id = b.product_sku_id 
+		LEFT JOIN sport_m_spec c on b.spec_id = c.id
+	    LEFT JOIN sport_m_product_spec_values d on a.id = d.product_sku_id   
+	    LEFT JOIN sport_m_spec_values e on d.spec_values_id = e.id
+	    WHERE a.stat =1 and b.stat = 1 and c.stat=1 and d.stat=1 and e.stat=1
+	    and a.id = #{productSkuId}
+	</select>
+	
+	<select id="selectSkuSpecGroup" resultType="com.tianfang.order.dto.SportMProductSpecDto" parameterType="String">
+		SELECT a.id,a.product_sku_id as productSkuId,a.spec_id as specId,a.create_time as createTime,a.last_update_time as lastUpdateTime,a.stat
+		FROM sport_m_product_spec a
+		WHERE a.stat = 1 and a.product_sku_id = #{productSkuId}
+		<!--GROUP BY a.product_sku_id-->
+	</select>
+	
+	<select id="selectSkuSpecValuesGroup" resultType="com.tianfang.order.dto.SportMProductSpecValuesDto" parameterType="String">
+		SELECT a.id,a.product_sku_id as productSkuId,a.spec_values_id as specValuesId,a.create_time as createTime,a.last_update_time as lastUpdateTime,a.stat 
+		FROM sport_m_product_spec_values a 
+		WHERE a.stat = 1 and a.product_sku_id = #{productSkuId}
+		<!--GROUP BY a.product_sku_id -->
+	</select>
+</mapper>
