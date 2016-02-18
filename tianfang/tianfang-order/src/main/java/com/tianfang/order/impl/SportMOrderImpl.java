@@ -159,7 +159,7 @@ public class SportMOrderImpl implements ISportMOrderService{
 					SportMProductSku m_sku = sportMProductSkuDao.selectByPrimaryKey(skuId[i]);
 					SportMProductSpu m_spu = sportMProductSpuDao.selectByPrimaryKey(m_sku.getProductId());
 					SportMOrderInfo orderInfo = new SportMOrderInfo();
-					orderInfo.setOrderInfoNo((new Random().nextInt(900)+100)+System.currentTimeMillis()+"");
+					orderInfo.setOrderInfoNo((new Random().nextInt(900)+100)+""+System.currentTimeMillis()+"");
 					orderInfo.setOrderStatus(OrderStatus.WaitingForPay.getValue());
 					orderInfo.setProductSkuId(skuId[i]);
 					orderInfo.setNumber(Integer.valueOf(number[i]));
