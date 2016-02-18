@@ -35,7 +35,7 @@ public class CompanyController extends BaseController {
 	private final static int PAGE_SIZE = 5;
 	
 	@Autowired
-	private CompanyRelatedService companyService;
+	private CompanyRelatedService companyService; 
 	@Autowired
 	private ISportCompanyEventService eventService;
 	
