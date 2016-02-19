@@ -71,5 +71,9 @@ public class SportMOrderInfoDto implements Serializable {
 	@Getter
 	@Setter
 	private String createTimeStr;
+	
+	@Getter
+	@Setter
+	private Integer evaluateStat;
 
 }
