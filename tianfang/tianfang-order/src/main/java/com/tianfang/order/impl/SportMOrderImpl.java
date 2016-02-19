@@ -16,14 +16,17 @@ import com.tianfang.common.util.BeanUtils;
 import com.tianfang.common.util.StringUtils;
 import com.tianfang.order.constants.OrderStatus;
 import com.tianfang.order.constants.PaymentStatus;
+import com.tianfang.order.dao.SportMEvaluateDao;
 import com.tianfang.order.dao.SportMOrderDao;
 import com.tianfang.order.dao.SportMOrderInfoDao;
 import com.tianfang.order.dao.SportMProductSkuDao;
 import com.tianfang.order.dao.SportMProductSpuDao;
+import com.tianfang.order.dto.SportMEvaluateDto;
 import com.tianfang.order.dto.SportMOrderDto;
 import com.tianfang.order.dto.SportMOrderInfoDto;
 import com.tianfang.order.dto.SportMOrderToolsDto;
 import com.tianfang.order.dto.SportMUserOrderDto;
+import com.tianfang.order.pojo.SportMEvaluate;
 import com.tianfang.order.pojo.SportMOrder;
 import com.tianfang.order.pojo.SportMOrderInfo;
 import com.tianfang.order.pojo.SportMProductSku;
@@ -49,6 +52,9 @@ public class SportMOrderImpl implements ISportMOrderService{
 	
 	@Autowired
 	private SportUserDao sportUserDao;
+	
+	@Autowired
+	private SportMEvaluateDao SportMEvaluateDao;
 
 	@Override
 	public long save(SportMOrderDto sportMOrderDto) {
@@ -108,6 +114,16 @@ public class SportMOrderImpl implements ISportMOrderService{
 			List<SportMOrderInfoDto> sportmOrderInfoDtos = new ArrayList<SportMOrderInfoDto>();
 			for (SportMOrderInfoDto sportMOrderInfoDto: sportMOrderInfoDtos) {
 				if (sportMUserOrderDto.getId().equals(sportMOrderInfoDto.getOrderId())) {
+					SportMEvaluateDto sportMEvaluateDto = new SportMEvaluateDto();
+					sportMEvaluateDto.setUserId(userId);
+					sportMEvaluateDto.setProductOrderInfoId(sportMOrderInfoDto.getId());
+					List<SportMEvaluate> sportMEvaluates = SportMEvaluateDao.getAllEvaluate(sportMEvaluateDto);
+					if (sportMEvaluates.size()>0) {
+						sportMOrderInfoDto.setEvaluateStat(DataStatus.ENABLED);
+					}
+					else {
+						sportMOrderInfoDto.setEvaluateStat(DataStatus.DISABLED);
+					}
 					sportmOrderInfoDtos.add(sportMOrderInfoDto);
 				}				
 			}
