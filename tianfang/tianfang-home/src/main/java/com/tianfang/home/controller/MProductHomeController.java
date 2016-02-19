@@ -201,12 +201,15 @@ public class MProductHomeController extends BaseController {
 			if(car.getIds().equals(shopping.getIds()) && car.getSkuId().equals(shopping.getSkuId()) ){
 				car.setId(shopping.getId());
 				SportMShoppingCartDto shop = (SportMShoppingCartDto) map.get(entry.getKey());
+			/*	System.out.println("最大库存"+car.getProductStock());
+				System.out.println("商品已经存在购物车中的数量"+shop.getNumberOf());
+				System.out.println("商品重新订购的数量"+car.getNumberOf());*/
+				if(articleNumber(car.getProductStock(),shop.getNumberOf()) < car.getNumberOf()){
+					return MessageResp.getMessage(false,"库存不足,请重新选购");
+				}
 				car.setNumberOf(shop.getNumberOf()+car.getNumberOf());			//修改数量
 				map.put(car.getId(), car);
 				//库存量要大于当前条数
-				if(car.getProductStock() < car.getNumberOf()){
-					return MessageResp.getMessage(false,"库存不足,请重新选购");
-				}
 				redisTemplate.opsForValue().set(key, map);
 				return MessageResp.getMessage(true,"添加成功");
 			}
@@ -344,6 +347,17 @@ public class MProductHomeController extends BaseController {
 		redisTemplate.opsForValue().set(key, map);
 		return MessageResp.getMessage(true,"购物车保存成功~~");
 	}
+	
+	/**
+	 * 
+	 * @param totalCount  最大库存
+	 * @param number 购物车 已经存在的商品数量
+	 * @return
+	 */
+	public Integer articleNumber(int totalCount , int number){
+		return (totalCount - number);
+	}
+
 	
 }
  
