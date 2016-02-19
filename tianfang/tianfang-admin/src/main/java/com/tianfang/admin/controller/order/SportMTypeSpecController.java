@@ -90,14 +90,14 @@ public class SportMTypeSpecController extends BaseController {
 	public ModelAndView toSaveST(SportMTypeSpecDto mTypeSpec){
 		ModelAndView mv= this.getModelAndView(this.getSessionUserId());
 		List<SportMTypeDto> typeLis= (List<SportMTypeDto>) redisTemplate.opsForValue().get("SportMTypeDto") ;
-		if(typeLis==null ){
+		if(typeLis.size()<1){
 			typeLis= iSportMTypeService.selectMTypeAll();
 			if(typeLis!=null){
 				redisController.addRedis(typeLis);
 			}
 		}
 		List<SportMSpecDto> specLis = (List<SportMSpecDto>) redisTemplate.opsForValue().get("SportMSpecDto");
-		if(specLis == null){
+		if(specLis.size()<1){
 			specLis = iSportMspecServie.selectAll();
 			if(specLis!=null){
 				redisController.addRedis(specLis);
