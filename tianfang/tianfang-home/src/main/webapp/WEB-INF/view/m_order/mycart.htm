@@ -235,36 +235,18 @@
 		}
 		$('.total_box span').text('￥' + _totalPrice)
 	}  */
-	 function price_all(){
+	function price_all(){
 		//计算总价
 			var _totalPrice = 0;
 			for(i=0;i<$('.cart_box ul li.seled .amt').length;i++){
 				_totalPrice = _totalPrice + Number((parseInt($('.cart_box ul li.seled .amt').eq(i).val())*parseFloat($('.cart_box ul li.seled .amt').eq(i).attr('sin_price'))).toFixed(2))
 			}
-			_totalPrice = cTwoDecimal(_totalPrice)
-			$('.total_box span').text('￥' + _totalPrice)
-		}
-		
-	function cTwoDecimal(x){
-		   var f_x = parseFloat(x);
-		   if (isNaN(f_x))
-		   {
-			  alert('function:changeTwoDecimal->parameter error');
-			  return false;
-		   }
-		   var f_x = Math.round(x*100)/100;
-		   var s_x = f_x.toString();
-		   var pos_decimal = s_x.indexOf('.');
-		   if (pos_decimal < 0)
-		   {
-			  pos_decimal = s_x.length;
-			  s_x += '.';
-		   }
-		   while (s_x.length <= pos_decimal + 2)
-		   {
-			  s_x += '0';
-		   }
-		   return s_x;
+			var ctd = _totalPrice.toString().split(".")[1].length
+			if(ctd < 2){
+				$('.total_box span').text('￥' + _totalPrice + '0')
+			}else{
+				$('.total_box span').text('￥' + _totalPrice)
+			}
 		}
 	
 	<!-- 	分割   ---------------------------------------------------------------------->
@@ -340,6 +322,9 @@
 			}
 			id += $(this).attr("object-id") +",";	
 		})
+		if(id == "" || id == null){
+			return;
+		}
 		location.href = "/m_shipping/toShipping.htm?id="+id;
 	}
 	</script>
