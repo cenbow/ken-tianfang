@@ -98,9 +98,9 @@
 									</td>
 									
 									<td class='hidden-480'>
-										<#if page.paymentStatus==0>
+										<#if page.paymentStatus==1>
 											<span class='label label-success'>已支付</span>	
-										<#elseif page.orderStatus==1>
+										<#elseif page.orderStatus==0>
 											<span class='label label-warning'>未支付</span>
 										</#if>
 									</td>
