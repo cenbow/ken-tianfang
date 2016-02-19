@@ -84,7 +84,7 @@ public class IndexController extends BaseController{
 //		// 视频(单条记录)
 //		dto.setType(5);
 //		List<SportHomeDto> videoLst = sportHomeService.findNRecords(dto, null);
-//		// 新闻	
+//		// -- 新闻	
 //		SportHomeDto newsDto = new SportHomeDto();
 //		newsDto.setType(6);
 //		List<SportHomeDto> newsLst = sportHomeService.findNRecords(newsDto, 3);

@@ -84,7 +84,7 @@ public class PayController {
 		}
 		// 商户网站订单系统中唯一订单号，必填
 		// 订单名称
-		String subject = new String(payDto.getSubject());
+		String subject = new String(orderDto.getAname());
 		// 必填
 		// 付款金额
 		String total_fee = String.valueOf(totalPrice);
