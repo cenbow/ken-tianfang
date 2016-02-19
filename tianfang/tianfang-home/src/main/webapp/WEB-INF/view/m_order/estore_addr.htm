@@ -222,8 +222,8 @@
 				//收货人姓名
 				var name = $("[name='name']").val().trim();
 				if(name.length >0){
-					if(name.length < 3 || name.length > 18){
-						layer.msg("收货人姓名格式不正确,一般为3-18个字符~~");
+					if(name.length < 2 || name.length > 18){
+						layer.msg("收货人姓名格式不正确,一般为2-18个字符~~");
 						return;
 					}
 				}else{
@@ -333,6 +333,10 @@
 					}
 				})
 				
+				if(sId==null || sId == ""){
+					alert("请先选中收货地址~~~");
+					return ;
+				}
 				//获取商品的参数 
 				var number ="";
 				var prices = "";
