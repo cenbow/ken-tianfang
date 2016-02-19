@@ -52,7 +52,7 @@
 														<span class="amout">X${(info.productStock)!}</span>
 														<#if info.evaluateStat??>
 															<#if info.evaluateStat == 0>
-																<span class="complain" id="evaluatecomment" data-obj-id="${(info.productSkuId)!}" data-order-id="${(info.productOrderInfoId)!}"><br><a href="###" >追加评论</a></span>		
+																<span class="complain" id="evaluatecomment" data-obj-id="${(info.productSkuId)!}" data-m-order-id="${(info.id)!}"><br><a href="###" >追加评论</a></span>		
 															</#if>		
 														</#if>																			
 													</li>
@@ -163,7 +163,7 @@
 		
 		$('.complain').on('click', function(){
 			var productSkuId = $(this).attr("data-obj-id");
-			var productOrderInfoId = $(this).attr("data-oeder-id");
+			var productOrderInfoId = $(this).attr("data-m-order-id");
 			$('#commentproductSkuId').val(productSkuId);
 			$('#productOrderInfoId').val(productOrderInfoId);
 			$('.comment_popup').addClass('open')
