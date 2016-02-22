@@ -334,6 +334,7 @@
 			id += $(this).attr("object-id") +",";	
 		})
 		if(id == "" || id == null){
+			alert("请选中商品~~")
 			return;
 		}
 		location.href = "/m_shipping/toShipping.htm?id="+id;
