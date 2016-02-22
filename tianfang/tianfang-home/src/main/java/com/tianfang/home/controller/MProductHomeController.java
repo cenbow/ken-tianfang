@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpSession;
 
@@ -210,7 +211,7 @@ public class MProductHomeController extends BaseController {
 				car.setNumberOf(shop.getNumberOf()+car.getNumberOf());			//修改数量
 				map.put(car.getId(), car);
 				//库存量要大于当前条数
-				redisTemplate.opsForValue().set(key, map);
+				redisTemplate.opsForValue().set(key, map,60,TimeUnit.DAYS);    //购物车信息为60天
 				return MessageResp.getMessage(true,"添加成功");
 			}
 			carList.add(shopping);
@@ -220,7 +221,7 @@ public class MProductHomeController extends BaseController {
 		}
 		car.setId(UUID.randomUUID()+"");
 		map.put(car.getId(), car);
-		redisTemplate.opsForValue().set(key, map);
+		redisTemplate.opsForValue().set(key, map,60,TimeUnit.DAYS);
         return MessageResp.getMessage(true,"添加成功");
 	}
 	/**
