@@ -123,6 +123,10 @@
 		 	for (var i=0;i<ids.length;i++) {
 			 	str += ids[i].getAttribute("object-id")+",";
 			} 
+		 	if(str==null || str == "" ){
+		 		alert("请选中商品进行操作~");
+		 		return;
+		 	}
 		 	$.ajax({
 				url:"/m/Product/delShoppingCar.htm",
 				data:{ids:str},
