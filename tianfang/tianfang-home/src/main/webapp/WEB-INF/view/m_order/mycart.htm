@@ -227,27 +227,34 @@
 			$('.cart_box .bar i').attr('tag','none')
 		}
 	}
-	/* function price_all(){
-		//计算总价
-		var _totalPrice = 0;
-		for(i=0;i<$('.cart_box ul li.seled .amt').length;i++){
-			_totalPrice = _totalPrice + parseInt($('.cart_box ul li.seled .amt').eq(i).val())*parseInt($('.cart_box ul li.seled .amt').eq(i).attr('sin_price'))
-		}
-		$('.total_box span').text('￥' + _totalPrice)
-	}  */
 	function price_all(){
 		//计算总价
 			var _totalPrice = 0;
-			for(i=0;i<$('.cart_box ul li.seled .amt').length;i++){
+			var count = $('.cart_box ul li.seled .amt').length
+			//alert(count)
+			for(i=0;i<count;i++){
 				_totalPrice = _totalPrice + Number((parseInt($('.cart_box ul li.seled .amt').eq(i).val())*parseFloat($('.cart_box ul li.seled .amt').eq(i).attr('sin_price'))).toFixed(2))
 			}
-			var ctd = _totalPrice.toString().split(".")[1].length
-			if(ctd < 2){
-				$('.total_box span').text('￥' + _totalPrice + '0')
-			}else{
-				$('.total_box span').text('￥' + _totalPrice)
-			}
+			$('.total_box span').text('￥' + changeTwoDecimal_f(_totalPrice))
 		}
+		
+		var changeTwoDecimal_f= function (floatvar){  
+		var f_x = parseFloat(floatvar);  
+		if (isNaN(f_x)){  
+	        return '0.00';  
+		}  
+		var f_x = Math.round(f_x*100)/100;  
+		var s_x = f_x.toString();  
+		var pos_decimal = s_x.indexOf('.');  
+		if (pos_decimal < 0){  
+			pos_decimal = s_x.length;  
+			s_x += '.';  
+		}  
+		while (s_x.length <= pos_decimal + 2){  
+			s_x += '0';  
+		}  
+			return s_x;  
+		}  
 	
 	<!-- 	分割   ---------------------------------------------------------------------->
 	
