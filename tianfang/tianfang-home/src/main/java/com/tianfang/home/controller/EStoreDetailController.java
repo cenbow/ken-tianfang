@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,7 @@ import com.tianfang.common.model.PageResult;
 import com.tianfang.common.model.Response;
 import com.tianfang.common.redis.RedisService;
 import com.tianfang.common.util.StringUtils;
+import com.tianfang.home.util.SessionUtil;
 import com.tianfang.order.dto.SportMEvaluateDto;
 import com.tianfang.order.dto.SportMOrderInfoDto;
 import com.tianfang.order.dto.SportMProductSpuDto;
@@ -30,6 +33,7 @@ import com.tianfang.order.service.ISportMEvaluateService;
 import com.tianfang.order.service.ISportMOrderService;
 import com.tianfang.order.service.ISportMProductSkuService;
 import com.tianfang.order.service.ISportMProductSpuService;
+import com.tianfang.user.dto.LoginUserDto;
 
 @Controller
 @RequestMapping("/estore/detail")
@@ -75,13 +79,18 @@ public class EStoreDetailController extends BaseController{
 	}
 	
 	@RequestMapping(value = "/userOrder")
-	public ModelAndView findOrderByUser(String userId,ExtPageQuery page) {
+	public ModelAndView findOrderByUser(ExtPageQuery page,HttpSession session) {
 		ModelAndView mv = this.getModelAndView();
-		if (StringUtils.isBlank(userId)) {
-			mv.addObject("msg", "出错了，userId不能为空！");
-			mv.setViewName("/m_order/error");
-			return mv;
+		// 获取当前登录用户Id
+		LoginUserDto loginUserDto = SessionUtil.getLoginSession(session);
+		// 只允许登录用户进行操作
+		if (loginUserDto == null) {
+			mv.addObject("status", "500");
+			mv.addObject("message", "用户没有登录!");
+//					return new ModelAndView("redirect:/index.htm");
+			return new ModelAndView("redirect:/index.htm");
 		}
+		String userId =loginUserDto.getId();
 		PageResult<SportMUserOrderDto> sportMUserOrderDtos = iSportMOrderService.findOrderByUser(userId, page.changeToPageQuery());
 		mv.addObject("pageList", sportMUserOrderDtos);
 		mv.addObject("userId", userId);
