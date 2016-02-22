@@ -106,7 +106,7 @@
 			<span class="amount">数量</span>
 			<span class="total_price">小计</span>
 			<span class="stock"><!-- <select><option>上海</option><option>上海</option><option>上海</option><option>上海</option><option>上海</option></select> --></span>
-			<span class="action">操作</span>
+			<span class="action"><!-- 操作 --></span>
 		</div>
 		<ul>
 			<#assign countTotal = 0 />
@@ -120,7 +120,7 @@
 						<span class="amount"><a class="minus" href="###"><!-- - --></a><input class="amt" disabled="disabled" car_id="${(car.id)!}" sku_id="${(car.skuId)!}" sin_price="${(car.price)?replace(',','')}" data_max="${(car.productStock)!}" value="${(car.numberOf)?replace(',','')}"><a class="plus" href="###"><!-- + --></a></span>
 						<span class="total_price">￥${(car.price*car.numberOf)}</span>
 						<span class="stock">有货</span>
-						<span class="action"><a href="###" object-id="${(car.id)!}">删除</a></span>
+						<span class="action"><a href="###" object-id="${(car.id)!}"><!-- 删除 --></a></span>
 						<#assign countTotal = countTotal+(car.price*car.numberOf) />
 					</li>
 				</#list>
