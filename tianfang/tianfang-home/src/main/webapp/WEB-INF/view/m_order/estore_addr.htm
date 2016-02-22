@@ -354,6 +354,10 @@
 			  $('[name=skuId]').val(skuId);
 			  $('[name=sId]').val(sId);
 			  $('[name=carId]').val(carId);
+			  if(skuId == null || skuId == ""){
+				  alert("请先去购物车选中付款商品!");
+				  return;
+			  }
 			  document.getElementById('addOrder').submit();			  
 			})
 		</script>
