@@ -24,7 +24,12 @@
 			<input type="button" id="selectBy" value="">
 			<input type="text" id="productName" placeholder="请输入您要搜索的名称" value="${(spuDto.productName)!}"> 
 		</div>
-		<a class="btn_cart" href="/m/Product/getShoppingCard.htm">购物车</a>
+		<!-- <a class="btn_cart" href="/m/Product/getShoppingCard.htm">购物车</a> -->
+		<#if user??>
+			<a class="btn_cart" href="/m/Product/getShoppingCard.htm">购物车</a>
+		<#else>
+			<a class="btn_cart" href="###" onclick="open_login();">购物车</a>
+		</#if>
 	</div>
 	<div id="store_slideBox" class="store_slideBox">
 		<div class="hd">
