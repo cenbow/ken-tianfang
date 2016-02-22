@@ -31,6 +31,10 @@ public class SportMEvaluateDto {
 	
 	@Getter
 	@Setter
+	private String productOrderInfoId;
+	
+	@Getter
+	@Setter
 	private Integer star;
 	
 	@Getter

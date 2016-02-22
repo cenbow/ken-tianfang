@@ -50,7 +50,11 @@
 														<span class="goods_name"><a href="###">${(info.skuName)!}</a></span>
 														<span class="price">￥${(info.skuProductPrice)!} </span>
 														<span class="amout">X${(info.productStock)!}</span>
-														<span class="complain" id="evaluatecomment" data-obj-id="${(info.productSkuId)!}"><br><a href="###" >追加评论</a></span>									
+														<#if info.evaluateStat??>
+															<#if info.evaluateStat == 0>
+																<span class="complain" id="evaluatecomment" data-obj-id="${(info.productSkuId)!}" data-m-order-id="${(info.id)!}"><br><a href="###" >追加评论</a></span>		
+															</#if>		
+														</#if>																			
 													</li>
 												</#list>
 											</ul>
@@ -73,7 +77,9 @@
 												<#elseif page.orderStatus == -4>
 													订单失效
 												</#if>	
-											</#if></span><br><span><img src="/static/img/icon_ct.png" border="0"></span><br><a href="###">订单详情</a></p></div>
+											</#if></span><br>
+												<!-- <span><img src="/static/img/icon_ct.png" border="0"></span><br><a href="###">订单详情</a></p> -->
+											</div>
 											<div class="action_box"><p><span></span><br><!--<a href="###">再次购买</a>--><a href="###">
 											<#if page.orderStatus??>
 												<#if page.orderStatus == 0>
@@ -99,6 +105,7 @@
 	<div class="comment_popup">
 		<div class="comment_box">
 			<input type='hidden' id='commentproductSkuId' name='commentproductSkuId' value="" >
+			<input type='hidden' id='productOrderInfoId' name='productOrderInfoId' value="" >
 			<div class="title">发表评论<a class="close" href="###" onClick="close_popup()"></a></div>
 			<div class="count">
 				<div class="tis">商品性能</div>
@@ -156,7 +163,9 @@
 		
 		$('.complain').on('click', function(){
 			var productSkuId = $(this).attr("data-obj-id");
+			var productOrderInfoId = $(this).attr("data-m-order-id");
 			$('#commentproductSkuId').val(productSkuId);
+			$('#productOrderInfoId').val(productOrderInfoId);
 			$('.comment_popup').addClass('open')
 		})
 		
@@ -167,6 +176,7 @@
 			var evaluateContent = $("#costextarea").val();	
 			var userId = "${(userId)!}";;
 			var productSkuId = $('#commentproductSkuId').val();
+			var productOrderInfoId = $('#productOrderInfoId').val();
 			var pic='';
 			$(".uploaded-pic").each(function(){
 				id = $(this).attr("data-obj-id")
@@ -219,7 +229,7 @@
 					type:"post",
 					dataType:"json",
 					data:{evaluateStatus:evaluateStatus,star:star,
-						evaluateContent:evaluateContent,pic:pic,
+						evaluateContent:evaluateContent,pic:pic,productOrderInfoId:productOrderInfoId,
 						productSkuId:productSkuId,userId:userId},
 					async: false,
 					success:function(data){
@@ -378,7 +388,10 @@
 						textAll += "<span class=goods_name><a href=###>"+sportMOrderInfoDtos[j].skuName+"</a></span>";
 						textAll += "<span class=price>￥"+sportMOrderInfoDtos[j].skuProductPrice+"</span>";
 						textAll += "<span class=amout>X"+sportMOrderInfoDtos[j].productStock+"</span>";
-						textAll += "<span class=complain><br><a href=### onClick=\"comment_popup()\">追加评论</a></span>";
+						if (sportMOrderInfoDtos[j].evaluateStat == 0) {
+							textAll += "<span class=complain><br><a href=### onClick=\"comment_popup()\">追加评论</a></span>";
+						}
+						
 						textAll += "</li>";
 					}
 					textAll += "</ul>"

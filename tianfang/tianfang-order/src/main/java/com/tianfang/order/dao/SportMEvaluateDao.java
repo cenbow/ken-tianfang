@@ -49,6 +49,12 @@ public class SportMEvaluateDao extends MyBatisBaseDao<SportMEvaluate>{
 		if (null != sportMEvaluateDto.getEvaluateStatus()) {
 			criteria.andEvaluateStatusEqualTo(sportMEvaluateDto.getEvaluateStatus());
 		}
+		if (StringUtils.isNotBlank(sportMEvaluateDto.getUserId())) {
+			criteria.andUserIdEqualTo(sportMEvaluateDto.getUserId());
+		}
+		if (StringUtils.isNotBlank(sportMEvaluateDto.getProductOrderInfoId())) {
+			criteria.andProductOrderInfoIdEqualTo(sportMEvaluateDto.getProductOrderInfoId());
+		}
 		criteria.andStatEqualTo(DataStatus.ENABLED);
 		return mappers.selectByExample(example);
 	}
