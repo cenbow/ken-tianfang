@@ -124,6 +124,8 @@ public class SportMOrderImpl implements ISportMOrderService{
 					else {
 						sportMOrderInfoDto.setEvaluateStat(DataStatus.DISABLED);
 					}
+					SportMProductSku sportMProductSku = sportMProductSkuDao.selectByPrimaryKey(sportMOrderInfoDto.getProductSkuId());
+					sportMOrderInfoDto.setProductSpuId(sportMProductSku.getProductId());
 					sportmOrderInfoDtos.add(sportMOrderInfoDto);
 				}				
 			}
@@ -233,6 +235,7 @@ public class SportMOrderImpl implements ISportMOrderService{
 		}		
 		return sportMOrderDto;
 	}
+	
 	
 	public void updateOrderById (String orderId,String orderNo,Integer orderStatus,Integer paymentStatus) {
 		SportMOrderDto sportMOrderDto = sportMOrderDao.findOrderById(orderId, orderNo);

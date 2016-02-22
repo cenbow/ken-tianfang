@@ -47,7 +47,7 @@
 												<#list page.sportMOrderInfoDtos as info>								
 													<li>
 														<a href="###"><img src="${(info.thumbnail)!}" border="0"></a>
-														<span class="goods_name"><a href="###">${(info.skuName)!}</a></span>
+														<span class="goods_name"><a href="/estore/detail/getProduct.htm?id=${(info.productSpuId)!}">${(info.skuName)!}</a></span>
 														<span class="price">￥${(info.skuProductPrice)!} </span>
 														<span class="amout">X${(info.productStock)!}</span>
 														<#if info.evaluateStat??>
@@ -83,12 +83,14 @@
 												</#if>	
 											</#if></span><br>
 												<!-- <span><img src="/static/img/icon_ct.png" border="0"></span><br><a href="###">订单详情</a></p> -->
-											</div>											
-											<#if page.orderStatus??>
-												<#if page.orderStatus == 0>
-														<div class="action_box"><p><span></span><br><!--<a href="###">再次购买</a>--><a href="/m_shipping/toShipping.htm?id=fe4bcae4-fdc1-450d-8532-a93f544c3d37,">立即付款</a></span></p></div>	
+											</div>
+											<div class="action_box">											
+												<#if page.orderStatus??>
+													<#if page.orderStatus == 0>
+															<p><span></span><br><!--<a href="###">再次购买</a>--><a href="/order/payOrder.htm?id=${(page.id)!}">立即付款</a></span></p>
+													</#if>
 												</#if>
-											</#if>																		
+											</div>																		
 									 	</li>
 									</#if>	
 								</#if>
@@ -387,19 +389,20 @@
 					for (var j = 0; j < sportMOrderInfoDtos.length; j++) {
 						textAll += "<li>"
 						textAll += "<a href=###><img src=\""+sportMOrderInfoDtos[j].thumbnail+"\" border=0></a>";
-						textAll += "<span class=goods_name><a href=###>"+sportMOrderInfoDtos[j].skuName+"</a></span>";
+						textAll += "<span class=goods_name><a <a href=/estore/detail/getProduct.htm?id="+sportMOrderInfoDtos[j].productSpuId+">"+sportMOrderInfoDtos[j].skuName+"</a></span>";
 						textAll += "<span class=price>￥"+sportMOrderInfoDtos[j].skuProductPrice+"</span>";
 						textAll += "<span class=amout>X"+sportMOrderInfoDtos[j].productStock+"</span>";
 						if (sportMOrderInfoDtos[j].evaluateStat == 0) {
 							textAll += "<span class=complain><br><a href=### onClick=\"comment_popup()\">追加评论</a></span>";
-						}
-						
+						}						
 						textAll += "</li>";
 					}
 					textAll += "</ul>"
 					textAll += "<div class=\"price_box\"><p><span class=\"pr\">1198.00</span><br><span class=\"dl\">(含运费：0.00)</span><br><span class=\"st\">手机订单</span></p></div>";
 					textAll += "<div class=\"status_box\"><p><span class=\"rs\">交易成功</span><br><span><img src=\"/static/img/icon_ct.png\" border=0></span><br><a href=###>订单详情</a></p></div>";
-					textAll += "<div class=\"action_box\"><p><span></span><br><!--<a href=\"###\">再次购买</a>--><a href=\"###\">立即付款</a></span></p></div>";					
+					if (result[i].orderStatus != null && result[i].orderStatus == 0) {
+						textAll += "<div class=\"action_box\"><p><span></span><br><!--<a href=\"###\">再次购买</a>--><a  href=/order/payOrder.htm?id="+result[i].id+">立即付款</a></span></p></div>";		
+					}								
 					textAll += "</li>";
 				}			
 				textAll += "</ul>"

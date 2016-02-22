@@ -70,4 +70,15 @@ public class SportMOrderController extends BaseController{
 		mv.setViewName("/m_order/pay-ready");
 		return mv;
 	}
+	
+	@RequestMapping("/payOrder")
+	public ModelAndView payOrder(String id) {
+		ModelAndView mv = this.getModelAndView(this.getSessionUserId());
+		SportMOrderDto order= iSportMOrderService.findOrderById(id, null);
+		mv.addObject("order",order);
+		mv.addObject("user",getSportUserByCache(this.getSessionUserId()));
+		mv.setViewName("/m_order/pay-ready");
+		return mv;
+	}
+	
 }

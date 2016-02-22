@@ -137,8 +137,7 @@
 												<label class="dt-size cur" data-obj-id= "${(value.specId)!}*${(value.id)!}">${(value.specValue)!}</label>
 											<#else>
 												<label class="dt-size" data-obj-id= "${(value.specId)!}*${(value.id)!}">${(value.specValue)!}</label>
-											</#if>
-											
+											</#if>											
 										</#list>
 									</#if>
 								</#list>
@@ -148,7 +147,7 @@
 								<label class="lf">数量</label>
 								<span class="lf num">
 									<a class="amount-decrease amount-change">-</a>
-									<input class="amount-Num js-amount" type="text" max="5" id="" value="1" maxlength="4"/>
+									<input class="amount-Num js-amount" type="text" max="${(sportMProductSpuDto.productStock)!}" id="" value="1" maxlength="4"/>
 									<a class="amount-increase amount-change">+</a>
 									<#if sportMProductSpuDto.productStock??>
 										<label class="limit" for="">剩余${(sportMProductSpuDto.productStock)!}件</label>
