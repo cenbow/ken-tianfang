@@ -150,7 +150,10 @@
 									<a class="amount-decrease amount-change">-</a>
 									<input class="amount-Num js-amount" type="text" max="5" id="" value="1" maxlength="4"/>
 									<a class="amount-increase amount-change">+</a>
-									<label class="limit" for="">限购5件</label>
+									<#if sportMProductSpuDto.productStock??>
+										<label class="limit" for="">剩余${(sportMProductSpuDto.productStock)!}件</label>
+									</#if>
+									<!-- <label class="limit" for="">限购5件</label> -->
 								</span>
 							</li>
 						</ul>
@@ -202,11 +205,19 @@
 								</dd>
 							</dl>
 						</div>
-						<div class="share">
-							<input class="bt bt1" type="button" name="" id="" value="我要评价" />
-							<br />
-							<!-- <input class="bt bt2" type="button" name="" id="" value="发表晒单" /> -->
-						</div>
+						<#if user??>
+							<div class="share">
+								<input class="bt bt1" type="button" name="" id="comment" data-obj-id="${(user.id)!}" value="我要评价" />
+								<br />
+								<!-- <input class="bt bt2" type="button" name="" id="" value="发表晒单" /> -->
+							</div>
+						<#else>
+							<div class="share">
+								<input class="bt bt1" type="button" name="" id="" value="我要评价" onclick="open_login();"/>
+								<br />
+								<!-- <input class="bt bt2" type="button" name="" id="" value="发表晒单" /> -->
+							</div>
+						</#if>
 					</div>
 					<div class="review">
 						<div class="review-hd">
@@ -786,6 +797,11 @@
 				} */
 				
 				gotoPageAlls();
+				$("#comment").on("click", function() {
+					var userId = $(this).attr("data-obj-id");
+					location.href = "/estore/detail/userOrder.htm?userId="+userId;
+					return;
+				});
 				$(".btn_cart").on("click", function() {
 					location.href = "/m/Product/getShoppingCard.htm";
 					return;

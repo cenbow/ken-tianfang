@@ -51,9 +51,13 @@
 														<span class="price">￥${(info.skuProductPrice)!} </span>
 														<span class="amout">X${(info.productStock)!}</span>
 														<#if info.evaluateStat??>
-															<#if info.evaluateStat == 0>
-																<span class="complain" id="evaluatecomment" data-obj-id="${(info.productSkuId)!}" data-m-order-id="${(info.id)!}"><br><a href="###" >追加评论</a></span>		
-															</#if>		
+															<#if info.orderStatus??>
+																<#if info.evaluateStat == 0>
+																	<#if info.orderStatus == 1 || info.orderStatus == 2>
+																		<span class="complain" id="evaluatecomment" data-obj-id="${(info.productSkuId)!}" data-m-order-id="${(info.id)!}"><br><a href="###" >追加评论</a></span>		
+																	</#if>
+																</#if>	
+															</#if>	
 														</#if>																			
 													</li>
 												</#list>
@@ -79,14 +83,12 @@
 												</#if>	
 											</#if></span><br>
 												<!-- <span><img src="/static/img/icon_ct.png" border="0"></span><br><a href="###">订单详情</a></p> -->
-											</div>
-											<div class="action_box"><p><span></span><br><!--<a href="###">再次购买</a>--><a href="###">
+											</div>											
 											<#if page.orderStatus??>
 												<#if page.orderStatus == 0>
-														立即付款
+														<div class="action_box"><p><span></span><br><!--<a href="###">再次购买</a>--><a href="/m_shipping/toShipping.htm?id=fe4bcae4-fdc1-450d-8532-a93f544c3d37,">立即付款</a></span></p></div>	
 												</#if>
-											</#if>
-											</a></span></p></div>								
+											</#if>																		
 									 	</li>
 									</#if>	
 								</#if>
