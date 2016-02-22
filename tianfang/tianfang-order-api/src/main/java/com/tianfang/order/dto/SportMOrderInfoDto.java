@@ -31,6 +31,10 @@ public class SportMOrderInfoDto implements Serializable {
 	@Getter
 	@Setter
     private String productSkuId;
+	
+	@Getter
+	@Setter
+	private String productSpuId;
 
 	@Getter
 	@Setter

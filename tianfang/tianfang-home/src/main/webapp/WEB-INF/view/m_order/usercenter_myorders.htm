@@ -47,7 +47,7 @@
 												<#list page.sportMOrderInfoDtos as info>								
 													<li>
 														<a href="###"><img src="${(info.thumbnail)!}" border="0"></a>
-														<span class="goods_name"><a href="###">${(info.skuName)!}</a></span>
+														<span class="goods_name"><a href="/estore/detail/getProduct.htm?id=${(info.productSpuId)!}">${(info.skuName)!}</a></span>
 														<span class="price">￥${(info.skuProductPrice)!} </span>
 														<span class="amout">X${(info.productStock)!}</span>
 														<#if info.evaluateStat??>

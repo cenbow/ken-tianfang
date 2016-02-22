@@ -124,6 +124,8 @@ public class SportMOrderImpl implements ISportMOrderService{
 					else {
 						sportMOrderInfoDto.setEvaluateStat(DataStatus.DISABLED);
 					}
+					SportMProductSku sportMProductSku = sportMProductSkuDao.selectByPrimaryKey(sportMOrderInfoDto.getProductSkuId());
+					sportMOrderInfoDto.setProductSpuId(sportMProductSku.getProductId());
 					sportmOrderInfoDtos.add(sportMOrderInfoDto);
 				}				
 			}
