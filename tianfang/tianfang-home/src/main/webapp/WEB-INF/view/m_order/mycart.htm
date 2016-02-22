@@ -29,7 +29,7 @@
 				<#list carList as car>
 					<li class="no-sel">
 						<i object-id="${(car.id)!}"></i>
-						<a href="###"><img class="pic" src="${(car.imgUrl)!}" border="0">
+						<a href="/estore/detail/getProduct.htm?id=${(car.spuId)!}"><img class="pic" src="${(car.imgUrl)!}" border="0">
 						<span class="goodsname">${(car.productName)!}</span></a>
 						<span class="price">￥${(car.price)!}</span>				
 						<span class="amount"><a class="minus" href="###" object-id="${(car.id)!}">-</a><input class="amt" sin_price="${(car.price)?replace(',','')}" data_max="${(car.productStock)!}" value="${(car.numberOf)!}"><a class="plus" href="###" object-id="${(car.id)!}">+</a></span>
@@ -263,7 +263,7 @@
 			console.log(data);
 			var str = "";
 			for ( var res in data) {
-				console.log(res);
+				//console.log(res);
 				str += "<a href=\"/estore/detail/getProduct.htm?id="+data[res].id+"\">"
 				str += "<li>"
 				str += "<img src=\""+data[res].thumbnail+"\" border=\"0\">"
@@ -294,7 +294,7 @@
 				console.log(data);
 				var str = "";
 				for ( var res in data) {
-					console.log(res);
+					//console.log(res);
 					str += "<a href=\"/estore/detail/getProduct.htm?id="+data[res].id+"\">"
 					str += "<li>"
 					str += "<img src=\""+data[res].thumbnail+"\" border=\"0\">"
@@ -327,6 +327,7 @@
 		}
 		location.href = "/m_shipping/toShipping.htm?id="+id;
 	}
+	
 	</script>
 </body>
 </html>

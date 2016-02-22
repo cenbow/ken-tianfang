@@ -114,7 +114,7 @@
 				<#list carList as car>
 					<li class="no-sel">
 						<!-- <i object-id="${(car.id)!}"></i> -->
-						<a href="###"><img class="pic" src="${(car.imgUrl)!}" border="0">
+						<a href="/estore/detail/getProduct.htm?id=${(car.spuId)!}"><img class="pic" src="${(car.imgUrl)!}" border="0">
 						<span class="goodsname">${(car.productName)!}</span></a>
 						<span class="price">￥${(car.price)!}</span>				
 						<span class="amount"><a class="minus" href="###"><!-- - --></a><input class="amt" disabled="disabled" car_id="${(car.id)!}" sku_id="${(car.skuId)!}" sin_price="${(car.price)?replace(',','')}" data_max="${(car.productStock)!}" value="${(car.numberOf)?replace(',','')}"><a class="plus" href="###"><!-- + --></a></span>
