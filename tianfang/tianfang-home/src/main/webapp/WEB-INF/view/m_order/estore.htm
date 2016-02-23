@@ -62,8 +62,23 @@
 			<a <#if spuDto.countEvaluate??> <#if spuDto.countEvaluate == 1 > class="cur" <#elseif spuDto.countEvaluate == 2> class="cur up" </#if>  </#if> href="###" <#if spuDto.countEvaluate??> obj_stat = '${(spuDto.countEvaluate)!}' <#else> obj_stat = '1'</#if> obj_type="countEvaluate">评论数</a>
 			<div class="results">
 				为您搜索到 <span id="">${(dataList.total)!}</span> 个商品 <span id=""><i>${(dataList.currPage)!}</i>/${(dataList.totalPage)!}</span>
-				<a class="prev" href="###"></a>
-				<a class="next" href="###"></a>
+				
+			<!-- 	<a class="prev" href="###"></a>
+				<a class="next" href="###"></a> -->
+				<#if dataList?? && dataList.total gt 0> 
+					<#if (dataList.currPage-1) gt 0 >
+						<a class="prev" href="javascript:gotoPageVideo(${dataList.currPage - 1})"></a>
+					<#else>
+						<a class="prev" href="javascript:;"></a>
+					</#if>
+					
+					<#if (dataList.currPage + 1) lte dataList.totalPage >
+						<a class="next" href="javascript:gotoPageVideo(${dataList.currPage + 1})"></a>
+					<#else>
+						<a class="next" href="javascript:;"></a>
+					</#if>
+				</#if>
+				
 			</div>
 		</div>
 		<div class="goods">
