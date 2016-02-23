@@ -67,6 +67,15 @@ public class EStoreDetailController extends BaseController{
 		redisTemplate.opsForValue().set(key, sportMShoppingCartDto);
 	}
 	
+	@RequestMapping(value = "/saveOrderStatus")
+	@ResponseBody
+	public Map<String, Object> saveOrderStatus(String orderId,Integer orderStatus) {
+		Integer result = iSportMOrderService.saveOrderStatus(orderId, orderStatus);
+		if (null != result && result == 1) {
+			return MessageResp.getMessage(true, "修改成功！");
+		}
+		return MessageResp.getMessage(true, "修改失败！");
+	}
 	
 	@RequestMapping(value = "/saveEvaluate")
 	@ResponseBody

@@ -214,6 +214,22 @@ public class SportMOrderImpl implements ISportMOrderService{
 		return sportMOrderDto;
 	}*/
 	
+	public int saveOrderStatus(String orderId,Integer orderStatus) {
+		SportMOrderDto sportMOrderDto = sportMOrderDao.findOrderById(orderId, null);
+		SportMOrderInfoDto sportMOrderInfoDto = new SportMOrderInfoDto();
+		sportMOrderInfoDto.setOrderId(sportMOrderDto.getId());
+		List<SportMOrderInfo> sportMOrderInfos = sportMOrderInfoDao.selectOrderInfo(sportMOrderInfoDto, null);
+		if (sportMOrderInfos.size()>0) {
+			for (SportMOrderInfo sportMOrderInfo : sportMOrderInfos) {
+				sportMOrderInfo.setOrderStatus(orderStatus);
+				sportMOrderInfoDao.updateByPrimaryKeySelective(sportMOrderInfo);
+			}
+		}
+		sportMOrderDto.setOrderStatus(orderStatus);
+		SportMOrder sportMOrder = BeanUtils.createBeanByTarget(sportMOrderDto, SportMOrder.class);
+		return sportMOrderDao.updateByPrimaryKeySelective(sportMOrder);
+	}
+	
 	public SportMOrderDto findOrderById(String orderId,String orderNo) {
 		SportMOrderDto sportMOrderDto = sportMOrderDao.findOrderById(orderId, orderNo);
 		if (StringUtils.isNotBlank(sportMOrderDto.getUserId())) {
