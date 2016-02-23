@@ -33,4 +33,6 @@ public interface ISportMOrderService {
 	public void updateOrderById (String orderId,String orderNo,Integer orderStatus,Integer paymentStatus);
 	
 	public Integer orderDelete(String orderId);
+	
+	public int saveOrderStatus(String orderId,Integer orderStatus);
 }
