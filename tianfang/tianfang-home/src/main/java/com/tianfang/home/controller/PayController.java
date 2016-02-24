@@ -54,6 +54,10 @@ public class PayController {
 		if (loginUserDto == null) {
 			return String.valueOf(DataStatus.DISABLED);
 		}
+		Integer result = iSportMOrderService.getOrderStatus(payDto.getOut_trade_no());
+		if (result == -4) {
+			return String.valueOf(result);
+		}
 		// //////////////////////////////////请求参数//////////////////////////////////////
 		// 支付类型
 		String payment_type = "1";

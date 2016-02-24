@@ -37,6 +37,18 @@
         <dependent-module archiveName="tianfang-company-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tianfang-company/tianfang-company">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="tianfang-onteach-api-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tianfang-onteach-api/tianfang-onteach-api">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="tianfang-onteach-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tianfang-onteach/tianfang-onteach">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="tianfang-order-api-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tianfang-order-api/tianfang-order-api">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="tianfang-order-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tianfang-order/tianfang-order">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="java-output-path" value="/tianfang-home/target/classes"/>
         <property name="context-root" value="tianfang-home"/>
     </wb-module>

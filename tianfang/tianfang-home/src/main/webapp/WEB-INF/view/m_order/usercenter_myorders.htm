@@ -41,7 +41,7 @@
 												${(page.createTimeStr)!} 订单号：${(page.orderNo)!}
 												<!-- <a class="share" href="###"></a>
 												<a class="flag" href="###"></a> -->
-												<a class="del" data-order-id="${(page.id)!}" href="###"></a>
+												<a class="del" data-dete-order-id="${(page.id)!}" href="###"></a>
 											</div>
 											<ul>
 												<#list page.sportMOrderInfoDtos as info>								
@@ -265,7 +265,7 @@
 		$('.row_order_info ul').on('click','li .del',function(){
 			//$(this).closest('li').remove()
 			layer.confirm('确定要删除此订单信息吗？', {icon: 3}, function(index){
-				id = $(".del").attr("data-order-id")
+				 var id = $(".del").attr("data-dete-order-id");
 				 $.ajax({
 						url:"/order/user/delete.htm",
 						type:"post",
@@ -273,15 +273,15 @@
 						data:{orderId:id},
 						async: false,
 						success:function(data){
-							if(data.success){
+							if(data.success){								
 								layer.msg(data.msg, {
 		            				shade: [0.9, '#000'],
 		            			    icon: 1,
 		            			    time: 1 //2秒关闭（如果不配置，默认是3秒）
 		            			}, function(){
 		            			    //do something
-		            				window.location.reload;
-		            			});	
+		            				window.location.reload();
+		            			});	 
 								
 							}else {
 								layer.msg(data.msg, {
@@ -385,7 +385,7 @@
 					textAll += "<li>";
 					textAll += "<div class=tit>";
 					textAll += ""+result[i].createTimeStr+" 订单号："+result[i].orderNo+"";
-					textAll += "<a class=del data-order-id=\""+result[i].id+"\" href=###></a>";
+					textAll += "<a class=del data-dete-order-id=\""+result[i].id+"\" href=###></a>";
 					textAll += "</div>";
 					textAll += "<ul>";
 					var sportMOrderInfoDtos = result[i].sportMOrderInfoDtos;
@@ -427,15 +427,18 @@
 					if (result[i].orderStatus != null && result[i].orderStatus == -4) {
 						textAll += "<div class=\"status_box\"><p><span class=\"rs\">订单失效</span><br></p></div>";
 					}
+					textAll += "<div class=\"action_box\"><p><span></span><br><!--<a href=\"###\">再次购买</a>--><a  href=/order/payOrder.htm?id="+result[i].id+">";
 					if (result[i].orderStatus != null && result[i].orderStatus == 0) {
-						textAll += "<div class=\"action_box\"><p><span></span><br><!--<a href=\"###\">再次购买</a>--><a  href=/order/payOrder.htm?id="+result[i].id+">立即付款</a></span></p></div>";		
+						textAll += "立即付款";		
 					}
+					textAll += "</a></span></p></div>";		
 					/* if (result[i].orderStatus != null && result[i].orderStatus == 1) {
 						textAll += "<div class=\"action_box\"><p><span></span><br><!--<a href=\"###\">再次购买</a>--><a  href=/order/payOrder.htm?id="+result[i].id+">确认收货</a></span></p></div>";		
 					}	 */
 					textAll += "</li>";
-				}			
+				}	
 				textAll += "</ul>"
+				textAll += "</div>"
 			    var	results = data.data;
 				var show_num = 7;
 				if(results!= null && results.total>0){

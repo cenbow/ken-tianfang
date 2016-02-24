@@ -19,11 +19,11 @@
 						<div class="row-fluid">
 							<!-- PAGE CONTENT BEGINS HERE -->
 							<form id="submitForm" class="form-horizontal" action="${base}/sport/brand/save.do" method="POST">
-								<input type="hidden" id="isShow" name="isShow" value="0"/>
+								<!-- <input type="hidden" id="isShow" name="isShow" value="0"/> -->
 								<input type="hidden" id="brandPic" name="brandPic" value=""/>		
 								<div class="control-group">
 									<label class="course_add_label" for="form-field-1">是否显示</label>
-										<select  name="releaseStat" id="releaseStat" data-placeholder="是否显示" style="vertical-align:top;margin-left:20px;">
+										<select  name="isShow" id="isShow" data-placeholder="是否显示" style="vertical-align:top;margin-left:20px;">
 											<option value=0>否</option>
 											<option value=1>是</option>											
 										</select>
@@ -208,9 +208,9 @@
 	            }
 	        });				
 			
-			$("#form-radio-show label input").on('click',function(){
+			/* $("#releaseStat label input").on('click',function(){
 				$("#isShow").val($(this).val());
-			});
+			}); */
 			
 			
 			$("#resetbutton").on('click',function(){

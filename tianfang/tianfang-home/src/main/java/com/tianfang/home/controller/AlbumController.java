@@ -22,7 +22,7 @@ import com.tianfang.common.model.PageResult;
 import com.tianfang.common.model.Response;
 
 /**		
- * <p>Title: AlbumController c</p> cwf
+ * <p>Title: AlbumController c</p>
  * <p>Description: 类描述</p>
  * <p>Copyright (c) 2015 </p>
  * <p>Company: 上海天坊信息科技有限公司</p>

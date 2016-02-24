@@ -48,6 +48,8 @@ public interface DataStatus
     final static long _FILESIZE_ = 1024 * 1024;
 
     final static long _TEMPFILESIZE = 1024 * 500;
+    
+    final static long ORDERVALIDTIME = 172800000;
 
     final static String _ORDER_ = "O";
 

@@ -108,6 +108,19 @@ public class SportMOrderImpl implements ISportMOrderService{
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
 		for (SportMUserOrderDto sportMUserOrderDto : sportMUserOrderDtos) {
 			sportMUserOrderDto.setCreateTimeStr(sdf.format(sportMUserOrderDto.getCreateTime()));
+			if (null != sportMUserOrderDto && null != sportMUserOrderDto.getOrderStatus()) {
+				if (-4 != sportMUserOrderDto.getOrderStatus()) {
+					long creatTime = sportMUserOrderDto.getCreateTime().getTime();
+					long nowDate = new Date().getTime();
+					long times = nowDate-creatTime;
+					if (times > DataStatus.ORDERVALIDTIME) {
+						sportMUserOrderDto.setOrderStatus(-4);
+						SportMOrder sportMOrder = sportMOrderDao.selectByPrimaryKey(sportMUserOrderDto.getId());
+						sportMOrder.setOrderStatus(-4);
+						sportMOrderDao.updateByPrimaryKeySelective(sportMOrder);
+					}
+				}
+			}
 		}
 		List<SportMOrderInfoDto> sportMOrderInfoDtos = sportMOrderDao.selectOrderInfo(userId);
 		for (SportMUserOrderDto sportMUserOrderDto : sportMUserOrderDtos) {
@@ -119,10 +132,12 @@ public class SportMOrderImpl implements ISportMOrderService{
 					sportMEvaluateDto.setProductOrderInfoId(sportMOrderInfoDto.getId());
 					List<SportMEvaluate> sportMEvaluates = SportMEvaluateDao.getAllEvaluate(sportMEvaluateDto);
 					if (sportMEvaluates.size()>0) {
-						sportMOrderInfoDto.setEvaluateStat(DataStatus.ENABLED);
+						sportMOrderInfoDto.setEvaluateStat(DataStatus.ENABLED);						
 					}
 					else {
-						sportMOrderInfoDto.setEvaluateStat(DataStatus.DISABLED);
+						if (sportMUserOrderDto.getOrderStatus() == 1 || sportMUserOrderDto.getOrderStatus() == 2) {
+							sportMOrderInfoDto.setEvaluateStat(DataStatus.DISABLED);
+						}						
 					}
 					SportMProductSku sportMProductSku = sportMProductSkuDao.selectByPrimaryKey(sportMOrderInfoDto.getProductSkuId());
 					sportMOrderInfoDto.setProductSpuId(sportMProductSku.getProductId());
@@ -292,6 +307,28 @@ public class SportMOrderImpl implements ISportMOrderService{
 			return 1;
 		}
 		return 0;
+	}
+	
+	public Integer getOrderStatus(String orderId) {
+		Integer orderStatus = -4;
+		SportMOrderDto sportMOrderDto = sportMOrderDao.findOrderById(orderId, null);
+		if (null != sportMOrderDto && null != sportMOrderDto.getOrderStatus()) {
+			if (orderStatus == sportMOrderDto.getOrderStatus()) {
+				return orderStatus;
+			}
+			if (orderStatus != sportMOrderDto.getOrderStatus()) {
+				long creatTime = sportMOrderDto.getCreateTime().getTime();
+				long nowDate = new Date().getTime();
+				long time = nowDate-creatTime;
+				if (time > DataStatus.ORDERVALIDTIME) {
+					sportMOrderDto.setOrderStatus(orderStatus);
+					SportMOrder sportMOrder = BeanUtils.createBeanByTarget(sportMOrderDto, SportMOrder.class);
+					sportMOrderDao.updateByPrimaryKeySelective(sportMOrder);
+					return orderStatus;
+				}
+			}
+		}
+		return null;
 	}
 	
 	/**
