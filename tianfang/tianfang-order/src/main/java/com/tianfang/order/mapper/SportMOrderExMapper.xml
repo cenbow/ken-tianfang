@@ -56,4 +56,12 @@
 				and o.user_id = #{userId} 
 			</if>
 	</select>
+	
+	<select id="selectDestroyOrder" parameterType="java.lang.Long"  resultType="com.tianfang.order.pojo.SportMOrder">
+			select * from sport_m_order o where o.order_status = '0' and o.create_time &lt; DATE_SUB(localtime(),INTERVAL #{dayNumber} DAY) 
+	</select>
+	
+	<update id="updateOrderStat" parameterType="java.lang.Long">  
+        update sport_m_order SET order_status = '-4' where order_status = '0' and  create_time &lt; DATE_SUB(localtime(),INTERVAL #{dayNumber} DAY) ;
+    </update>  
 </mapper>

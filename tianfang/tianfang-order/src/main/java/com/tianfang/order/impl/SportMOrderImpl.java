@@ -293,4 +293,32 @@ public class SportMOrderImpl implements ISportMOrderService{
 		}
 		return 0;
 	}
+	
+	/**
+	 * 修改失效订单状态
+	 */
+	public void destroyOrder(){
+		//失效天数
+		int dayNumber = 2;   
+		//获取失效订单集合  
+		List<SportMOrder> lis = sportMOrderDao.selectDestroyOrder(dayNumber);
+	 	//回滚失效订单库存
+	 	if(lis.size()>0){
+	 		for (SportMOrder ord : lis) {
+	 			SportMOrderInfoDto ordInfoDto = new SportMOrderInfoDto();
+	 			ordInfoDto.setOrderId(ord.getId());
+	 			List<SportMOrderInfo> lisOrderInfo = sportMOrderInfoDao.selectAll(ordInfoDto);
+	 			if(lisOrderInfo.size()>0){
+	 				for (SportMOrderInfo ordInfo : lisOrderInfo) {
+	 					//拿到订单明细对应的sku商品
+	 					SportMProductSku skuPro = sportMProductSkuDao.selectByPrimaryKey(ordInfo.getProductSkuId());
+	 					skuPro.setProductStock(skuPro.getProductStock()+ordInfo.getNumber()); //订单数量 + 剩余库存  = 新库存
+	 					sportMProductSkuDao.updateByPrimaryKey(skuPro);
+					}
+	 			}
+			}
+	 	}
+	 	//更改失效订单状态 
+	 	sportMOrderDao.updateOrderStat(dayNumber);
+	}
 }

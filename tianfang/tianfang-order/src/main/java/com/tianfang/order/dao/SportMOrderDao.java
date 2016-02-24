@@ -106,4 +106,17 @@ public class SportMOrderDao extends MyBatisBaseDao<SportMOrder>{
 		}
 		return sportMOrderDto;
 	}
+
+	/**
+	 * 查找失效订单列表
+	 * @param dayNumber 失效天数
+	 * @return
+	 */
+	public List<SportMOrder> selectDestroyOrder(long dayNumber) {
+		return mappersEx.selectDestroyOrder(dayNumber);
+	}
+
+	public long updateOrderStat(long dayNumber) {
+		return mappersEx.updateOrderStat(dayNumber);
+	}
 }
