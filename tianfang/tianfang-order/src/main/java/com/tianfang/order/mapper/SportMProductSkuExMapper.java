@@ -16,6 +16,8 @@ public interface SportMProductSkuExMapper {
 	
 	List<SportMProductSkuDto> selectProductSkuByPage(@Param("sportMProductSkuDto") SportMProductSkuDto sportMProductSkuDto,@Param("page") PageQuery page);	
 	
+	long selectProductSkuCount(@Param("sportMProductSkuDto") SportMProductSkuDto sportMProductSkuDto);
+	
 	List<SportMOrderInfoDto> selectOrderBySpu(@Param("productId") String productId,@Param("page") PageQuery page);
 	
 	long selectOrderBySpuCount(@Param("productId") String productId);

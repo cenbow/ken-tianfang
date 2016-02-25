@@ -53,7 +53,7 @@
 														<#if info.evaluateStat??>
 															<#if info.orderStatus??>
 																<#if info.evaluateStat == 0>
-																	<#if info.orderStatus == 1 || info.orderStatus == 2>
+																	<#if page.orderStatus == 1 || page.orderStatus == 2>
 																		<span class="complain" id="evaluatecomment" data-obj-id="${(info.productSkuId)!}" data-m-order-id="${(info.id)!}"><br><a href="###" >追加评论</a></span>		
 																	</#if>
 																</#if>	
@@ -87,7 +87,8 @@
 											<div class="action_box">											
 												<#if page.orderStatus??>
 													<#if page.orderStatus == 0>
-															<p><span></span><br><!--<a href="###">再次购买</a>--><a href="/order/payOrder.htm?id=${(page.id)!}">立即付款</a></span></p>
+															<p><a href="/order/payOrder.htm?id=${(page.id)!}">立即付款</a></p>
+															<!-- <p style="top: 40px;"><span></span><br><a href="###">再次购买</a><a href="/order/payOrder.htm?id=${(page.id)!}">立即付款</a></span></p> -->
 													</#if>
 													<!-- <#if page.orderStatus == 1>
 															<p><span></span><br><a href="###">再次购买</a><a href="/order/payOrder.htm?id=${(page.id)!}">确认收货</a></span></p>
@@ -427,11 +428,11 @@
 					if (result[i].orderStatus != null && result[i].orderStatus == -4) {
 						textAll += "<div class=\"status_box\"><p><span class=\"rs\">订单失效</span><br></p></div>";
 					}
-					textAll += "<div class=\"action_box\"><p><span></span><br><!--<a href=\"###\">再次购买</a>--><a  href=/order/payOrder.htm?id="+result[i].id+">";
+					textAll += "<div class=\"action_box\"><p><a  href=/order/payOrder.htm?id="+result[i].id+">";
 					if (result[i].orderStatus != null && result[i].orderStatus == 0) {
 						textAll += "立即付款";		
 					}
-					textAll += "</a></span></p></div>";		
+					textAll += "</a></p></div>";		
 					/* if (result[i].orderStatus != null && result[i].orderStatus == 1) {
 						textAll += "<div class=\"action_box\"><p><span></span><br><!--<a href=\"###\">再次购买</a>--><a  href=/order/payOrder.htm?id="+result[i].id+">确认收货</a></span></p></div>";		
 					}	 */

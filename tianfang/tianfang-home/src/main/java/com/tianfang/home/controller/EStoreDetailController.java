@@ -80,6 +80,9 @@ public class EStoreDetailController extends BaseController{
 	@RequestMapping(value = "/saveEvaluate")
 	@ResponseBody
 	public Map<String, Object> saveEvaluate(SportMEvaluateDto sportMEvaluateDto) {
+		if  (StringUtils.isBlank(sportMEvaluateDto.getPic())) {
+			sportMEvaluateDto.setPic(null);
+		}
 		Integer result = iSportMEvaluateService.saveEvaluate(sportMEvaluateDto);
 		if (null != result && result == 1) {
 			return MessageResp.getMessage(true, "评论成功！");

@@ -143,18 +143,20 @@
 								</#list>
 							</li>
 							</#if>
-							<li>
-								<label class="lf">数量</label>
-								<span class="lf num">
-									<a class="amount-decrease amount-change">-</a>
-									<input class="amount-Num js-amount" type="text" max="${(sportMProductSpuDto.productStock)!}" id="" value="1" maxlength="4"/>
-									<a class="amount-increase amount-change">+</a>
-									<#if sportMProductSpuDto.productStock??>
-										<label class="limit" for="">剩余${(sportMProductSpuDto.productStock)!}件</label>
-									</#if>
-									<!-- <label class="limit" for="">限购5件</label> -->
-								</span>
-							</li>
+							<div id="sportMProductSpuDto-productStock">
+								<li class="sportMProductSpuDto-productStock">
+									<label class="lf">数量</label>
+									<span class="lf num">
+										<a class="amount-decrease amount-change">-</a>
+										<input class="amount-Num js-amount" type="text" max="${(sportMProductSpuDto.productStock)!}" id="" value="1" maxlength="4"/>
+										<a class="amount-increase amount-change">+</a>
+										<#if sportMProductSpuDto.productStock??>
+											<label class="limit" for="">剩余${(sportMProductSpuDto.productStock)!}件</label>
+										</#if>
+										<!-- <label class="limit" for="">限购5件</label> -->
+									</span>
+								</li>
+							</div>
 						</ul>
 						<#if user??>
 							<!-- <div class="submit"><a href="/m_shipping/toShipping.htm">确认结算</a></div> -->
@@ -665,7 +667,11 @@
 								<#if (sportMOrderInfoDtos.results?size>0)>
 									<#list sportMOrderInfoDtos.results as page>
 										<li class="con-record-li">
+										<#if page.nickName??>
 											<p class="name">${(page.nickName)!}</p>
+										<#else>
+											<p class="name">空</p>
+										</#if>		
 											<p class="type">${(page.skuName)!}</p>
 											<p class="num">${(page.number)!}</p>
 											<p class="date">${(page.createTime)?string("yyyy-MM-dd HH:mm:ss")}</p>
@@ -784,6 +790,18 @@
 							textAll += "<span id=productMarketPrice>￥"+sku.productPrice+"</span>"
 							textAll += "<div>"
 							$('#es-detail-price').append(textAll)
+							$('.sportMProductSpuDto-productStock').remove();
+							var textall = "";
+							textall += "<li class=\"sportMProductSpuDto-productStock\">"
+							textall += "<label class=\"lf\">数量</label>"
+							textall += "<span class=\"lf num\">"
+							textall += "<a class=\"amount-decrease amount-change\">-</a>"
+							textall += "<input class=\"amount-Num js-amount\" type=\"text\" max="+sku.productStock+" id=\"\" value=\"1\" maxlength=\"4\"/>"	
+							textall += "<a class=\"amount-increase amount-change\">+</a>"	
+						 	textall += "<label class=\"limit\" for=\"\">剩余"+sku.productStock+"件</label>"
+							textall += "</span>"
+							textall += "</li>"
+							$('#sportMProductSpuDto-productStock').append(textall);
 						}else {
 							alert(data.msg);
 						}							
@@ -831,7 +849,19 @@
 								textAll += "<label for=\"\">售价</label>"
 								textAll += "<span id=productMarketPrice>￥"+sku.productPrice+"</span>"
 								textAll += "<div>"
-								$('#es-detail-price').append(textAll)
+								$('#es-detail-price').append(textAll);
+								$('.sportMProductSpuDto-productStock').remove();
+								var textall = "";
+								textall += "<li class=\"sportMProductSpuDto-productStock\">"
+								textall += "<label class=\"lf\">数量</label>"
+								textall += "<span class=\"lf num\">"
+								textall += "<a class=\"amount-decrease amount-change\">-</a>"
+								textall += "<input class=\"amount-Num js-amount\" type=\"text\" max="+sku.productStock+" id=\"\" value=\"1\" maxlength=\"4\"/>"	
+								textall += "<a class=\"amount-increase amount-change\">+</a>"	
+							 	textall += "<label class=\"limit\" for=\"\">剩余"+sku.productStock+"件</label>"
+								textall += "</span>"
+								textall += "</li>"
+								$('#sportMProductSpuDto-productStock').append(textall);
 							}else {
 								alert(data.msg);
 							}							
@@ -864,7 +894,7 @@
 						//						console.log("sd");
 					}
 				});
-				$(".amount-decrease").on("click", function() {
+				$('#sportMProductSpuDto-productStock').on("click", ".amount-decrease",function() {
 					var $am = $(".js-amount");
 					if ($am.val() == 1) {
 						return;
@@ -878,7 +908,7 @@
 					document.getElementById("byCriteria").submit();
 					//window.location.href = '/m/Product/homeInfo.htm?productName='+name;
 				})
-				$(".amount-increase").on("click", function() {
+				$('#sportMProductSpuDto-productStock').on("click"," ", function() {
 					var $am = $(".js-amount");
 					console.log($am.val());
 					if ($am.val().length == 4 || $am.val() >= parseInt($am.attr("max"), 10)) {

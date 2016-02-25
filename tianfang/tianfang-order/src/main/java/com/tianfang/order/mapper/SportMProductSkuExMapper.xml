@@ -18,26 +18,42 @@
 	   LEFT JOIN sport_m_spec f on h.spec_id = f.id
 	   LEFT JOIN sport_m_spec_values g on i.spec_values_id = g.id
 	   WHERE a.stat =1 and b.stat = 1 and c.stat=1 and d.stat=1 and e.stat=1 and f.stat=1 and g.stat=1 and h.stat=1 and i.stat=1
-	   <include refid="where_productsku_bypage" />
+	   <include refid="where_productsku_bypages" />
 	   GROUP BY h.product_sku_id
 	   ORDER BY a.create_time desc	 
        limit  #{page.startNum}, #{page.pageSize}
 	</select>	
 	
-	<sql id="where_productsku_bypage">		
+	<select id="selectProductSkuCount" resultType="java.lang.Long" parameterType="com.tianfang.order.dto.SportMProductSkuDto">
+	   select count(t.counts) from (SELECT a.id, COUNT(*) counts 
+	   FROM sport_m_product_sku a 
+	   LEFT JOIN sport_m_product_spu b on a.product_id = b.id  
+	   LEFT JOIN sport_m_product_spec h on a.id = h.product_sku_id 
+	   LEFT JOIN sport_m_product_spec_values i on a.id = i.product_sku_id   
+	   LEFT JOIN sport_m_brand c on b.brand_id = c.id
+	   LEFT JOIN sport_m_category d on b.category_id = d.id
+	   LEFT JOIN sport_m_type e on b.type_id = e.id
+	   LEFT JOIN sport_m_spec f on h.spec_id = f.id
+	   LEFT JOIN sport_m_spec_values g on i.spec_values_id = g.id
+	   WHERE a.stat =1 and b.stat = 1 and c.stat=1 and d.stat=1 and e.stat=1 and f.stat=1 and g.stat=1 and h.stat=1 and i.stat=1
+	   <include refid="where_productsku_bypages" />
+	   GROUP BY a.id) t
+	</select>
+	
+	<sql id="where_productsku_bypages">		
 		<if test="sportMProductSkuDto.productName != null and sportMProductSkuDto.productName != ''">
 			and b.product_name like "%"#{sportMProductSkuDto.productName}"%"
 	   </if>
 	   <if test="sportMProductSkuDto.brandName != null and sportMProductSkuDto.brandName != ''">
-			and c.brand_name like #{sportMProductSkuDto.brandName}
+			and c.brand_name like  "%"#{sportMProductSkuDto.brandName}"%"
 	   </if>
 	   <if test="sportMProductSkuDto.categoryName != null and sportMProductSkuDto.categoryName != ''">
-			and d.category_name like #{sportMProductSkuDto.categoryName}
+			and d.category_name like "%"#{sportMProductSkuDto.categoryName}"%"
 	   </if>
 	   <if test="sportMProductSkuDto.typeName != null and sportMProductSkuDto.typeName != ''">
-			and e.type_name like #{sportMProductSkuDto.typeName}
+			and e.type_name like "%"#{sportMProductSkuDto.typeName}"%"
 	   </if>
-	   <if test="sportMProductSkuDto.productStatus != null and sportMProductSkuDto.productStatus != ''">
+	   <if test="sportMProductSkuDto.productStatus != null">
 			and a.product_status = #{sportMProductSkuDto.productStatus}
 	   </if>
 	</sql>
