@@ -205,7 +205,7 @@ public class MProductHomeController extends BaseController {
 			/*	System.out.println("最大库存"+car.getProductStock());
 				System.out.println("商品已经存在购物车中的数量"+shop.getNumberOf());
 				System.out.println("商品重新订购的数量"+car.getNumberOf());*/
-				if(articleNumber(car.getProductStock(),shop.getNumberOf()) < car.getNumberOf()){
+				if(articleNumber(car.getProductStock(),shop.getNumberOf()) <= car.getNumberOf()){
 					return MessageResp.getMessage(false,"库存不足,请重新选购");
 				}
 				car.setNumberOf(shop.getNumberOf()+car.getNumberOf());			//修改数量

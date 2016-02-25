@@ -32,7 +32,7 @@
 						<a href="/estore/detail/getProduct.htm?id=${(car.spuId)!}"><img class="pic" src="${(car.imgUrl)!}" border="0">
 						<span class="goodsname">${(car.productName)!}</span></a>
 						<span class="price">￥${(car.price)!}</span>				
-						<span class="amount"><a class="minus" href="###" object-id="${(car.id)!}">-</a><input class="amt" sin_price="${(car.price)?replace(',','')}" data_max="${(car.productStock)!}" value="${(car.numberOf)!}"><a class="plus" href="###" object-id="${(car.id)!}">+</a></span>
+						<span class="amount"><a class="minus" href="###" object-id="${(car.id)!}">-</a><input class="amt" object-id="${(car.id)!}" sin_price="${(car.price)?replace(',','')}" data_max="${(car.productStock)!}" value="${(car.numberOf)!}"><a class="plus" href="###" object-id="${(car.id)!}">+</a></span>
 						<span class="total_price">￥${(car.price*car.numberOf)}</span>
 						<span class="stock">有货</span>
 						<span class="action"><a href="###" object-id="${(car.id)!}">删除</a></span>
