@@ -157,7 +157,10 @@
 	})
 	//页码跳转 
 	function gotoPageVideo(page){
-		window.location.href = '/m/Product/homeInfo.htm?page='+page;
+		var priceStat = $('[name=priceStat]').val();
+		var newStat = $('[name=newStat]').val();
+		var typeStat = $('[name=typeStat]').val();
+		window.location.href = '/m/Product/homeInfo.htm?page='+page+'&priceStat='+priceStat+'&newStat='+newStat+'&typeStat='+typeStat;
 	}
 	
 	$(".tabbar #typeSpu").on("click",function(){
