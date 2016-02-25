@@ -412,6 +412,10 @@
 					layer.alert('商品库存不能为空~', { icon: 7 });
 					return;
 				}
+				if($("[name=productPrice]").val() > 99999999  || $("[name=productMarketPrice]").val() > 99999999 || $("[name=productCostPrice]").val() > 99999999){
+					layer.alert('价格信息过大,价格录入不能超过千万~', { icon: 7 });
+					return;
+				} 
 				var ajaxParams = $("#submitForm").serialize();
 				$.ajax({
 					type : "POST",
