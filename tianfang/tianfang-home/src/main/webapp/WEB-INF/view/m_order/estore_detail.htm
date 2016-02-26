@@ -908,7 +908,7 @@
 					document.getElementById("byCriteria").submit();
 					//window.location.href = '/m/Product/homeInfo.htm?productName='+name;
 				})
-				$('#sportMProductSpuDto-productStock').on("click"," ", function() {
+				$('#sportMProductSpuDto-productStock').on("click",".amount-increase", function() {
 					var $am = $(".js-amount");
 					console.log($am.val());
 					if ($am.val().length == 4 || $am.val() >= parseInt($am.attr("max"), 10)) {
