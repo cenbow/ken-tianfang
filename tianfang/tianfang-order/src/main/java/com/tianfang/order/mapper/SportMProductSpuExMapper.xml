@@ -26,8 +26,10 @@
 		<if test="spu.productStatus != null ">
 			and product_status = #{spu.productStatus}
 		</if>
+		<if test="page != null">
 		<if test="page.startNum != null and page.pageSize != null ">
 			 limit  #{page.startNum}, #{page.pageSize}
+		</if>
 		</if>
 	</select>
 	
