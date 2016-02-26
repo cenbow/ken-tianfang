@@ -179,7 +179,7 @@
 		
 		$('.submit').on('click', function(){
 			var evaluateStatus = $("input[name='RadioGroup1']:checked").val();
-			var rulescheckbox = $("input[name='rulescheckbox']:checked").val();
+			/* var rulescheckbox = $("input[name='rulescheckbox']:checked").val(); */
 			var star = $(".cos ul").attr("data")
 			var evaluateContent = $("#costextarea").val();	
 			var userId = "${(userId)!}";;
@@ -212,7 +212,7 @@
 					});		
 				return;
 			}
-			if (rulescheckbox =='' || rulescheckbox == null || rulescheckbox == 'undefined') {
+			/* if (rulescheckbox =='' || rulescheckbox == null || rulescheckbox == 'undefined') {
 				layer.msg('请选择接受规则~', {
 					shade: [0.9, '#000'],
 					icon: 2,
@@ -221,7 +221,7 @@
 						return;
 					});		
 				return;
-			}
+			} */
 			if (evaluateContent =='' || evaluateContent == null || evaluateContent == 'undefined') {
 				layer.msg('请写评论内容~', {
 					shade: [0.9, '#000'],
