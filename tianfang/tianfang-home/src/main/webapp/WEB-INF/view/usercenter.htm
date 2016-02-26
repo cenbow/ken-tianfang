@@ -38,7 +38,31 @@
 							</li>
 							<li><label>昵称</label><input disabled id="nick_name" name="nickName" class="closed" type="text" value="${(userInfo.nickName)!}"><span></span></li>
 							<li><label>性别</label><i style="left:475px"></i><select disabled id="gender" name="gender"><#if userInfo.gender == '1'><option selected="selected" value="1">男</option><option value="0" >女</option><#else><option value="1" >男</option><option selected="selected" value="0">女</option> </#if></select></li>
-							<li><label>所在地</label><i style="left:330px"></i><i style="left:475px"></i><select disabled id="dic" name="province" class="area province" onchange="doDistrict();" ><option value="">省份</option><#if result?? >	<#list result as page><option value="${(page.id)?replace(',','')}">${(page.name)!}</option></#list></#if></select><select disabled class="area city" id="area" name="location"></select></li> 
+							<li><label>所在地</label><i style="left:330px"></i><i style="left:475px"></i>
+							<!-- <select disabled id="dic" name="province" class="area province" onchange="doDistrict();" ><option value="">省份</option><#if result?? >	<#list result as page><option value="${(page.id)?replace(',','')}">${(page.name)!}</option></#list></#if></select><select disabled class="area city" id="area" name="location"></select> -->
+							<select disabled id="province" name="province" class="area province" onchange="changeForm(this.value)" " >
+								<option value="">省份</option>
+									<#if result?? >
+										<#list result as page>
+											<option value="${(page.id)?replace(',','')}">${(page.name)!}</option>
+										</#list>
+									</#if>
+							</select>
+							<select disabled  class="area city" id="area" name="location" onchange="changeFormCity(this.value)" >
+									<#if areaAdd??>
+										<option value="${(areaAdd.id)?replace(',','')}">${(areaAdd.name)!}</option>
+									<#else>
+										<option value="">市区</option>
+									</#if>
+							</select>
+							<select disabled id="areaCounty" name="distruct" class="area county">
+							        <#if distructAdd??>
+										<option value="${(distructAdd.id)?replace(',','')}">${(distructAdd.name)!}</option>
+									<#else>
+										<option value="">区域</option>
+									</#if>
+							</select>
+							</li> 
 						</ul>
 						<input class="save_info" type="button" value="保 存">
 					</div>
@@ -144,6 +168,65 @@
 	    doDistrict(); //获取省份下区域信息  
 	    document.getElementById('area').value="${(userInfo.location)!}"; 
 	} 
+	
+	//获取省份信息
+	function changeForm(val){
+		$.ajax({
+			type : "POST",
+			url : "${base}/m_shipping/getAddressByCriteria.htm",
+			data: {parentId:val.replace(',',''),level:2},
+			datatype : "json",
+			success : function(datas){
+				var data = datas.data;
+				console.log(data);
+				$("#area").empty();
+				var categoryId = document.getElementById("area");
+				categoryId[0] =new Option("全部","");
+				var i=0;
+				if (data.length > 0) {
+					for(var o in data){
+						if(data[o].name == undefined ||data[o].name == '' || data[o].name == null ){
+							continue;
+						}
+						i++;
+						categoryId[i] =new Option(data[o].name,data[o].id);
+					}
+				} else {
+					$("#area").empty(); 
+					categoryId[0] =new Option("全部","");
+				}
+			}
+		})
+	}
+	//获取区域信息 
+	function changeFormCity(val){
+		$.ajax({
+			type : "POST",
+			url : "${base}/m_shipping/getAddressByCriteria.htm",
+			data: {parentId:val.replace(',',''),level:3},
+			datatype : "json",
+			success : function(datas){
+				var data = datas.data;
+				console.log(data);
+				$("#areaCounty").empty();
+				var categoryId = document.getElementById("areaCounty");
+				categoryId[0] =new Option("全部","");
+				var i=0;
+				if (data.length > 0) {
+					for(var o in data){
+						if(data[o].name == undefined ||data[o].name == '' || data[o].name == null ){
+							continue;
+						}
+						i++;
+						categoryId[i] =new Option(data[o].name,data[o].id);
+					}
+				} else {
+					$("#areaCounty").empty(); 
+					categoryId[0] =new Option("全部","");
+				}
+			}
+		})
+	}
 </script>
 <script type="text/javascript" src="/static/js/usercenter.js" ></script>
 </html>
