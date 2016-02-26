@@ -41,23 +41,28 @@
 							<li><label>所在地</label><i style="left:330px"></i><i style="left:475px"></i>
 							<!-- <select disabled id="dic" name="province" class="area province" onchange="doDistrict();" ><option value="">省份</option><#if result?? >	<#list result as page><option value="${(page.id)?replace(',','')}">${(page.name)!}</option></#list></#if></select><select disabled class="area city" id="area" name="location"></select> -->
 							<select disabled id="province" name="province" class="area province" onchange="changeForm(this.value)" " >
-								<option value="">省份</option>
+							   		<#if proName??>
+										<option value="${(proName.id)?replace(',','')}">${(proName.name)!}</option>
+									<#else>
+										<option value="">省份</option>
+									</#if>
+								
 									<#if result?? >
 										<#list result as page>
 											<option value="${(page.id)?replace(',','')}">${(page.name)!}</option>
 										</#list>
 									</#if>
 							</select>
-							<select disabled  class="area city" id="area" name="location" onchange="changeFormCity(this.value)" >
-									<#if areaAdd??>
-										<option value="${(areaAdd.id)?replace(',','')}">${(areaAdd.name)!}</option>
+							<select disabled  class="area city" id="area" name="area" onchange="changeFormCity(this.value)" >
+									<#if areName??>
+										<option value="${(areName.id)?replace(',','')}">${(areName.name)!}</option>
 									<#else>
 										<option value="">市区</option>
 									</#if>
 							</select>
-							<select disabled id="areaCounty" name="distruct" class="area county">
-							        <#if distructAdd??>
-										<option value="${(distructAdd.id)?replace(',','')}">${(distructAdd.name)!}</option>
+							<select disabled id="areaCounty" name="location" class="area county">
+							        <#if locName??>
+										<option value="${(locName.id)?replace(',','')}">${(locName.name)!}</option>
 									<#else>
 										<option value="">区域</option>
 									</#if>

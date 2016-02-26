@@ -57,6 +57,10 @@ public class SportUserReqDto implements Serializable{
     @Setter
     @Getter
     private String location;
+    
+    @Setter
+    @Getter
+    private String area;
 
     @Setter
     @Getter
