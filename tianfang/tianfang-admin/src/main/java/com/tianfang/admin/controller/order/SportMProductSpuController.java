@@ -89,6 +89,7 @@ public class SportMProductSpuController extends BaseController {
 	public Map<String,Object> delete(String id){
 		long stat = iProductSpu.delete(id);
 		if(stat >0){
+			System.out.println(iSportMProductSkuService.findAllSpu().size());
 			redisController.addRedis(iSportMProductSkuService.findAllSpu());
 			return MessageResp.getMessage(true, "删除成功~~");
 		}

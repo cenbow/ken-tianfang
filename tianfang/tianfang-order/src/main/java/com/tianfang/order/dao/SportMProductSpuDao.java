@@ -115,8 +115,8 @@ public class SportMProductSpuDao extends MyBatisBaseDao<SportMProductSpu>{
 		return stat;
 	}
 
-	public List<SportMProductSpuDto> selectPageAllEx(SportMProductSpuDto spu) {
-		return mappersEx.selectPageAll(spu);
+	public List<SportMProductSpuDto> selectPageAllEx(SportMProductSpuDto spu,PageQuery page) {
+		return mappersEx.selectPageAll(spu,page);
 	}
 
 	public long countPageAll(SportMProductSpuDto spu) {

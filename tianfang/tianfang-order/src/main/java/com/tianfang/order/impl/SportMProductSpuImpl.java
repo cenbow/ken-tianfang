@@ -57,9 +57,7 @@ public class SportMProductSpuImpl implements ISportMProductSpuService{
 	
 	@Override
 	public PageResult<SportMProductSpuDto> selectPageAll(SportMProductSpuDto spu, PageQuery page) {
-		spu.setStart(page.getStartNum());
-		spu.setLimit(page.getPageSize());
-		List<SportMProductSpuDto> lis = sportMProductSpuDao.selectPageAllEx(spu);
+		List<SportMProductSpuDto> lis = sportMProductSpuDao.selectPageAllEx(spu,page);
 		long total = sportMProductSpuDao.countPageAll(spu);
 		page.setTotal(total);
 		return new PageResult<SportMProductSpuDto>(page,lis);

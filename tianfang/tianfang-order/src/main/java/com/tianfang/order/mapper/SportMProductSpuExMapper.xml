@@ -23,8 +23,11 @@
 		<if test="spu.categoryName != null and spu.categoryName !='' ">
 			and category_name like "%"#{spu.categoryName}"%" 
 		</if>
-		<if test="spu.start != null and spu.limit != null ">
-			limit #{spu.start},#{spu.limit}
+		<if test="spu.productStatus != null ">
+			and product_status = #{spu.productStatus}
+		</if>
+		<if test="page.startNum != null and page.pageSize != null ">
+			 limit  #{page.startNum}, #{page.pageSize}
 		</if>
 	</select>
 	
@@ -44,9 +47,6 @@
 		</if>
 		<if test="spu.categoryName != null and spu.categoryName !='' ">
 			and category_name like "%"#{spu.categoryName}"%" 
-		</if>
-		<if test="spu.start != null and spu.limit != null ">
-			limit #{spu.start},#{spu.limit}
 		</if>
 	</select>
 </mapper>
