@@ -620,11 +620,18 @@ public class UserController extends BaseController{
 		shipping.setUserId(userInfo.getId());
 		//获取用户对应的收货地址
 		SportShippingAddressDto userShipping = issaService.getByCriteria(shipping);
-		
-		SportAddressesDto proName = addressService.getAddressesById(Integer.valueOf(userInfo.getProvince()));
-		SportAddressesDto areName = addressService.getAddressesById(Integer.valueOf(userInfo.getArea()));
-		SportAddressesDto locName = addressService.getAddressesById(Integer.valueOf(userInfo.getLocation()));
-		
+		SportAddressesDto proName =new SportAddressesDto();   //省
+		SportAddressesDto areName =new SportAddressesDto();	  //市
+		SportAddressesDto locName = new SportAddressesDto();  //区
+		if(StringUtils.isNotBlank(userInfo.getProvince())){
+			proName = addressService.getAddressesById(Integer.valueOf(userInfo.getProvince()));
+		}
+		if(StringUtils.isNotBlank(userInfo.getArea())){
+			areName = addressService.getAddressesById(Integer.valueOf(userInfo.getArea()));
+		}
+		if(StringUtils.isNotBlank(userInfo.getLocation())){
+			locName = addressService.getAddressesById(Integer.valueOf(userInfo.getLocation()));
+		}
 		//获取全部区县数据
 		List<SportAddressesDto> lis = new ArrayList<SportAddressesDto>();
 		addresses.setParentId("1");
