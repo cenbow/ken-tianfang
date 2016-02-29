@@ -421,6 +421,10 @@
 				layer.alert('请选择商品名称~', { icon: 7 });
 				return;
 			}
+			if ($("[name=productName]").val().length <2 || $("[name=productName]").val().length >18) {
+				layer.alert('商品名称定义为2~18个字符', { icon: 7 });
+				return;
+			}
 			if (null == $("[name=brandId]").val() || '' == $("[name=brandId]").val()) {
 				layer.alert('请选择所属商品~', { icon: 7 });
 				return;
