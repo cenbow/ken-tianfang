@@ -120,6 +120,7 @@ public class SportMProductSkuDao extends MyBatisBaseDao<SportMProductSku>{
 		if (StringUtils.isNotBlank(productId)) {
 			criteria.andProductIdEqualTo(productId);
 		}
+		criteria.andProductStatusEqualTo(DataStatus.ENABLED);
 		criteria.andStatEqualTo(DataStatus.ENABLED);
 		List<SportMProductSku> sportMProductSkus = mappers.selectByExample(example);
 		return BeanUtils.createBeanListByTarget(sportMProductSkus, SportMProductSkuDto.class);
