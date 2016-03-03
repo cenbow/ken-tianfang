@@ -36,5 +36,5 @@ public interface ISportMOrderService {
 	
 	public int saveOrderStatus(String orderId,Integer orderStatus);
 	
-	public Integer getOrderStatus(String orderId);
+	public Integer getOrderStatus(String order_no);
 }

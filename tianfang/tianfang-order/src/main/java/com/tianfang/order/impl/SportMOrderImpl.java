@@ -309,9 +309,9 @@ public class SportMOrderImpl implements ISportMOrderService{
 		return 0;
 	}
 	
-	public Integer getOrderStatus(String orderId) {
+	public Integer getOrderStatus(String order_no) {
 		Integer orderStatus = -4;
-		SportMOrderDto sportMOrderDto = sportMOrderDao.findOrderById(orderId, null);
+		SportMOrderDto sportMOrderDto = sportMOrderDao.findOrderById(null,order_no);
 		if (null != sportMOrderDto && null != sportMOrderDto.getOrderStatus()) {
 			if (orderStatus == sportMOrderDto.getOrderStatus()) {
 				return orderStatus;

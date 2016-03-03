@@ -55,7 +55,7 @@ public class PayController {
 			return String.valueOf(DataStatus.DISABLED);
 		}
 		Integer result = iSportMOrderService.getOrderStatus(payDto.getOut_trade_no());
-		if (result == -4) {
+		if (null != result && result == -4) {
 			return String.valueOf(result);
 		}
 		// //////////////////////////////////请求参数//////////////////////////////////////
