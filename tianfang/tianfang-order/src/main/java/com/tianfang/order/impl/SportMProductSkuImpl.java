@@ -216,7 +216,9 @@ public class SportMProductSkuImpl implements ISportMProductSkuService{
 	
 	public SportMProductSkuDto findById(String id) {
 		SportMProductSku sportMProductSku = sportMProductSkuDao.selectByPrimaryKey(id);
+		SportMProductSpu sportMProductSpu = sportMProductSpuDao.selectByPrimaryKey(sportMProductSku.getProductId());
 		SportMProductSkuDto sportMProductSkuDto = BeanUtils.createBeanByTarget(sportMProductSku, SportMProductSkuDto.class);
+		sportMProductSkuDto.setTypeId(sportMProductSpu.getTypeId());
 		return sportMProductSkuDto;
 	}
 	
