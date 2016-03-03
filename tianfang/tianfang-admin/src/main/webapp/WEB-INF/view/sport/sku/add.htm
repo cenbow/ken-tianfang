@@ -428,6 +428,10 @@
 				layer.alert('商品库存不能为空~', { icon: 7 });
 				return;
 			}
+			if(productStock < 1){
+				layer.alert('商品库存要大于0~', { icon: 7 });
+				return;
+			}
 			var idStr = ids.replace(",", ""); 
 			if (idStr == '' || idStr == null) {
 				layer.alert('请添加商品规格~', { icon: 7 });
