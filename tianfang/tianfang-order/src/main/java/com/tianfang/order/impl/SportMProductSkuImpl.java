@@ -280,5 +280,14 @@ public class SportMProductSkuImpl implements ISportMProductSkuService{
 //		List<SportMSpecValuesDto> specValuesDtos = BeanUtils.createBeanListByTarget(sportMSpecValues, SportMSpecValuesDto.class);
 		return specProductDtos;
 	}
+
+	@Override
+	public List<SportMProductSkuDto> findSkuByProduct(String productId) {
+		List<SportMProductSku> sku = sportMProductSkuDao.findSkuByProductIdList(productId);
+		if(sku != null && sku.size() >0){
+			return BeanUtils.createBeanListByTarget(sku, SportMProductSku.class);
+		}
+		return null;
+	}
 	
 }

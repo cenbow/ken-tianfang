@@ -124,4 +124,14 @@ public class SportMProductSkuDao extends MyBatisBaseDao<SportMProductSku>{
 		List<SportMProductSku> sportMProductSkus = mappers.selectByExample(example);
 		return BeanUtils.createBeanListByTarget(sportMProductSkus, SportMProductSkuDto.class);
 	}
+
+	public List<SportMProductSku> findSkuByProductIdList(String productId) {
+		SportMProductSkuExample example = new SportMProductSkuExample();
+		SportMProductSkuExample.Criteria criteria = example.createCriteria();
+		if (StringUtils.isNotBlank(productId)) {
+			criteria.andProductIdEqualTo(productId);
+		}
+		criteria.andStatEqualTo(DataStatus.ENABLED);
+		return mappers.selectByExample(example);
+	}
 }

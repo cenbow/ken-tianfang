@@ -23,7 +23,7 @@
 		<if test="spu.categoryName != null and spu.categoryName !='' ">
 			and category_name like "%"#{spu.categoryName}"%" 
 		</if>
-		<if test="spu.productStatus != null ">
+		<if test="spu.productStatus != null "> 
 			and product_status = #{spu.productStatus}
 		</if>
 		<if test="page != null">

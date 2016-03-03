@@ -45,5 +45,7 @@ public interface ISportMProductSkuService {
 	public List<SportMSpecProductDto> findAllSkuByProductId(String productId);
 	
 	public List<SportMProductSkuSpecValuesDto> selectSkuSpecValues(String productSkuId) ;
+	
+	public List<SportMProductSkuDto> findSkuByProduct(String productId);
 }
 

@@ -29,6 +29,7 @@ public class SportMProductSpuImpl implements ISportMProductSpuService{
 	@Override
 	public long save(SportMProductSpuDto spu) {
 		SportMProductSpu pSpu = BeanUtils.createBeanByTarget(spu,SportMProductSpu.class);
+		pSpu.setProductStatus(0);  //新增为下架状态     通过添加sku修改为上架状态 
 		return sportMProductSpuDao.save(pSpu);
 	}
 
