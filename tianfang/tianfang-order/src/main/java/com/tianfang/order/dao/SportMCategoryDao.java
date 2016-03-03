@@ -48,10 +48,11 @@ public class SportMCategoryDao extends MyBatisBaseDao<SportMCategory>{
 	}
 	
 	public long count(SportMCategoryDto sportMCategoryDto) {
-		SportMCategoryExample example = new SportMCategoryExample();
+		/*SportMCategoryExample example = new SportMCategoryExample();
 		SportMCategoryExample.Criteria criteria = example.createCriteria();
 		criteria.andStatEqualTo(DataStatus.ENABLED);
-		return mappers.countByExample(example);
+		return mappers.countByExample(example);*/
+		return exMappers.selectCategoryByCount(sportMCategoryDto);
 	}
 	
 	public List<SportMCategoryDto> findAllCategory() {

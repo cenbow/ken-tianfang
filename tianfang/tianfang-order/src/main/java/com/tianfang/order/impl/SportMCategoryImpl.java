@@ -35,13 +35,19 @@ public class SportMCategoryImpl implements ISportMCategoryService{
 		if (results.size()>0) {
 			for (SportMCategoryDto sportmCategoryDto : results) {
 				sportmCategoryDto.setCreateDate(sdf.format(sportmCategoryDto.getCreateTime()));
-				if (StringUtils.isNotBlank(sportmCategoryDto.getParentId()) && !sportmCategoryDto.getParentId().equals("0")) {
-					for (SportMCategoryDto sportmcategoryDto : results) {
-						if (sportmCategoryDto.getParentId().equals(sportmcategoryDto.getId())) {
-							sportmCategoryDto.setParentName(sportmcategoryDto.getCategoryName());
-						}
+				if(StringUtils.isNotBlank(sportMCategoryDto.getParentId())){
+					SportMCategory cate = sportMCategoryDao.selectByPrimaryKey(sportMCategoryDto.getParentId());
+					if(cate!=null){
+						sportmCategoryDto.setParentName(cate.getCategoryName());
 					}
 				}
+				/*if (StringUtils.isNotBlank(sportmCategoryDto.getParentId()) && !sportmCategoryDto.getParentId().equals("0")) {
+					for (SportMCategoryDto mcategoryDto : results) {
+						if (sportmCategoryDto.getParentId().equals(mcategoryDto.getId())) {
+							sportmCategoryDto.setParentName(mcategoryDto.getCategoryName());
+						}
+					}
+				}*/
 				
 			}
 		}

@@ -12,6 +12,15 @@
        limit  #{page.startNum}, #{page.pageSize}
 	</select>
 	
+	
+	 <select id="selectCategoryByCount" resultType="java.lang.Long" parameterType="com.tianfang.order.dto.SportMCategoryDto">
+	   SELECT count(*)
+	   FROM sport_m_category a 
+	   LEFT JOIN sport_m_type b on a.type_id = b.id  
+	   WHERE a.stat =1 and b.stat = 1
+	   <include refid="where_category_bypage" />
+	</select>
+	
 	<sql id="where_category_bypage">		
 		<if test="sportMCategoryDto.categoryName != null and sportMCategoryDto.categoryName != ''">
 			and a.category_name like "%"#{sportMCategoryDto.categoryName}"%"

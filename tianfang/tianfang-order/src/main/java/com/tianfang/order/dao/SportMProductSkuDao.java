@@ -135,4 +135,15 @@ public class SportMProductSkuDao extends MyBatisBaseDao<SportMProductSku>{
 		criteria.andStatEqualTo(DataStatus.ENABLED);
 		return mappers.selectByExample(example);
 	}
+	
+	public List<SportMProductSku> findSkuByCriteria(SportMProductSku sku) {
+		SportMProductSkuExample example = new SportMProductSkuExample();
+		SportMProductSkuExample.Criteria criteria = example.createCriteria();
+		if (StringUtils.isNotBlank(sku.getSpecName())) {
+			criteria.andSpecNameEqualTo(sku.getSpecName());
+		}
+		criteria.andProductStatusEqualTo(DataStatus.ENABLED);
+		criteria.andStatEqualTo(DataStatus.ENABLED);
+		return mappers.selectByExample(example);
+	}
 }

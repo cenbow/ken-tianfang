@@ -11,4 +11,5 @@ public interface SportMCategoryExMapper {
 	
 	List<SportMCategoryDto> selectCategoryByPage(@Param("sportMCategoryDto") SportMCategoryDto sportMCategoryDto,@Param("page") PageQuery page);
 
+	long selectCategoryByCount(@Param("sportMCategoryDto") SportMCategoryDto sportMCategoryDto);
 }

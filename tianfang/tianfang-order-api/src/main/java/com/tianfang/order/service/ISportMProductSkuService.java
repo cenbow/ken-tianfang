@@ -47,5 +47,8 @@ public interface ISportMProductSkuService {
 	public List<SportMProductSkuSpecValuesDto> selectSkuSpecValues(String productSkuId) ;
 	
 	public List<SportMProductSkuDto> findSkuByProduct(String productId);
+
+	public boolean selectSkuByCriteria(SportMProductSkuDto skuDto);
+	
 }
 
