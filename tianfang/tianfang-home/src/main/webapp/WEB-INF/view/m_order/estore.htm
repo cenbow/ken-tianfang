@@ -8,7 +8,7 @@
 	<script src="/static/js/login.js"></script>
     <link href="/static/css/style.css" rel="stylesheet" />
 </head>
-<body>
+<body onkeydown="BindEnter(event)">
 	<#include "/common/topbar.htm"/>
 	<form id="byCriteria" action="/m/Product/homeInfo.htm">
 		<input type="hidden" name="typeId" value="${(spuDto.typeId)!}" />
@@ -171,6 +171,17 @@
 	    document.getElementById("byCriteria").submit();
 		//window.location.href='/m/Product/homeInfo.htm?typeId='+id; 
 	})
+	
+	function BindEnter(obj)
+	{
+    //使用document.getElementById获取到按钮对象
+    var button = document.getElementById('selectBy');
+    if(obj.keyCode == 13)
+        {
+            button.click();
+            obj.returnValue = false;
+        }
+	}
 	</script>
 </body>
 </html>
