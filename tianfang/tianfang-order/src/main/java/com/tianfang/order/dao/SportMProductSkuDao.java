@@ -131,6 +131,7 @@ public class SportMProductSkuDao extends MyBatisBaseDao<SportMProductSku>{
 		if (StringUtils.isNotBlank(productId)) {
 			criteria.andProductIdEqualTo(productId);
 		}
+		criteria.andProductStatusEqualTo(DataStatus.ENABLED);
 		criteria.andStatEqualTo(DataStatus.ENABLED);
 		return mappers.selectByExample(example);
 	}
