@@ -203,6 +203,11 @@
 				val = val >= max ? max : val;
 				$(this).val(val);
 			}).on("blur", function() {
+				var amt_field = $(this).parent().find('.amt')
+				if(parseInt(amt_field.val()) > parseInt(amt_field.attr('data_max'))){
+					alert("库存数量不足~~ ");
+					return
+				}
 				var val = $(this).val(),max = parseInt($(this).attr("max"));
 				if (val.length == 0) {
 					$(this).val(1);
