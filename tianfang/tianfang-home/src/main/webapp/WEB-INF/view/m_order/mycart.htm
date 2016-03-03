@@ -205,7 +205,7 @@
 			}).on("blur", function() {
 				var amt_field = $(this).parent().find('.amt')
 				if(parseInt(amt_field.val()) > parseInt(amt_field.attr('data_max'))){
-					this.value = parseInt(0);
+					this.value = parseInt(1);
 					alert("库存数量不足~~ ");
 					return
 				}
