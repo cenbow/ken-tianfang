@@ -63,7 +63,7 @@
 							<div class="scrollbutton smallImgDown"></div>
 						</div>
 						<!--smallImg end-->
-						<div id="bigView" style="display:none;"><img width="800" height="800" alt="" src="" /></div>
+						<div id="bigView" style="display:none;"><img width="800" height="800" alt="" src="" /></div> 
 					</div>
 				</div>
 				<div class="main-box">
@@ -796,9 +796,17 @@
 							textall += "<label class=\"lf\">数量</label>"
 							textall += "<span class=\"lf num\">"
 							textall += "<a class=\"amount-decrease amount-change\">-</a>"
-							textall += "<input class=\"amount-Num js-amount\" type=\"text\" max="+sku.productStock+" id=\"\" value=\"1\" maxlength=\"4\"/>"	
+							if (sku.productStock != null && sku.productStock > 0) {
+								textall += "<input class=\"amount-Num js-amount\" type=\"text\" max="+sku.productStock+" id=\"\" value=\"1\" maxlength=\"4\"/>"	
+							} else {
+								textall += "<input class=\"amount-Num js-amount\" type=\"text\" max=\"0\" id=\"\" value=\"1\" maxlength=\"4\"/>"	
+							}		
 							textall += "<a class=\"amount-increase amount-change\">+</a>"	
-						 	textall += "<label class=\"limit\" for=\"\">剩余"+sku.productStock+"件</label>"
+							if (sku.productStock != null && sku.productStock > 0) {
+								textall += "<label class=\"limit\" for=\"\">剩余"+sku.productStock+"件</label>"
+							}else {
+								textall += "<label class=\"limit\" for=\"\">暂无库存</label>"	
+							}
 							textall += "</span>"
 							textall += "</li>"
 							$('#sportMProductSpuDto-productStock').append(textall);
@@ -856,9 +864,18 @@
 								textall += "<label class=\"lf\">数量</label>"
 								textall += "<span class=\"lf num\">"
 								textall += "<a class=\"amount-decrease amount-change\">-</a>"
-								textall += "<input class=\"amount-Num js-amount\" type=\"text\" max="+sku.productStock+" id=\"\" value=\"1\" maxlength=\"4\"/>"	
+								if (sku.productStock != null && sku.productStock > 0) {
+									textall += "<input class=\"amount-Num js-amount\" type=\"text\" max="+sku.productStock+" id=\"\" value=\"1\" maxlength=\"4\"/>"	
+								} else {
+									textall += "<input class=\"amount-Num js-amount\" type=\"text\" max=\"0\" id=\"\" value=\"1\" maxlength=\"4\"/>"	
+								}								
 								textall += "<a class=\"amount-increase amount-change\">+</a>"	
-							 	textall += "<label class=\"limit\" for=\"\">剩余"+sku.productStock+"件</label>"
+								if (sku.productStock != null && sku.productStock > 0) {
+									textall += "<label class=\"limit\" for=\"\">剩余"+sku.productStock+"件</label>"
+								}else {
+									textall += "<label class=\"limit\" for=\"\">暂无库存</label>"	
+								}
+							 	
 								textall += "</span>"
 								textall += "</li>"
 								$('#sportMProductSpuDto-productStock').append(textall);
