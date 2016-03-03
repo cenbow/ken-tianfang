@@ -146,6 +146,9 @@ public class MProductHomeController extends BaseController {
 	@RequestMapping("/toMShppingCard")
 	@ResponseBody
 	public Map<String,Object> toShoppingCard(SportMShoppingCartDto car,HttpSession session){
+		if(car.getNumberOf() < 1){
+			return MessageResp.getMessage(false,"选择商品数量要大于0");
+		}
 		//获取当前登录用户
 		String userId = this.getSessionUserId();
 		String key = userId+"Card";
