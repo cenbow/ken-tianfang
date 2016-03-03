@@ -14,6 +14,7 @@ import com.tianfang.admin.controller.PageData;
 import com.tianfang.common.ext.ExtPageQuery;
 import com.tianfang.common.model.MessageResp;
 import com.tianfang.common.model.PageResult;
+import com.tianfang.common.util.StringUtils;
 import com.tianfang.order.dto.SportMSpecDto;
 import com.tianfang.order.dto.SportMSpecValuesDto;
 import com.tianfang.order.dto.SportMTypeDto;
@@ -82,6 +83,14 @@ public class SportMSpecController extends BaseController {
 	@ResponseBody
 	@RequestMapping("/delete")
 	public Map<String,Object> delete(String id){
+		if(StringUtils.isNotBlank(id)){
+			SportMSpecValuesDto ssv = new SportMSpecValuesDto();
+			ssv.setSpecId(id);
+			List<SportMSpecValuesDto> lis_spec = iSportMSpecValuesService.selectByCreate(ssv);
+			if(lis_spec!=null && lis_spec.size()>0){
+				return MessageResp.getMessage(false,"请删除商品属性的关联信息~~~");
+			}
+		}
 		long stat = iSportMspecServie.delete(id);
 		if(stat > 0){
 			redisController.addRedis(iSportMspecServie.selectAll());
