@@ -97,7 +97,7 @@ public class SportMTypeSpecController extends BaseController {
 			}
 		}
 		List<SportMSpecDto> specLis = (List<SportMSpecDto>) redisTemplate.opsForValue().get("SportMSpecDto");
-		if(specLis.size()<1){
+		if(specLis!=null && specLis.size()<1){
 			specLis = iSportMspecServie.selectAll();
 			if(specLis!=null){
 				redisController.addRedis(specLis);
