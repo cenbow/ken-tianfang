@@ -85,24 +85,23 @@ public class SportMTypeSpecController extends BaseController {
 		return MessageResp.getMessage(false, "新增失败");
 	}
 	
-	@SuppressWarnings({ "unchecked"})
 	@RequestMapping("/toSave")
 	public ModelAndView toSaveST(SportMTypeSpecDto mTypeSpec){
 		ModelAndView mv= this.getModelAndView(this.getSessionUserId());
-		List<SportMTypeDto> typeLis= (List<SportMTypeDto>) redisTemplate.opsForValue().get("SportMTypeDto") ;
-		if(typeLis==null || typeLis.size()<1){
-			typeLis= iSportMTypeService.selectMTypeAll();
-			if(typeLis!=null){
+		/*List<SportMTypeDto> typeLis= (List<SportMTypeDto>) redisTemplate.opsForValue().get("SportMTypeDto") ;
+		if(typeLis==null || typeLis.size()<1){*/
+		List<SportMTypeDto> typeLis= iSportMTypeService.selectMTypeAll();
+		/*	if(typeLis!=null){
 				redisController.addRedis(typeLis);
 			}
-		}
-		List<SportMSpecDto> specLis = (List<SportMSpecDto>) redisTemplate.opsForValue().get("SportMSpecDto");
-		if(specLis==null || specLis.size()<1){
-			specLis = iSportMspecServie.selectAll();
-			if(specLis!=null){
+		}*/
+		/*List<SportMSpecDto> specLis = (List<SportMSpecDto>) redisTemplate.opsForValue().get("SportMSpecDto");
+		if(specLis==null || specLis.size()<1){*/
+		List<SportMSpecDto> specLis = iSportMspecServie.selectAll();
+			/*if(specLis!=null){
 				redisController.addRedis(specLis);
 			}
-		}
+		}*/
 		try {
 			mv.addObject("typeLis",typeLis);
 			mv.addObject("specLis",specLis);
