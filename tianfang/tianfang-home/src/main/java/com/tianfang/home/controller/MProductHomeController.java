@@ -134,7 +134,7 @@ public class MProductHomeController extends BaseController {
 				return MessageResp.getMessage(true, sku);			
 			}			
 		}
-		return MessageResp.getMessage(false,"无此商品");
+		return MessageResp.getMessage(false,"此规格商品没有~");
 	}
 	
 	/**
