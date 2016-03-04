@@ -125,8 +125,8 @@
 									<td class='hidden-phone'>${(page.lastUpdateTime)?string("yyyy-MM-dd")}</td>
 									<td>
 										<div id="operation" class='hidden-phone visible-desktop btn-group'>		
-										    <!-- <a id='editRights' data-obj-id="${(page.id)!}" class="btn btn-mini btn-purple"><i class=""></i>页面位置</a> -->								
-											<a id='editObj' data-obj-id="${(page.id)!}" class='btn btn-mini btn-warning' title="编辑"><i class='icon-edit'></i></a>
+										    <a id='editRights' data-obj-id="${(page.id)!}" data-obj-stat="${(page.productStatus)!}" class="btn btn-mini btn-purple" title="上下架"><i class=""></i>上下架</a>							
+											<a id='editObj' data-obj-id="${(page.id)!}"  class='btn btn-mini btn-warning' title="编辑"><i class='icon-edit'></i></a>
 											<a id='deleteObj' data-obj-id="${(page.id)!}" class='btn btn-mini btn-danger' title="删除"><i class='icon-trash'></i></a>
 											<!-- <a id='previewObj' data-obj-id="${(page.id)!}" class='btn btn-mini label-info' title="预览"><i class=''></i>预览</a> -->
 										</div>
@@ -259,15 +259,45 @@
 			});
 			$("#operation #editRights").on('click',function(){
 				var id = $(this).attr("data-obj-id");
+				var productStatus = $(this).attr("data-obj-stat");
+				
 				//iframe层-父子操作
-				layer.open({
+				/* layer.open({
 				    type: 2,
 				    area: ['380px', '260px'],
 				    fix: true, //不固定
 				    maxmin: false,
 				    content: '${base}/sport/newsInfo/openPagePosition.do?id='+id
-				});				
+				});	 */			
 				//console.log($(this).attr("data-obj-id"));
+				layer.confirm('确定要更改上架状态吗？', {icon: 3}, function(index){
+					$.ajax({
+			             type: "POST",
+			             url: "${base}/product/spu/spuStatus.do",
+			             data: {id:id,productStatus:productStatus},
+			             dataType: "json",
+			             success: function(data){
+			            	 if(data.success){
+		            			layer.msg('操作成功', {
+		            				shade: [0.9, '#000'],
+		            			    icon: 6,
+		            			    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+		            			}, function(){
+		            			    //do something
+		            				reload_page();
+		            			});		            		 
+			            	 }else{
+		            			layer.msg('操作失败', {
+		            				shade: [0.9, '#000'],
+		            			    icon: 6,
+		            			    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+		            			},function(){
+		            				return;
+		            			});
+			            	 }
+			             }
+			         });
+					});
 			});
 			$("#operation #editObj").on('click',function(){
 				var newsId = $(this).attr("data-obj-id");
@@ -278,8 +308,9 @@
 				    fix: true, //不固定
 				    maxmin: false,
 				    content: '${base}/product/spu/openEditView.do?id='+newsId
-				});				
+				}); 				
 				//console.log($(this).attr("data-obj-id"));
+				
 			});
 			
 			$("#operation #examineObj").on('click',function(){

@@ -31,4 +31,6 @@ public interface ISportMProductSpuService {
 
 	SportMProductSpuDto selectSpuById(String spuId);
 
+	long spuStatus(SportMProductSpuDto spu);
+
 }

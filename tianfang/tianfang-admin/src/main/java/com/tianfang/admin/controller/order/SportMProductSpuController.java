@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.tianfang.admin.controller.BaseController;
 import com.tianfang.admin.controller.PageData;
+import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.ext.ExtPageQuery;
 import com.tianfang.common.model.MessageResp;
 import com.tianfang.common.model.PageResult;
@@ -84,6 +85,35 @@ public class SportMProductSpuController extends BaseController {
 			spu.setThumbnail(null);
 		}
 		long stat = iProductSpu.edit(spu);
+		if(stat >0){
+			redisController.addRedis(iSportMProductSkuService.findAllSpu());
+			return MessageResp.getMessage(true, "修改成功~~");
+		}
+		return MessageResp.getMessage(false, "修改失败~~");
+	}
+	
+	@SuppressWarnings("unchecked")
+	@ResponseBody
+	@RequestMapping("/spuStatus")
+	public Map<String,Object> spuStatus(SportMProductSpuDto spu){
+		if (spu.getProductStatus() == 1) {
+			spu.setProductStatus(DataStatus.DISABLED);
+		}else{
+			spu.setProductStatus(DataStatus.ENABLED);
+		}
+		if(spu.getProductStatus() == 1){   //修改商品为上架状态  保证商品属性有 关联记录
+			List<SportMProductSkuDto> lisSku =	iSportMProductSkuService.findSkuByProduct(spu.getId());
+			if(lisSku==null || lisSku.size()<1){
+				return MessageResp.getMessage(false, "请先为对应的商品属性添加关联值~~");
+			}
+		}
+		if (StringUtils.isBlank(spu.getPic())) {
+			spu.setPic(null);
+		}
+		if (StringUtils.isBlank(spu.getThumbnail())) {
+			spu.setThumbnail(null);
+		}
+		long stat = iProductSpu.spuStatus(spu);
 		if(stat >0){
 			redisController.addRedis(iSportMProductSkuService.findAllSpu());
 			return MessageResp.getMessage(true, "修改成功~~");

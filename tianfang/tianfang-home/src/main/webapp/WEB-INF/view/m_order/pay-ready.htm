@@ -16,6 +16,11 @@
 		<!-- <script src="/static/js/header.js"></script> -->
 		<#include "/common/topbar.htm"/>
 		<div class="wrapper">
+		<#if msg??>
+				<div class="pay-info bg1" style="text-align:center;  font-size:20px; margin: 100px 0 100px 0;">
+					${(msg)}
+				</div>
+		<#else>
 			<div class="pay-ready-a">
 				<div class="pay-ready-d">
 					<h1>订单已提交成功，请您尽快付款!</h1>
@@ -26,6 +31,7 @@
 				</div>
 
 			</div>
+			
 			<div class="pay-info bg1">
 				<ul class="pay-info-ul">
 					<li>
@@ -50,12 +56,12 @@
 					<li><img class="status" src="/static/img/selected.png"/><img class="logo-pay" class="status" src="/static/img/zfb.png" alt="" /></li>
 					<!-- <li><img class="status" src="/static/img/unselected.png"/> <img class="logo-pay" src="/static/img/zsyh.png" alt="" /></li>
 					<li><img class="status" src="/static/img/unselected.png"/><img class="logo-pay" class="status" src="/static/img/zfb.png" alt="" /></li> -->
-				</ul>
-			</div>
+				</ul>			
 			<div class="bts pay-bts">
 				<a class="bt cur">确认支付</a>
 			</div>
 		</div>
+		</#if>
 		<form id="orderInfo" action="">
 			<input name="out_trade_no" value="${(order.orderNo)!}" type="hidden" />
 			<input name="subject" type="hidden" value="123" />

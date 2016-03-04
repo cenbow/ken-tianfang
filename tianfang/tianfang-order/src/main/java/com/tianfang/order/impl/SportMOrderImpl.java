@@ -25,6 +25,8 @@ import com.tianfang.order.dto.SportMEvaluateDto;
 import com.tianfang.order.dto.SportMOrderDto;
 import com.tianfang.order.dto.SportMOrderInfoDto;
 import com.tianfang.order.dto.SportMOrderToolsDto;
+import com.tianfang.order.dto.SportMProductSkuDto;
+import com.tianfang.order.dto.SportMProductSpuDto;
 import com.tianfang.order.dto.SportMUserOrderDto;
 import com.tianfang.order.pojo.SportMEvaluate;
 import com.tianfang.order.pojo.SportMOrder;
@@ -167,6 +169,15 @@ public class SportMOrderImpl implements ISportMOrderService{
 		Double totalPrices = 0d;
 		for (int i = 0; i < skuId.length; i++) {
 			SportMProductSku m_sku = sportMProductSkuDao.selectByPrimaryKey(skuId[i]);
+			if(m_sku.getProductStatus() == 0){
+				SportMProductSkuDto skuDto =	BeanUtils.createBeanByTarget(m_sku, SportMProductSkuDto.class);
+				SportMProductSpuDto spuDto =    BeanUtils.createBeanByTarget(sportMProductSpuDao.selectByPrimaryKey(skuDto.getProductId()), SportMProductSpuDto.class); 
+				SportMOrderDto orderDto =  new SportMOrderDto();
+				orderDto.setSkuId(skuDto.getId());
+				orderDto.setSkuName(spuDto.getProductName()+"-"+skuDto.getSpecName());
+				return orderDto;
+			}
+			
 			totalPrices += Integer.valueOf(number[i]) * Double.valueOf(m_sku.getProductPrice()) ;
 		}
 		// 选中的商品  数据库中总价 与 前台总价相等    生成订单

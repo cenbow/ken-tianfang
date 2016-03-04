@@ -70,6 +70,7 @@ public class SportMCategoryDao extends MyBatisBaseDao<SportMCategory>{
 		if (StringUtils.isNotBlank(typeId)) {
 			criteria.andTypeIdEqualTo(typeId);
 		}
+		criteria.andIsShowEqualTo(DataStatus.ENABLED);
 		criteria.andStatEqualTo(DataStatus.ENABLED);
 		List<SportMCategory> sportMCategories = mappers.selectByExample(example);
 		return BeanUtils.createBeanListByTarget(sportMCategories, SportMCategoryDto.class);

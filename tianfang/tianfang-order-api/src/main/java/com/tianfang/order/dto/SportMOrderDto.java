@@ -64,4 +64,10 @@ public class SportMOrderDto implements Serializable {
 	@Getter
 	@Setter
 	private String addressInfo ;//收货地址
+	@Getter
+	@Setter
+	private String skuId ;
+	@Getter
+	@Setter
+	private String skuName ;
 }

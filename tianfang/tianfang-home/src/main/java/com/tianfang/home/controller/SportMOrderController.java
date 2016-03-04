@@ -1,5 +1,6 @@
 package com.tianfang.home.controller;
 
+import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -12,8 +13,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.tianfang.common.model.MessageResp;
+import com.tianfang.common.util.StringUtils;
 import com.tianfang.order.dto.SportMOrderDto;
 import com.tianfang.order.dto.SportMOrderToolsDto;
+import com.tianfang.order.dto.SportMShoppingCartDto;
 import com.tianfang.order.service.ISportMOrderInfoService;
 import com.tianfang.order.service.ISportMOrderService;
 
@@ -57,6 +60,23 @@ public class SportMOrderController extends BaseController{
 		//生成订单  返回订单信息
 		SportMOrderDto order= iSportMOrderService.addOrder(tools);
 		if(order!=null){
+			if(StringUtils.isNotBlank(order.getSkuId())){
+				//删除购物车
+				Map<String,Object> map =  (Map<String, Object>) redisTemplate.opsForValue().get(key);
+				//通过skuId 找到对应的无效的 某一条商品记录 删除
+				Iterator entries = map.entrySet().iterator();
+				while (entries.hasNext()) {
+					Map.Entry entry = (Map.Entry) entries.next();
+					SportMShoppingCartDto shopping= (SportMShoppingCartDto) entry.getValue();
+					if(shopping.getSkuId().equals(order.getSkuId())){
+						map.remove(shopping.getId());
+					}
+				}
+				redisTemplate.opsForValue().set(key, map);
+				mv.addObject("msg","您购买的"+order.getSkuName()+"商品，已经下架，请重新购买！");
+				mv.setViewName("/m_order/pay-ready");
+				return mv;
+			}
 			//删除购物车
 			Map<String,Object> map =  (Map<String, Object>) redisTemplate.opsForValue().get(key);
 			for (int i = 0; i < carId.length; i++) {

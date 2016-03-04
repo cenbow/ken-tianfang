@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
 import com.tianfang.common.util.BeanUtils;
@@ -41,6 +42,20 @@ public class SportMProductSpuImpl implements ISportMProductSpuService{
 			sportMProductSkuDao.updateByPrimaryKeySelective(sportMProductSku);
 		}
 		return sportMProductSpuDao.edit(pSpu);
+	}
+	
+	@Override
+	public long spuStatus(SportMProductSpuDto spu) {
+		SportMProductSpu pSpu = BeanUtils.createBeanByTarget(spu,SportMProductSpu.class);
+		SportMProductSpu sportMProductSpu = sportMProductSpuDao.selectByPrimaryKey(spu.getId());
+		if (null != spu.getProductStatus() && spu.getProductStatus() == 0) {
+			List<SportMProductSku> sku = sportMProductSkuDao.findSkuByProductIdList(spu.getId());
+			for (SportMProductSku sportmProductSku :sku) {
+				sportmProductSku.setProductStatus(DataStatus.DISABLED);
+				sportMProductSkuDao.updateByPrimaryKeySelective(sportmProductSku);
+			}
+		}		
+		return sportMProductSpuDao.updateByPrimaryKeySelective(pSpu);
 	}
 
 	@Override

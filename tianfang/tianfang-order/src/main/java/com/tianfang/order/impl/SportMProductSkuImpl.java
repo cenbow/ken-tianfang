@@ -95,7 +95,9 @@ public class SportMProductSkuImpl implements ISportMProductSkuService{
 	}
 	
 	public List<SportMBrandDto> findAllBrand(){
-		List<SportMBrandDto> sportMBrandDtos = sportMBrandDao.findPage(null, null);
+		SportMBrandDto sportMBrandDto = new SportMBrandDto();
+		sportMBrandDto.setIsShow(DataStatus.ENABLED);
+		List<SportMBrandDto> sportMBrandDtos = sportMBrandDao.findPage(sportMBrandDto, null);
 		return sportMBrandDtos;
 	}
 	
