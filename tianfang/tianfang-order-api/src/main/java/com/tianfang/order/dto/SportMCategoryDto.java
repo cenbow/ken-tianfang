@@ -64,4 +64,9 @@ public class SportMCategoryDto implements Serializable {
 	@Getter
     @Setter
     private String typeName;
+	
+	
+	@Getter
+	@Setter
+	private Integer deleteStat;
 }

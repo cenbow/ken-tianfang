@@ -12,7 +12,7 @@ public interface ISportMSpecService {
 
 	long edit(SportMSpecDto sportMSpec);
 
-	long delete(String id);
+	Object delete(String id);
 
 	PageResult<SportMSpecDto> selectPageAll(SportMSpecDto sportMSpec,PageQuery changeToPageQuery);
 

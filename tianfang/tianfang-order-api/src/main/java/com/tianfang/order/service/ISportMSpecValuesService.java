@@ -10,7 +10,7 @@ public interface ISportMSpecValuesService {
 
 	List<SportMSpecValuesDto> selectByCreate(SportMSpecValuesDto specVal);
 
-	long delete(String id);
+	Object delete(String id);
 
 	long update(SportMSpecValuesDto sportMSpecValue);
 

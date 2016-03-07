@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.tianfang.admin.controller.BaseController;
 import com.tianfang.admin.controller.PageData;
+import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.ext.ExtPageQuery;
 import com.tianfang.common.model.MessageResp;
 import com.tianfang.common.model.PageResult;
@@ -91,12 +92,19 @@ public class SportMSpecController extends BaseController {
 				return MessageResp.getMessage(false,"请删除商品属性的关联信息~~~");
 			}
 		}
-		long stat = iSportMspecServie.delete(id);
-		if(stat > 0){
+		SportMSpecDto sportMSpecDto =  (SportMSpecDto) iSportMspecServie.delete(id);
+		if (DataStatus.DISABLED == sportMSpecDto.getDeleteStat()) {
+			return MessageResp.getMessage(false, "删除失败，规格'"+sportMSpecDto.getSpecName()+"'已被使用不能删除");
+		}
+		if (DataStatus.ENABLED == sportMSpecDto.getDeleteStat()) {
 			redisController.addRedis(iSportMspecServie.selectAll());
 			return MessageResp.getMessage(true,"删除成功~~~");
 		}
-		return MessageResp.getMessage(false,"删除失败~~~");
+		/*if(stat > 0){
+			redisController.addRedis(iSportMspecServie.selectAll());
+			return MessageResp.getMessage(true,"删除成功~~~");
+		}*/
+		return MessageResp.getMessage(false,"未知错误~~~");
 	}
 	/**
 	 * 查询规格信息
@@ -205,11 +213,17 @@ public class SportMSpecController extends BaseController {
 	@ResponseBody
 	@RequestMapping("/deleteSpecInfo")
 	public Map<String,Object> deleteSpecInfo(String id){
-		long stat = iSportMSpecValuesService.delete(id);
-		if(stat >0){
+		SportMSpecValuesDto sportMSpecValuesDto  = (SportMSpecValuesDto) iSportMSpecValuesService.delete(id);
+		if (DataStatus.DISABLED == sportMSpecValuesDto.getDeleteStat()) {
+			return MessageResp.getMessage(false, "删除失败，规格明细'"+sportMSpecValuesDto.getSpecValue()+"'已被使用不能删除");
+		}	
+		if (DataStatus.ENABLED == sportMSpecValuesDto.getDeleteStat()) {
 			return MessageResp.getMessage(true,"删除成功~~~");
 		}
-		return MessageResp.getMessage(false,"新增失败~~~");
+//		if(stat >0){
+//			return MessageResp.getMessage(true,"删除成功~~~");
+//		}
+		return MessageResp.getMessage(false,"未知错误~~~");
 	}
 	
 	/**

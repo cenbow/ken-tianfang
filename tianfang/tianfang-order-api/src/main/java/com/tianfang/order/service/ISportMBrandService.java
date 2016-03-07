@@ -14,7 +14,7 @@ public interface ISportMBrandService {
 	
 	public SportMBrandDto findById(String id);
 	
-	public Object delete(String ids) ;
+	public SportMBrandDto delete(String ids) ;
 
 	public List<SportMBrandDto> selectAll();
 }

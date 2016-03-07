@@ -322,7 +322,7 @@
 		             dataType: "json",
 		             success: function(data){
 		            	 if(data.success){
-	            			layer.msg('数据删除成功', {
+	            			layer.msg(data.msg, {
 	            				shade: [0.9, '#000'],
 	            			    icon: 6,
 	            			    time: 1500 //2秒关闭（如果不配置，默认是3秒）
@@ -331,7 +331,7 @@
 	            				reload_page();
 	            			});		            		 
 		            	 }else{
-	            			layer.msg('数据删除失败', {
+	            			layer.msg(data.msg, {
 	            				shade: [0.9, '#000'],
 	            			    icon: 6,
 	            			    time: 1500 //2秒关闭（如果不配置，默认是3秒）
@@ -368,7 +368,7 @@
 				             dataType: "json",
 				             success: function(data){
 				            	 if(data.success){
-			            			layer.msg('数据删除成功', {
+			            			layer.msg(data.msg, {
 			            				shade: [0.9, '#000'],
 			            			    icon: 6,
 			            			    time: 1500 //2秒关闭（如果不配置，默认是3秒）
@@ -377,7 +377,7 @@
 			            				reload_page();
 			            			});		            		 
 				            	 }else{
-			            			layer.msg('数据删除失败', {
+			            			layer.msg(data.msg, {
 			            				shade: [0.9, '#000'],
 			            			    icon: 6,
 			            			    time: 1500 //2秒关闭（如果不配置，默认是3秒）

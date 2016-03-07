@@ -48,16 +48,20 @@ public class SportMProductSpuImpl implements ISportMProductSpuService{
 	public long spuStatus(SportMProductSpuDto spu) {
 		SportMProductSpu pSpu = BeanUtils.createBeanByTarget(spu,SportMProductSpu.class);
 		SportMProductSpu sportMProductSpu = sportMProductSpuDao.selectByPrimaryKey(spu.getId());
-		if (null != spu.getProductStatus() && spu.getProductStatus() == 0) {
+		if (null != spu.getProductStatus()) {
 			List<SportMProductSku> sku = sportMProductSkuDao.findSkuByProductIdList(spu.getId());
 			for (SportMProductSku sportmProductSku :sku) {
-				sportmProductSku.setProductStatus(DataStatus.DISABLED);
+				sportmProductSku.setProductStatus(spu.getProductStatus());
 				sportMProductSkuDao.updateByPrimaryKeySelective(sportmProductSku);
 			}
 		}		
 		return sportMProductSpuDao.updateByPrimaryKeySelective(pSpu);
 	}
 
+	public List<SportMProductSpu> findSpuById(SportMProductSpuDto spu){
+		return sportMProductSpuDao.findSpuById(spu);
+	}
+	
 	@Override
 	public long delete(String id) {
 		String[] ids = id.split(",");

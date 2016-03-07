@@ -18,7 +18,7 @@ public interface ISportMTypeSpecService {
 
 	PageResult<SportTypeSpecExDto> selectTypeSpec(SportTypeSpecExDto spexDto,PageQuery page);
 
-	long delete(String id);
+	Object delete(String id);
 
 	List<SportMTypeSpecDto> selectAll();
 

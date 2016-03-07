@@ -50,4 +50,8 @@ public class SportTypeSpecExDto implements Serializable {
 		@Getter
 		@Setter
 		private Integer limit;
+		
+		@Getter
+		@Setter
+		private Integer deleteStat;
 }

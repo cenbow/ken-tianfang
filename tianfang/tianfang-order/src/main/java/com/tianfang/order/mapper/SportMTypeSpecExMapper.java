@@ -11,6 +11,8 @@ import com.tianfang.order.dto.SportTypeSpecExDto;
 public interface SportMTypeSpecExMapper {
 
 	List<SportTypeSpecExDto> selectTypeSpec(@Param("spexDto") SportTypeSpecExDto spexDto);
+	
+	List<SportTypeSpecExDto> selectProductTypeSpec(@Param("spexDto") SportTypeSpecExDto spexDto);
     
 	long countTypeSpec(@Param("spexDto") SportTypeSpecExDto spexDto);
 	

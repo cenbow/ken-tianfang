@@ -13,8 +13,11 @@ import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
 import com.tianfang.common.util.BeanUtils;
 import com.tianfang.common.util.StringUtils;
+import com.tianfang.order.dao.SportMProductSpuDao;
 import com.tianfang.order.dao.SportMTypeDao;
+import com.tianfang.order.dto.SportMProductSpuDto;
 import com.tianfang.order.dto.SportMTypeDto;
+import com.tianfang.order.pojo.SportMProductSpu;
 import com.tianfang.order.pojo.SportMType;
 import com.tianfang.order.service.ISportMTypeService;
 @Service
@@ -22,6 +25,9 @@ public class SportMTypeImpl implements ISportMTypeService{
 	
 	@Autowired
 	private SportMTypeDao sportMTypeDao;
+	
+	@Autowired
+	private SportMProductSpuDao sportMProductSpuDao;
 	
 	public PageResult<SportMTypeDto> findPage(SportMTypeDto sportMTypeDto,PageQuery page) {
 		List<SportMTypeDto> sportMTypeDtos = sportMTypeDao.findPage(sportMTypeDto, page);
@@ -49,18 +55,41 @@ public class SportMTypeImpl implements ISportMTypeService{
 	
 	public Object delete(String ids) {
 		String[] idStr = ids.split(",");
+		SportMTypeDto sportMTypeDto = new SportMTypeDto();
 		if (idStr.length>0) {
+			for (String id : idStr) {
+				SportMProductSpuDto spu = new SportMProductSpuDto();
+				spu.setTypeId(id);
+				List<SportMProductSpu> sportMProductSpus = sportMProductSpuDao.findSpuById(spu);
+				SportMType sportMType = sportMTypeDao.selectByPrimaryKey(id);
+				if (sportMProductSpus.size()>0) {
+					sportMTypeDto = BeanUtils.createBeanByTarget(sportMType, SportMTypeDto.class);
+					sportMTypeDto.setDeleteStat(DataStatus.DISABLED);
+					return sportMTypeDto;
+				}
+			}
 			for (String id : idStr) {
 				SportMType sportMType = sportMTypeDao.selectByPrimaryKey(id);
 				sportMType.setStat(DataStatus.DISABLED);
 				sportMTypeDao.updateByPrimaryKeySelective(sportMType);
-			}			
+			}
+			sportMTypeDto.setDeleteStat(DataStatus.ENABLED);
+			return sportMTypeDto;
 		}else {
+			SportMProductSpuDto spu = new SportMProductSpuDto();
+			spu.setTypeId(ids);
+			List<SportMProductSpu> sportMProductSpus = sportMProductSpuDao.findSpuById(spu);
 			SportMType sportMType = sportMTypeDao.selectByPrimaryKey(ids);
+			if (sportMProductSpus.size()>0) {
+				sportMTypeDto = BeanUtils.createBeanByTarget(sportMType, SportMTypeDto.class);
+				sportMTypeDto.setDeleteStat(DataStatus.DISABLED);
+				return sportMTypeDto;
+			}
 			sportMType.setStat(DataStatus.DISABLED);
 			sportMTypeDao.updateByPrimaryKeySelective(sportMType);
+			sportMTypeDto.setDeleteStat(DataStatus.ENABLED);
+			return sportMTypeDto;
 		}
-		return null;
 	}
 
 	@Override

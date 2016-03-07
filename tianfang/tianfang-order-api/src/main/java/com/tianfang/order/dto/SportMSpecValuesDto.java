@@ -44,4 +44,8 @@ public class SportMSpecValuesDto implements Serializable {
     @Getter
     @Setter
     private Integer stat;
+    
+    @Getter
+    @Setter
+    private Integer deleteStat;
 }

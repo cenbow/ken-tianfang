@@ -16,10 +16,12 @@ import com.tianfang.admin.controller.BaseController;
 import com.tianfang.admin.controller.Const;
 import com.tianfang.admin.controller.PageData;
 import com.tianfang.admin.dto.SportAdminDto;
+import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.ext.ExtPageQuery;
 import com.tianfang.common.model.MessageResp;
 import com.tianfang.common.model.PageResult;
 import com.tianfang.order.dto.SportMBrandDto;
+import com.tianfang.order.pojo.SportMBrand;
 import com.tianfang.order.service.ISportMBrandService;
 
 @Controller
@@ -103,8 +105,14 @@ public class SportMBrandController extends BaseController{
 		if(ids == null || "".equals(ids)){
             return MessageResp.getMessage(false, "请求参数不能为空~") ;
         }
-		iSportMBrandService.delete(ids);
-		redisController.addRedis(iSportMBrandService.selectAll());
-		return MessageResp.getMessage(true, "删除成功！");
+		SportMBrandDto sportMBrandDto = iSportMBrandService.delete(ids);
+		if (DataStatus.DISABLED == sportMBrandDto.getDeleteStat()) {
+			return MessageResp.getMessage(false, "删除失败，品牌'"+sportMBrandDto.getBrandName()+"'已被使用不能删除");
+		}
+		if (DataStatus.ENABLED == sportMBrandDto.getDeleteStat()) {
+			redisController.addRedis(iSportMBrandService.selectAll());
+			return MessageResp.getMessage(true, "删除成功！");
+		}
+		return MessageResp.getMessage(false, "未知错误！");
 	}
 }

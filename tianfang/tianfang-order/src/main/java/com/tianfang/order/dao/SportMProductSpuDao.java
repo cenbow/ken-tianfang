@@ -123,6 +123,21 @@ public class SportMProductSpuDao extends MyBatisBaseDao<SportMProductSpu>{
 		return mappersEx.countPageAll(spu);
 	}
 
+	public List<SportMProductSpu> findSpuById(SportMProductSpuDto spu) {
+		SportMProductSpuExample example = new SportMProductSpuExample();
+		SportMProductSpuExample.Criteria criteria = example.createCriteria();
+		if (StringUtils.isNotBlank(spu.getBrandId())) {
+			criteria.andBrandIdEqualTo(spu.getBrandId());
+		}
+		if (StringUtils.isNotBlank(spu.getTypeId())) {
+			criteria.andTypeIdEqualTo(spu.getTypeId());
+		}
+		if (StringUtils.isNotBlank(spu.getCategoryId())) {
+			criteria.andCategoryIdEqualTo(spu.getCategoryId());
+		}
+		List<SportMProductSpu> results = mappers.selectByExample(example);
+		return results;
+	}
 	
 	public List<SportMProductSpuDto> findAllSpu(){
 		SportMProductSpuExample example = new SportMProductSpuExample();

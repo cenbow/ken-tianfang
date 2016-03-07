@@ -39,5 +39,15 @@ public class SportMProductSpecDao extends MyBatisBaseDao<SportMProductSpec>{
 		criteria.andStatEqualTo(DataStatus.ENABLED);
 		List<SportMProductSpec> sportMProductSpecs = mappers.selectByExample(example);
 		return sportMProductSpecs;
-	}	
+	}
+	
+	public List<SportMProductSpec> findByProductSpec(SportMProductSpecDto sportMProductSpecDto) {
+		SportMProductSpecExample example = new SportMProductSpecExample();
+		SportMProductSpecExample.Criteria criteria = example.createCriteria();
+		if (StringUtils.isNotBlank(sportMProductSpecDto.getSpecId())) {
+			criteria.andSpecIdEqualTo(sportMProductSpecDto.getSpecId());
+		}
+		List<SportMProductSpec> sportMProductSpecs = mappers.selectByExample(example);
+		return sportMProductSpecs;
+	}
 }

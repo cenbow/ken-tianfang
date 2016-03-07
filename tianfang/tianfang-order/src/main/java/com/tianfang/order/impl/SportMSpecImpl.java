@@ -6,12 +6,16 @@ import org.apache.zookeeper.KeeperException.BadVersionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
 import com.tianfang.common.util.BeanUtils;
+import com.tianfang.order.dao.SportMProductSpecDao;
 import com.tianfang.order.dao.SportMSpecDao;
 import com.tianfang.order.dao.SportMTypeSpecDao;
+import com.tianfang.order.dto.SportMProductSpecDto;
 import com.tianfang.order.dto.SportMSpecDto;
+import com.tianfang.order.pojo.SportMProductSpec;
 import com.tianfang.order.pojo.SportMSpec;
 import com.tianfang.order.pojo.SportMTypeSpec;
 import com.tianfang.order.service.ISportMSpecService;
@@ -23,6 +27,9 @@ public class SportMSpecImpl implements ISportMSpecService{
 	private SportMSpecDao sportMSpecDao;
 	@Autowired
 	private SportMTypeSpecDao sportMTypeSpecDao;
+	
+	@Autowired
+	private SportMProductSpecDao sportMProductSpecDao;
 
 	@Override
 	public long save(SportMSpecDto sportMSpec) {
@@ -47,16 +54,32 @@ public class SportMSpecImpl implements ISportMSpecService{
 	}
 
 	@Override
-	public long delete(String id) {
+	public Object delete(String id) {
 		String[] ids = id.split(",");
+		SportMSpecDto sportMSpecDto =  new SportMSpecDto();
 		long stat = 0;
 		for (String str : ids) {
-			stat = sportMSpecDao.delete(str);
+			SportMProductSpecDto sport =  new SportMProductSpecDto();
+			sport.setSpecId(str);
+			List<SportMProductSpec> result = sportMProductSpecDao.findByProductSpec(sport);
+			SportMSpec sportMspec = sportMSpecDao.selectByPrimaryKey(str);
+			if (result.size()>0) {
+				sportMSpecDto = BeanUtils.createBeanByTarget(sportMspec, SportMSpecDto.class);
+				sportMSpecDto.setDeleteStat(DataStatus.DISABLED);
+				return sportMSpecDto;
+			}
+			/*stat = sportMSpecDao.delete(str);
 			if(stat<0){
 				return stat;
-			}
+			}*/
 		}
-		return stat;
+		for (String str : ids) {
+			SportMSpec sportMspec = sportMSpecDao.selectByPrimaryKey(str);
+			sportMspec.setStat(DataStatus.DISABLED);
+			sportMSpecDao.updateByPrimaryKeySelective(sportMspec);
+		}
+		sportMSpecDto.setDeleteStat(DataStatus.ENABLED);
+		return sportMSpecDto;
 	}
 
 	@Override
@@ -88,5 +111,4 @@ public class SportMSpecImpl implements ISportMSpecService{
 		}
 		return null;
 	} 
-	
 }

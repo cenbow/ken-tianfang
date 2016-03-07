@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.tianfang.admin.controller.BaseController;
+import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.ext.ExtPageQuery;
 import com.tianfang.common.model.MessageResp;
 import com.tianfang.common.model.PageResult;
@@ -63,12 +64,19 @@ public class SportMTypeSpecController extends BaseController {
 	@ResponseBody
 	@RequestMapping("/delete")
 	public Map<String,Object> delete(String id){
-		long stat = iSportMTypeSpecService.delete(id);
-		if (stat >0) {
+		SportTypeSpecExDto sportTypeSpecExDto = (SportTypeSpecExDto) iSportMTypeSpecService.delete(id);
+		if (DataStatus.DISABLED == sportTypeSpecExDto.getDeleteStat()) {
+			return MessageResp.getMessage(false, "删除失败，类型'"+sportTypeSpecExDto.getTypeName()+"'和规格'"+sportTypeSpecExDto.getSpecName()+"'已被使用不能删除");
+		}	
+		if (DataStatus.ENABLED == sportTypeSpecExDto.getDeleteStat()) {
 			redisController.addRedis(iSportMTypeSpecService.selectAll());
 			return MessageResp.getMessage(true,"删除成功");
-	    }
-	    return MessageResp.getMessage(false,"删除失败");
+		}
+//		if (stat >0) {
+//			redisController.addRedis(iSportMTypeSpecService.selectAll());
+//			return MessageResp.getMessage(true,"删除成功");
+//	    }
+	    return MessageResp.getMessage(false,"未知失败");
 	}
 	
 	@RequestMapping("/save")

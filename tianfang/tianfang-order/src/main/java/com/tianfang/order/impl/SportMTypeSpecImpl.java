@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.model.PageQuery;
 import com.tianfang.common.model.PageResult;
 import com.tianfang.common.util.BeanUtils;
@@ -49,16 +50,32 @@ public class SportMTypeSpecImpl implements ISportMTypeSpecService{
 	}
 
 	@Override
-	public long delete(String id) {
+	public Object delete(String id) {
 		String[] ids = id.split(",");
+		SportTypeSpecExDto sportTypeSpecExDto = new SportTypeSpecExDto();		
 		long stat =0;
 		for (String str : ids) {
-			stat = sportMTypeSpecDao.delete(str);
-			if(stat<1){
-				return stat;
+			SportTypeSpecExDto spexDto = new SportTypeSpecExDto();	
+			spexDto.setId(str);
+			List<SportTypeSpecExDto> sportTypeSpecExDtos = sportMTypeSpecDao.selectProductTypeSpec(spexDto);
+			if (sportTypeSpecExDtos.size()>0) {
+				sportTypeSpecExDto.setSpecName(sportTypeSpecExDtos.get(0).getSpecName());
+				sportTypeSpecExDto.setTypeName(sportTypeSpecExDtos.get(0).getTypeName());
+				sportTypeSpecExDto.setDeleteStat(DataStatus.DISABLED);
+				return sportTypeSpecExDto;
 			}
+//			stat = sportMTypeSpecDao.delete(str);
+//			if(stat<1){
+//				return stat;
+//			}
 		}
-		return stat;
+		for ( String str : ids) {
+			SportMTypeSpec spec = sportMTypeSpecDao.selectByPrimaryKey(str);
+			spec.setStat(DataStatus.DISABLED);
+			sportMTypeSpecDao.updateByPrimaryKeySelective(spec);
+		}
+		sportTypeSpecExDto.setDeleteStat(DataStatus.ENABLED);
+		return sportTypeSpecExDto;
 	}
 
 	@Override

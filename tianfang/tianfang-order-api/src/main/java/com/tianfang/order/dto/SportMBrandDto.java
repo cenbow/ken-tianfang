@@ -52,5 +52,9 @@ public class SportMBrandDto implements Serializable {
 	@Getter
     @Setter
     private String createDate;
+	
+	@Getter
+	@Setter
+	private Integer deleteStat;
 
 }

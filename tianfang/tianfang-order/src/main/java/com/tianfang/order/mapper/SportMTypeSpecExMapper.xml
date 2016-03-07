@@ -11,6 +11,34 @@
 		</if>
 	</select>
 	
+	<select id="selectProductTypeSpec" parameterType="com.tianfang.order.dto.SportTypeSpecExDto" resultType="com.tianfang.order.dto.SportTypeSpecExDto">
+		select 
+		tp.id as id,
+		tp.spec_id as specId , 
+		tp.type_id as typeId ,
+		tp.create_time as createTime ,
+		tp.last_update_time as lastUpdateTime ,
+	    spec.spec_name as specName ,
+		spec.spec_order as specOrder ,
+		type.type_name as typeName ,
+		type.type_order as typeOrder
+		from sport_m_type_spec as tp 
+		inner join sport_m_spec as spec on (tp.spec_id = spec.id)
+		inner join sport_m_type as type on (tp.type_id = type.id)		
+		inner join sport_m_product_spec as skuspec on (skuspec.spec_id = tp.spec_id) 
+		inner join sport_m_product_sku as sku on (sku.id = skuspec.product_sku_id)
+		where tp.stat = '1'
+		<if test="spexDto.id != null and spexDto.id !='' ">
+			and tp.id like #{spexDto.id} 
+		</if>
+		<if test="spexDto.typeId != null and spexDto.typeId !='' ">
+			and tp.type_id like #{spexDto.typeId} 
+		</if>
+		<if test="spexDto.specId != null and spexDto.specId !='' ">
+			and tp.spec_id like #{spexDto.specId} 
+		</if>		
+	</select>
+	
 	<select id="selectTypeSpec" parameterType="com.tianfang.order.dto.SportTypeSpecExDto" resultType="com.tianfang.order.dto.SportTypeSpecExDto">
 		select 
 		tp.id as id,

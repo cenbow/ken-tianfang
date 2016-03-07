@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.tianfang.admin.controller.BaseController;
 import com.tianfang.admin.controller.PageData;
+import com.tianfang.common.constants.DataStatus;
 import com.tianfang.common.ext.ExtPageQuery;
 import com.tianfang.common.model.MessageResp;
 import com.tianfang.common.model.PageResult;
@@ -91,8 +92,14 @@ public class SportMTypeController extends BaseController{
 		if(ids == null || "".equals(ids)){
             return MessageResp.getMessage(false, "请求参数不能为空~") ;
         }
-		iSportMTypeService.delete(ids);
-		redisController.addRedis(iSportMTypeService.selectMTypeAll());
-		return MessageResp.getMessage(true, "删除成功！");
+		SportMTypeDto sportMTypeDto = (SportMTypeDto) iSportMTypeService.delete(ids);
+		if (DataStatus.DISABLED == sportMTypeDto.getDeleteStat()) {
+			return MessageResp.getMessage(false, "删除失败，类型'"+sportMTypeDto.getTypeName()+"'已被使用不能删除");
+		}
+		if (DataStatus.ENABLED == sportMTypeDto.getDeleteStat()) {
+			redisController.addRedis(iSportMTypeService.selectMTypeAll());
+			return MessageResp.getMessage(true, "删除成功！");
+		}
+		return MessageResp.getMessage(false, "未知错误！");
 	}
 }

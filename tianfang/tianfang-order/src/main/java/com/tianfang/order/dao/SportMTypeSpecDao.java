@@ -67,6 +67,10 @@ public class SportMTypeSpecDao extends MyBatisBaseDao<SportMTypeSpec>{
 		return stat;
 	}
 	
+	public List<SportTypeSpecExDto> selectProductTypeSpec(SportTypeSpecExDto spexDto) {
+		return mapperEx.selectProductTypeSpec(spexDto);
+	}
+	
 	public List<SportMSpecDto> findSpecByTypeId(String typeId){
 		return mapperEx.findSpecByTypeId(typeId);
 	}

@@ -40,5 +40,9 @@ public class SportMTypeDto implements Serializable {
     @Getter
     @Setter
     private String createDate;
+    
+    @Getter
+	@Setter
+	private Integer deleteStat;
 
 }
