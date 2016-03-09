@@ -101,12 +101,12 @@ public class SportMProductSpuController extends BaseController {
 		}else{
 			spu.setProductStatus(DataStatus.ENABLED);
 		}
-		/*if(spu.getProductStatus() == 1){   //修改商品为上架状态  保证商品属性有 关联记录
+		if(spu.getProductStatus() == 1){   //修改商品为上架状态  保证商品属性有 关联记录
 			List<SportMProductSkuDto> lisSku =	iSportMProductSkuService.findSkuByProduct(spu.getId());
 			if(lisSku==null || lisSku.size()<1){
 				return MessageResp.getMessage(false, "请先为对应的商品属性添加关联值~~");
 			}
-		}*/
+		}
 		if (StringUtils.isBlank(spu.getPic())) {
 			spu.setPic(null);
 		}
