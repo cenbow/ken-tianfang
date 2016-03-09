@@ -669,8 +669,18 @@
 								<#if (sportMOrderInfoDtos.results?size>0)>
 									<#list sportMOrderInfoDtos.results as page>
 										<li class="con-record-li">
-										<#if page.nickName??>
-											<p class="name">${(page.nickName)!}</p>
+										<#if ((page.nickName)?length>0)>
+											<!-- <#if (page.nickName)?length>0> -->
+												<p class="name">${(page.nickName)!}</p>
+											<!-- </#if>	 -->
+										<#elseif ((page.mobile)?length>0)>
+											<!-- <#if (page.mobile)?length>0> -->
+												<p class="name">${(page.mobile)!}</p>	
+											<!-- </#if> -->
+										<#elseif ((page.email)?length>0)>
+											<!-- <#if (page.email)?length>0> -->
+												<p class="name">${(page.email)!}</p>
+											<!-- </#if>			 -->						
 										<#else>
 											<p class="name">空</p>
 										</#if>		

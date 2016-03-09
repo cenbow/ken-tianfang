@@ -60,7 +60,7 @@
 	
 	
 	<select id="selectOrderBySpu" resultType="com.tianfang.order.dto.SportMOrderInfoDto" parameterType="java.lang.String">
-	   SELECT b.id,e.product_name as skuName,b.number,d.nick_name as nickName,b.create_time as createTime
+	   SELECT b.id,e.product_name as skuName,b.number,d.nick_name as nickName,d.email as email,d.mobile as mobile,b.create_time as createTime
 	   FROM sport_m_product_sku a 
 	   LEFT JOIN sport_m_product_spu e on a.product_id = e.id 
 	   LEFT JOIN sport_m_order_info b on a.id = b.product_sku_id 

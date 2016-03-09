@@ -47,6 +47,14 @@ public class SportMOrderInfoDto implements Serializable {
 	@Getter
 	@Setter
     private String nickName;
+	
+	@Getter
+	@Setter
+	private String email;
+	
+	@Getter
+	@Setter
+	private String mobile;
 
 	@Getter
 	@Setter

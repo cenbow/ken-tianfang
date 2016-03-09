@@ -213,6 +213,11 @@ public class SportMOrderImpl implements ISportMOrderService{
 					orderInfo.setProductStock(m_sku.getProductStock());
 					orderInfo.setStat(DataStatus.ENABLED);
 					stat = sportMOrderInfoDao.insert(orderInfo);
+					m_sku.setProductStock(m_sku.getProductStock()-Integer.valueOf(number[i]));
+					sportMProductSkuDao.updateByPrimaryKeySelective(m_sku);
+					if (m_sku.getProductStock() < Integer.valueOf(number[i])) {
+						return null;
+					}
 					if(stat<1){
 						return null;
 					}
