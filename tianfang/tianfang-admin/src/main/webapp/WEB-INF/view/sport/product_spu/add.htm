@@ -84,19 +84,19 @@
 								<div class="control-group">
 									<label class="course_add_label" for="form-field-1">商品价格</label>
 									<div class="course_add_input">
-										<input type="text" name="productPrice" style="width:300px;“ id="form-field-1" placeholder="商品价格">
+										<input type="text" name="productPrice" style="width:300px;“ id="form-field-1" placeholder="商品价格" onkeyup="this.value=this.value.replace(/[^0-9.]/g,'')" />
 									</div>
 								</div>
 								<div class="control-group">
 									<label class="course_add_label" for="form-field-1">市场价</label>
 									<div class="course_add_input">
-										<input type="text" name="productMarketPrice" style="width:300px;“ id="form-field-1" placeholder="市场价">
+										<input type="text" name="productMarketPrice" style="width:300px;“ id="form-field-1" placeholder="市场价" onkeyup="this.value=this.value.replace(/[^0-9.]/g,'')" />
 									</div>
 								</div>
 								<div class="control-group">
 									<label class="course_add_label" for="form-field-1">成本价</label>
 									<div class="course_add_input">
-										<input type="text" name="productCostPrice" style="width:300px;“ id="form-field-1" placeholder="成本价">
+										<input type="text" name="productCostPrice" style="width:300px;“ id="form-field-1" placeholder="成本价" onkeyup="this.value=this.value.replace(/[^0-9.]/g,'')" />
 									</div>
 								</div>
 								<!-- <div class="control-group">
@@ -348,6 +348,11 @@
 				var content = UM.getEditor('editor').getContent();
 				$("#content").val(content);
 				$("#pic").val(urls);
+				var picVal = $("#pic").val();
+				if (picVal.length > 550) {
+					layer.alert('最多只能上传10张图片，请重新上传~', { icon: 7 });
+					return;
+				}
 				if (null == $("[name=productName]").val() || '' == $("[name=productName]").val()) {
 					layer.alert('请选择商品名称~', { icon: 7 });
 					return;
@@ -384,6 +389,7 @@
 					layer.alert('价格信息过大,价格录入不能超过千万~', { icon: 7 });
 					return;
 				} 
+				
 				/* if (null == $("[name=productStock]").val() || '' == $("[name=productStock]").val()) {
 					layer.alert('商品库存不能为空~', { icon: 7 });
 					return;

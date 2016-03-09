@@ -21,7 +21,10 @@
 	   <include refid="where_category_bypage" />
 	</select>
 	
-	<sql id="where_category_bypage">		
+	<sql id="where_category_bypage">
+		<if test="sportMCategoryDto.isShow != null">
+			and a.is_show = #{sportMCategoryDto.isShow}
+	    </if>		
 		<if test="sportMCategoryDto.categoryName != null and sportMCategoryDto.categoryName != ''">
 			and a.category_name like "%"#{sportMCategoryDto.categoryName}"%"
 	   </if>
@@ -31,9 +34,7 @@
 	   <if test="sportMCategoryDto.parentId != null and sportMCategoryDto.parentId != ''">
 			and a.parent_id = #{sportMCategoryDto.parentId}
 	   </if>
-	   <if test="sportMCategoryDto.isShow != null and sportMCategoryDto.isShow != ''">
-			and a.is_show = #{sportMCategoryDto.isShow}
-	   </if>
+	  
 	</sql>
 	
 </mapper>

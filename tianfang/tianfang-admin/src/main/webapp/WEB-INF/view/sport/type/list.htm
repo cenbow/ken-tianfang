@@ -43,7 +43,7 @@
 					<tbody><tr>
 						<td>
 							<span class="input-icon">
-								<input autocomplete="off" id="nav-search-input" type="text" name="typeName" value="${(newDto.typeName)!}" placeholder="类型名称">
+								<input autocomplete="off" id="nav-search-input" type="text" name="typeName" value="${(newDto.typeName)!}" placeholder="类型名称" />
 								<i id="nav-search-icon" class="icon-search"></i>
 							</span>
 						</td>
@@ -81,7 +81,7 @@
 									<td class='center'>
 										<label><input name="checkBoxId" value="${(page.id)!}" type='checkbox' /><span class="lbl"></span></label>
 									</td>
-									<td><input type="text" class="up_typeName span10" value="${(page.typeName)!}" obj-id="${(page.id)!}" old-order="${(page.typeName)!}" /></td>
+									<td><input type="text" class="up_typeName span10" value="${(page.typeName)!}" obj-id="${(page.id)!}" old-order="${(page.typeName)!}" maxlength="10" /></td>
 									<td><input type="text" class="up_order span8" value="${(page.typeOrder)!}" obj-id="${(page.id)!}" old-order="${(page.typeOrder)!}" /></td>
 									<td>${(page.createDate)!}</td>
 									<td>

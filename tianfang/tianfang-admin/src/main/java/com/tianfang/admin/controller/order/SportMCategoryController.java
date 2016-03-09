@@ -40,6 +40,11 @@ public class SportMCategoryController extends BaseController{
 		ModelAndView mv = this.getModelAndView(this.getSessionUserId());
 		List<SportMTypeDto> sportMTypeDtos = iSportMCategoryService.getAllType();
 		List<SportMCategoryDto> sportMCategoryDtos = iSportMCategoryService.findAllCategory();
+		SportMCategoryDto sportmCategoryDto = new SportMCategoryDto();
+		sportmCategoryDto.setCategoryName("顶级");
+		sportmCategoryDto.setParentId("0");
+		sportmCategoryDto.setId("0");
+		sportMCategoryDtos.add(sportmCategoryDto);
 		mv.addObject("category", sportMCategoryDtos);
 		mv.addObject("type", sportMTypeDtos);
 		mv.addObject("data", sportMCategoryDto);

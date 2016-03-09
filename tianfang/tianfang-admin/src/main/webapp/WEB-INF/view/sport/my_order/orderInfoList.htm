@@ -11,7 +11,7 @@
 
 <!-- PAGE CONTENT BEGINS HERE -->
 		<div class="row-fluid">
-			<form action="${base}/m/orderInfo/selectOrderInfo.do" method="post" name="submitForm" id="submitForm">
+			<form action="${base}/m/orderInfo/selectOrderInfo.do?orderId=${(orderInfoDto.orderId)!}" method="post" name="submitForm" id="submitForm">
 				<table border="0">
 					<tbody><tr>
 						<td>
@@ -31,7 +31,7 @@
 								<label><input type="checkbox" /><span class="lbl"></span></label>
 							</th>
 							<th>订单明细编号</th>
-							<th>订单编号</th>
+							<!-- <th>订单编号</th> -->
 							<th>订单状态</th>
 							<th>商品名称</th>
 							<th>商品数量</th>
@@ -48,7 +48,7 @@
 										<label><input name="checkBoxId" value="${(page.id)!}" type='checkbox' /><span class="lbl"></span></label>
 									</td>
 									<td><a href='#'>${(page.orderInfoNo)!}</a></td>
-									<td><a href='#'>${(page.orderNo)!}</a></td>
+									<!-- <td><a href='#'>${(page.orderNo)!}</a></td> -->
 									<td class='hidden-480'>
 										<#if page.orderStatus==0>
 											<span class='label label-success'>等待买家付款</span>	

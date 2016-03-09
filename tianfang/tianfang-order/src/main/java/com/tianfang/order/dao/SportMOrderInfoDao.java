@@ -38,7 +38,7 @@ public class SportMOrderInfoDao extends MyBatisBaseDao<SportMOrderInfo>{
 
 	public List<SportMOrderInfo> selectOrderInfo(SportMOrderInfoDto orderInfoDto, PageQuery page) {
 		SportMOrderInfoExample example = new SportMOrderInfoExample();
-		Criteria criteria = example.createCriteria();
+		SportMOrderInfoExample.Criteria criteria = example.createCriteria();
 		byCriteria(orderInfoDto,criteria);
 		criteria.andStatEqualTo(DataStatus.ENABLED);
 		if(page!=null){

@@ -38,7 +38,7 @@ public class SportMOrderInfoController extends BaseController {
 	@RequestMapping("/selectOrderInfo")
 	public ModelAndView findOrderInfo(SportMOrderInfoDto orderInfoDto,ExtPageQuery page){
 		ModelAndView mv = this.getModelAndView(this.getSessionUserId());
-		PageResult<SportMOrderInfoDto> pageList = iSportMOrderInfoService.findOrderInfo(orderInfoDto,page.changeToPageQuery());
+		PageResult<SportMOrderInfoDto> pageList = iSportMOrderInfoService.selectOrderInfo(orderInfoDto,page.changeToPageQuery());
 		try {
 			mv.addObject("pageList", pageList);
 			mv.addObject("orderInfoDto", orderInfoDto);

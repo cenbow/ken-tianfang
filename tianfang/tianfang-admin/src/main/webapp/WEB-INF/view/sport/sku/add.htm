@@ -47,13 +47,13 @@
 						<div class="span6">
 							<label class="control-label" for="form-field-2" style="width: 100px;">商品价格</label>
 							<div class="controls">
-								<input type="text" name="productPrice" class="span12" id="specOrder" style="margin-left: -60px;" placeholder="商品价格"  >
+								<input type="text" name="productPrice" class="span12" id="specOrder" style="margin-left: -60px;" placeholder="商品价格" onkeyup="this.value=this.value.replace(/[^0-9.]/g,'')" />
 							</div>
 						</div>
 						<div class="span6">
 							<label class="control-label" for="form-field-2" style="width: 100px;">市场价</label>
 							<div class="controls">
-								<input type="text" name="productMarketPrice" class="span12" id="specOrder" style="margin-left: -60px;" placeholder="市场价"  >
+								<input type="text" name="productMarketPrice" class="span12" id="specOrder" style="margin-left: -60px;" placeholder="市场价" onkeyup="this.value=this.value.replace(/[^0-9.]/g,'')" />
 							</div>
 						</div>						
 					</div>
@@ -63,13 +63,13 @@
 						<div class="span6">
 							<label class="control-label" for="form-field-2" style="width: 100px;">成本价</label>
 							<div class="controls">
-								<input type="text" name="productCostPrice" class="span12" id="specOrder" style="margin-left: -60px;" placeholder="成本价"  >
+								<input type="text" name="productCostPrice" class="span12" id="specOrder" style="margin-left: -60px;" placeholder="成本价" onkeyup="this.value=this.value.replace(/[^0-9.]/g,'')" />
 							</div>
 						</div>
 						<div class="span6">
 							<label class="control-label" for="form-field-2" style="width: 100px;">商品库存</label>
 							<div class="controls">
-								<input type="text" name="productStock" class="span12" id="specOrder" style="margin-left: -60px;" placeholder="商品库存"  >
+								<input type="text" name="productStock" class="span12" id="specOrder" style="margin-left: -60px;" placeholder="商品库存" maxlength="10"  onkeyup="this.value=this.value.replace(/[^0-9]/g,'')" />
 							</div>
 						</div>						
 					</div>

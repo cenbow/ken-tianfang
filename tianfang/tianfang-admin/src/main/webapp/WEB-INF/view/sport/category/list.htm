@@ -69,18 +69,18 @@
 						<td style="vertical-align:top;"> 
 						 	<select class="chzn-select" name="parentId" id="parentId" data-placeholder="父级" style="vertical-align:top;width:120px;">
 							<option value=""></option>
-							<option value="">全部</option>
-							<option value="0">顶级</option>
+							<option value="">全部</option>	
+							<option value="0">顶级</option>	 				
 							<#if category??>
 								<#list category as page>
 									<#if data.parentId??>
 										<#if data.parentId == page.id>
-											<option selected="selected" value="${(page.id)!}">${(page.categoryName)!}</option>
+											<option selected="selected" value="${(page.id)!}">${(page.categoryName)!}</option>											
 										<#else>
 											<option value="${(page.id)!}">${(page.categoryName)!}</option>
-										</#if>													
+										</#if>
 									<#else>
-										<option value="${(page.id)!}">${(page.categoryName)!}</option>
+										<option value="${(page.id)!}">${(page.categoryName)!}</option> 
 									</#if>
 								</#list>
 							</#if>								
@@ -164,7 +164,7 @@
 											<span class='label'>空</span>
 										</#if>
 										</td>
-									<td>${(page.createDate)!}</td>
+									<td>${(page.createTime)?string("yyyy-MM-dd")}</td>
 									<td>
 										<div id="operation" class='hidden-phone visible-desktop btn-group'>									
 											<a id='editObj' data-obj-id="${(page.id)!}" class='btn btn-mini btn-warning' title="编辑"><i class='icon-edit'></i></a>

@@ -49,7 +49,7 @@ public class SportMProductSpuImpl implements ISportMProductSpuService{
 		SportMProductSpu pSpu = BeanUtils.createBeanByTarget(spu,SportMProductSpu.class);
 		SportMProductSpu sportMProductSpu = sportMProductSpuDao.selectByPrimaryKey(spu.getId());
 		if (null != spu.getProductStatus()) {
-			List<SportMProductSku> sku = sportMProductSkuDao.findSkuByProductIdList(spu.getId());
+			List<SportMProductSku> sku = sportMProductSkuDao.findSkuByListProductId(spu.getId());
 			for (SportMProductSku sportmProductSku :sku) {
 				sportmProductSku.setProductStatus(spu.getProductStatus());
 				sportMProductSkuDao.updateByPrimaryKeySelective(sportmProductSku);

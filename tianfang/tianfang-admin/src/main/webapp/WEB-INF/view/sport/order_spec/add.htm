@@ -28,7 +28,8 @@
 								<div class="control-group">
 									<label class="control-label" for="form-field-2">规格排序</label>
 									<div class="controls">
-										<input type="text" name="specOrder" class="span3" id="specOrder" placeholder="规格排序"  >
+										<input type="text" name="specOrder" class="span3" id="specOrder" placeholder="规格排序"  onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"  
+                                    onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'0')}else{this.value=this.value.replace(/\D/g,'')}" >
 									</div>
 								</div>
 								<!-- <div class="control-group">

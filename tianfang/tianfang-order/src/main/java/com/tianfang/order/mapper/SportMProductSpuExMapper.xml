@@ -38,6 +38,9 @@
 		from sport_m_product_spu spu inner join sport_m_brand brand on (spu.brand_id = brand.id) inner join sport_m_type type 
 		on (spu.type_id = type.id) inner join sport_m_category category on (spu.category_id = category.id) where spu.stat = '1'
 		and type.stat = '1' and brand.stat = '1' and category.stat = '1'
+		 <if test="spu.productStatus != null">
+			and spu.product_status=#{spu.productStatus} 
+		</if>
 	    <if test="spu.productName != null and spu.productName !='' ">
 			and spu.product_name like "%"#{spu.productName}"%" 
 		</if>
