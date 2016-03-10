@@ -134,9 +134,9 @@
 									<#if specVaule.sportMSpecValuesDtos??>										
 										<#list specVaule.sportMSpecValuesDtos as value>
 											<#if value_index == 0>
-												<label class="dt-size cur" data-obj-id= "${(value.specId)!}*${(value.id)!}">${(value.specValue)!}</label>
+												<label class="dt-size cur" data-obj-id= "${(value.specId)!}*${(value.id)!}" data-spec-value="${(value.specValue)!}">${(value.specValue)!}</label>
 											<#else>
-												<label class="dt-size" data-obj-id= "${(value.specId)!}*${(value.id)!}">${(value.specValue)!}</label>
+												<label class="dt-size" data-obj-id= "${(value.specId)!}*${(value.id)!}" data-spec-value="${(value.specValue)!}">${(value.specValue)!}</label>
 											</#if>											
 										</#list>
 									</#if>
@@ -984,15 +984,18 @@
 					price = price.substring(1,price.Length).replace(',','');
 					var spuId = "${(sportMProductSpuDto.id)!}";
 					var ids = '';
+					var specValues= '规格:';
 					$(".dt-size.cur").each(function(){
 						id = $(this).attr("data-obj-id")
+						specValue = $(this).attr("data-spec-value")
+						specValues += specValue+"/";
 						ids += id+",";
 					});	
 					$.ajax({
 						url:"/m/Product/toMShppingCard.htm",
 						type:"post",
 						dataType:"json",
-						data:{spuId:spuId,ids:ids,numberOf:number,price:price},
+						data:{spuId:spuId,ids:ids,numberOf:number,price:price,specValuesIdStr:specValues},
 						async: false,
 						success:function(data){
 							if(data.success){

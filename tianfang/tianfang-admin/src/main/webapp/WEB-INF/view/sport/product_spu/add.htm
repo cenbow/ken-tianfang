@@ -73,7 +73,7 @@
 									</div>									
 								</div>
 								<div class="control-group">
-									<label class="course_add_label" for="form-field-2">商品图（最多10张图片）</label>
+									<label class="course_add_label" for="form-field-2">商品图 （支持最多10张图片）</label>
 									<div class="course_add_input">
 										<input multiple type="file" id="id-input-file-4"/>
 									</div>
@@ -351,6 +351,7 @@
 				var picVal = $("#pic").val();
 				if (picVal.length > 550) {
 					layer.alert('最多只能上传10张图片，请重新上传~', { icon: 7 });
+					$("#img_contain").empty();
 					return;
 				}
 				if (null == $("[name=productName]").val() || '' == $("[name=productName]").val()) {

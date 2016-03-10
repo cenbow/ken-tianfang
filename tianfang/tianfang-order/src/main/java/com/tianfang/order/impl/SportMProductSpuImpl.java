@@ -68,6 +68,11 @@ public class SportMProductSpuImpl implements ISportMProductSpuService{
 		long stat = 0;
 		for (String str : ids) {
 			stat= sportMProductSpuDao.delete(str);
+			List<SportMProductSku> sportMProductSkus = sportMProductSkuDao.findSkuByListProductId(str);
+			for (SportMProductSku sportMProductSku : sportMProductSkus) {
+				sportMProductSku.setStat(DataStatus.DISABLED);
+				sportMProductSkuDao.updateByPrimaryKeySelective(sportMProductSku);
+			}
 			if(stat<0){
 				return stat;
 			}

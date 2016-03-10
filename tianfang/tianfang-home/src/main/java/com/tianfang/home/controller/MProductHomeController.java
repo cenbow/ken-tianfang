@@ -297,13 +297,13 @@ public class MProductHomeController extends BaseController {
 		Response<List<SportMProductSpuDto>> result = new Response<List<SportMProductSpuDto>>();
 		String key = "SportMProductSpuDto";
 		List<SportMProductSpuDto> spuList = (List<SportMProductSpuDto>) redisTemplate.opsForValue().get(key);
-		if(spuList != null && spuList.size()<1){
+		if(spuList == null){
 			spuList = spuService.selectByCriteria(spu);
 			redisTemplate.opsForValue().set(key, spuList);
 		}
 		List<SportMProductSpuDto> newSpuList =   new ArrayList<SportMProductSpuDto>();
 		//集合小于5直接返回
-		if(newSpuList != null && spuList.size()<5){
+		if(newSpuList != null && null != spuList && spuList.size()<5){
 			result.setData(spuList);
 			result.setStatus(DataStatus.ENABLED);
 			return result;

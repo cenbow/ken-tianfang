@@ -169,12 +169,12 @@ public class SportMOrderImpl implements ISportMOrderService{
 		Double totalPrices = 0d;
 		for (int i = 0; i < skuId.length; i++) {
 			SportMProductSku m_sku = sportMProductSkuDao.selectByPrimaryKey(skuId[i]);
-			if(m_sku.getProductStatus() == 0){
+			if(m_sku.getProductStatus() == 0 || m_sku.getStat() == 0){
 				SportMProductSkuDto skuDto =	BeanUtils.createBeanByTarget(m_sku, SportMProductSkuDto.class);
 				SportMProductSpuDto spuDto =    BeanUtils.createBeanByTarget(sportMProductSpuDao.selectByPrimaryKey(skuDto.getProductId()), SportMProductSpuDto.class); 
 				SportMOrderDto orderDto =  new SportMOrderDto();
 				orderDto.setSkuId(skuDto.getId());
-				orderDto.setSkuName(spuDto.getProductName()+"-"+skuDto.getSpecName());
+				orderDto.setSkuName(spuDto.getProductName()+"-"+skuDto.getSpecName()+"-"+skuDto.getSpecValue());
 				return orderDto;
 			}
 			
