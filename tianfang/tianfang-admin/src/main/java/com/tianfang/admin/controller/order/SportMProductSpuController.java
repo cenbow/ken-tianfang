@@ -61,7 +61,7 @@ public class SportMProductSpuController extends BaseController {
 	public Map<String,Object> save(SportMProductSpuDto spu){
 		long stat = iProductSpu.save(spu);
 		if(stat >0){
-			redisController.addRedis(iSportMProductSkuService.findAllSpu());
+			redisController.addRedis(iSportMProductSkuService.findPageAllSpu());
 			return MessageResp.getMessage(true, "新增成功~~");
 		}
 		return MessageResp.getMessage(false, "新增失败~~");
@@ -86,7 +86,7 @@ public class SportMProductSpuController extends BaseController {
 		}
 		long stat = iProductSpu.edit(spu);
 		if(stat >0){
-			redisController.addRedis(iSportMProductSkuService.findAllSpu());
+			redisController.addRedis(iSportMProductSkuService.findPageAllSpu());
 			return MessageResp.getMessage(true, "修改成功~~");
 		}
 		return MessageResp.getMessage(false, "修改失败~~");
@@ -115,7 +115,7 @@ public class SportMProductSpuController extends BaseController {
 		}
 		long stat = iProductSpu.spuStatus(spu);
 		if(stat >0){
-			redisController.addRedis(iSportMProductSkuService.findAllSpu());
+			redisController.addRedis(iSportMProductSkuService.findPageAllSpu());
 			return MessageResp.getMessage(true, "修改成功~~");
 		}
 		return MessageResp.getMessage(false, "修改失败~~");
