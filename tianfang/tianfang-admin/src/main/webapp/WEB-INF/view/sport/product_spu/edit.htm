@@ -420,6 +420,9 @@
 			var picVal = $("#pic").val();
 			if (picVal.length > 550) {
 				layer.alert('最多只能上传10张图片，请重新上传~', { icon: 7 });
+				$("#img_contain").empty();
+				$("#pic").val("");
+				urls = "";
 				return;
 			}
 			if (null == $("[name=productName]").val() || '' == $("[name=productName]").val()) {
