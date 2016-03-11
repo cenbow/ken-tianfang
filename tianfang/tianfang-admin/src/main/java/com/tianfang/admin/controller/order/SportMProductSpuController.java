@@ -128,7 +128,7 @@ public class SportMProductSpuController extends BaseController {
 		long stat = iProductSpu.delete(id);
 		if(stat >0){
 			//System.out.println(iSportMProductSkuService.findAllSpu().size());
-			redisController.addRedis(iSportMProductSkuService.findAllSpu());
+			redisController.addRedis(iSportMProductSkuService.findPageAllSpu());
 			return MessageResp.getMessage(true, "删除成功~~");
 		}
 		return MessageResp.getMessage(false, "删除成功~~");

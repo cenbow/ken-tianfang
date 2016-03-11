@@ -33,6 +33,38 @@
 		</if>
 	</select>
 	
+	<select id="selectSpuPageAll" parameterType="com.tianfang.order.dto.SportMProductSpuDto" resultType="com.tianfang.order.dto.SportMProductSpuDto">
+		select
+		spu.id, spu.product_name as productName, spu.product_price as productPrice ,spu.product_market_price as productMarketPrice,
+		spu.product_cost_price as productCostPrice, spu.product_status as productStatus, spu.product_stock as productStock, 
+		spu.create_time as createTime,
+		spu.last_update_time as lastUpdateTime ,
+		brand.brand_name as brandName,type.type_name as typeName ,category.category_name as categoryName 
+		from sport_m_product_spu spu inner join sport_m_brand brand on (spu.brand_id = brand.id) inner join sport_m_type type 
+		on (spu.type_id = type.id) inner join sport_m_category category on (spu.category_id = category.id) where spu.stat = '1' 
+		and spu.product_status = '1' and type.stat = '1' and brand.stat = '1' and category.stat = '1'
+	    <if test="spu.productName != null and spu.productName !='' ">
+			and spu.product_name like "%"#{spu.productName}"%" 
+		</if>
+		<if test="spu.brandName != null and spu.brandName !='' ">
+			and brand.brand_name like "%"#{spu.brandName}"%" 
+		</if>
+		<if test="spu.typeName != null and spu.typeName !='' ">
+			and type.type_name like "%"#{spu.typeName}"%" 
+		</if>
+		<if test="spu.categoryName != null and spu.categoryName !='' ">
+			and category_name like "%"#{spu.categoryName}"%" 
+		</if>
+		<if test="spu.productStatus != null "> 
+			and product_status = #{spu.productStatus}
+		</if>
+		<if test="page != null">
+		<if test="page.startNum != null and page.pageSize != null ">
+			 limit  #{page.startNum}, #{page.pageSize}
+		</if>
+		</if>
+	</select>
+	
 	<select id="countPageAll" parameterType="com.tianfang.order.dto.SportMProductSpuDto" resultType="java.lang.Long">
 		select count(*) 
 		from sport_m_product_spu spu inner join sport_m_brand brand on (spu.brand_id = brand.id) inner join sport_m_type type 

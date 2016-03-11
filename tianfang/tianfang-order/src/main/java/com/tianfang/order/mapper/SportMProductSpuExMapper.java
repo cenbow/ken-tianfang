@@ -11,5 +11,7 @@ public interface SportMProductSpuExMapper {
 
 	List<SportMProductSpuDto> selectPageAll(@Param("spu") SportMProductSpuDto spu ,@Param("page") PageQuery page);
 	
+	List<SportMProductSpuDto> selectSpuPageAll(@Param("spu") SportMProductSpuDto spu ,@Param("page") PageQuery page);
+	
 	long countPageAll(@Param("spu") SportMProductSpuDto spu);
 }

@@ -86,6 +86,10 @@ public class SportMOrderInfoDto implements Serializable {
 	
 	@Getter
 	@Setter
+	private String specValue;
+	
+	@Getter
+	@Setter
 	private Integer evaluateStat;
 
 }

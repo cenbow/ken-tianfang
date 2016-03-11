@@ -120,6 +120,17 @@ public class SportMOrderImpl implements ISportMOrderService{
 						SportMOrder sportMOrder = sportMOrderDao.selectByPrimaryKey(sportMUserOrderDto.getId());
 						sportMOrder.setOrderStatus(-4);
 						sportMOrderDao.updateByPrimaryKeySelective(sportMOrder);
+						SportMOrderInfoDto orderInfoDto = new SportMOrderInfoDto();
+						orderInfoDto.setOrderId(sportMUserOrderDto.getId());
+						List<SportMOrderInfo> sportMOrderInfos = sportMOrderInfoDao.selectAll(orderInfoDto);
+						for (SportMOrderInfo sportMOrderInfoDto :sportMOrderInfos) {
+							SportMProductSku sportMProductSku = sportMProductSkuDao.selectByPrimaryKey(sportMOrderInfoDto.getProductSkuId());
+							sportMProductSku.setProductStock(sportMProductSku.getProductStock()+sportMOrderInfoDto.getNumber());
+							sportMProductSkuDao.updateByPrimaryKeySelective(sportMProductSku);
+							SportMProductSpu sportMProductSpu = sportMProductSpuDao.selectByPrimaryKey(sportMProductSku.getProductId());
+							sportMProductSpu.setProductStock(sportMProductSpu.getProductStock()+sportMOrderInfoDto.getNumber());
+							sportMProductSpuDao.updateByPrimaryKeySelective(sportMProductSpu);
+						}
 					}
 				}
 			}
@@ -215,6 +226,8 @@ public class SportMOrderImpl implements ISportMOrderService{
 					stat = sportMOrderInfoDao.insert(orderInfo);
 					m_sku.setProductStock(m_sku.getProductStock()-Integer.valueOf(number[i]));
 					sportMProductSkuDao.updateByPrimaryKeySelective(m_sku);
+					m_spu.setProductStock(m_spu.getProductStock()-Integer.valueOf(number[i]));
+					sportMProductSpuDao.updateByPrimaryKeySelective(m_spu);
 					if (m_sku.getProductStock() < Integer.valueOf(number[i])) {
 						return null;
 					}
@@ -314,12 +327,28 @@ public class SportMOrderImpl implements ISportMOrderService{
 			SportMOrderInfoDto sportMOrderInfoDto = new SportMOrderInfoDto();
 			sportMOrderInfoDto.setOrderId(orderId);
 			List<SportMOrderInfo> sportMOrderInfos = sportMOrderInfoDao.selectAll(sportMOrderInfoDto);
-			if (sportMOrderInfos.size()>0) {
-				for (SportMOrderInfo sportMOrderInfo :sportMOrderInfos) {
-					sportMOrderInfo.setStat(DataStatus.DISABLED);
-					sportMOrderInfoDao.updateByPrimaryKeySelective(sportMOrderInfo);
+			if (-4 != sportMOrderDto.getOrderStatus()) {
+				if (sportMOrderInfos.size()>0) {
+					for (SportMOrderInfo sportMOrderInfo :sportMOrderInfos) {
+						sportMOrderInfo.setStat(DataStatus.DISABLED);
+						sportMOrderInfoDao.updateByPrimaryKeySelective(sportMOrderInfo);
+						SportMProductSku sportMProductSku = sportMProductSkuDao.selectByPrimaryKey(sportMOrderInfo.getProductSkuId());
+						sportMProductSku.setProductStock(sportMProductSku.getProductStock()+sportMOrderInfo.getNumber());
+						sportMProductSkuDao.updateByPrimaryKeySelective(sportMProductSku);
+						SportMProductSpu sportMProductSpu = sportMProductSpuDao.selectByPrimaryKey(sportMProductSku.getProductId());
+						sportMProductSpu.setProductStock(sportMProductSpu.getProductStock()+sportMOrderInfo.getNumber());
+						sportMProductSpuDao.updateByPrimaryKeySelective(sportMProductSpu);
+					}
 				}
 			}
+			else {
+				if (sportMOrderInfos.size()>0) {
+					for (SportMOrderInfo sportMOrderInfo :sportMOrderInfos) {
+						sportMOrderInfo.setStat(DataStatus.DISABLED);
+						sportMOrderInfoDao.updateByPrimaryKeySelective(sportMOrderInfo);
+					}
+				}
+			}			
 			return 1;
 		}
 		return 0;

@@ -28,6 +28,8 @@ public interface ISportMProductSkuService {
 	
 	public List<SportMProductSpuDto> findAllSpu();
 	
+	public List<SportMProductSpuDto> findPageAllSpu();
+	
 	public List<SportMSpecDto> findAllSpec();
 	
 	public List<SportMBrandDto> findAllBrand();
