@@ -84,7 +84,6 @@ public class SportMOrderController extends BaseController{
 			}
 			redisTemplate.opsForValue().set(key, map);
 		}
-		
 		mv.addObject("order",order);
 		mv.addObject("user",getSportUserByCache(this.getSessionUserId()));
 		mv.setViewName("/m_order/pay-ready");

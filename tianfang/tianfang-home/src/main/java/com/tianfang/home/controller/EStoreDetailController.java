@@ -92,6 +92,7 @@ public class EStoreDetailController extends BaseController{
 	
 	@RequestMapping(value = "/userOrder")
 	public ModelAndView findOrderByUser(ExtPageQuery page,HttpSession session) {
+		page.setLimit(7);
 		ModelAndView mv = this.getModelAndView();
 		// 获取当前登录用户Id
 		LoginUserDto loginUserDto = SessionUtil.getLoginSession(session);
@@ -103,7 +104,8 @@ public class EStoreDetailController extends BaseController{
 			return new ModelAndView("redirect:/index.htm");
 		}
 		String userId =loginUserDto.getId();
-		PageResult<SportMUserOrderDto> sportMUserOrderDtos = iSportMOrderService.findOrderByUser(userId, page.changeToPageQuery());
+		PageQuery pages = page.changeToPageQuery();
+		PageResult<SportMUserOrderDto> sportMUserOrderDtos = iSportMOrderService.findOrderByUser(userId, pages);
 		mv.addObject("pageList", sportMUserOrderDtos);
 		mv.addObject("userId", userId);
 		mv.addObject("userInfo",getSportUserByCache(userId));
@@ -115,7 +117,9 @@ public class EStoreDetailController extends BaseController{
 	@ResponseBody
 	public Response<PageResult<SportMUserOrderDto>> findUserOrderByPage(@RequestParam(defaultValue="1") int page,String userId){
 		Response<PageResult<SportMUserOrderDto>> result = new Response<PageResult<SportMUserOrderDto>>();
-		PageQuery pages = new ExtPageQuery().changeToPageQuery();
+		ExtPageQuery pagess = new ExtPageQuery();
+		pagess.setLimit(7);
+		PageQuery pages = pagess.changeToPageQuery();
 		pages.setCurrPage(page);
 		PageResult<SportMUserOrderDto> spPageResult = iSportMOrderService.findOrderByUser(userId, pages);
 		result.setData(spPageResult);

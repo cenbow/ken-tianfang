@@ -153,7 +153,9 @@ public class SportMOrderImpl implements ISportMOrderService{
 						}						
 					}
 					SportMProductSku sportMProductSku = sportMProductSkuDao.selectByPrimaryKey(sportMOrderInfoDto.getProductSkuId());
-					sportMOrderInfoDto.setProductSpuId(sportMProductSku.getProductId());
+					if (null != sportMProductSku) {
+						sportMOrderInfoDto.setProductSpuId(sportMProductSku.getProductId());
+					}					
 					sportmOrderInfoDtos.add(sportMOrderInfoDto);
 				}				
 			}
@@ -179,7 +181,9 @@ public class SportMOrderImpl implements ISportMOrderService{
 		//后台选中商品总价
 		Double totalPrices = 0d;
 		for (int i = 0; i < skuId.length; i++) {
+			System.out.println("skuId="+skuId[i]);
 			SportMProductSku m_sku = sportMProductSkuDao.selectByPrimaryKey(skuId[i]);
+			System.out.println("m_sku="+m_sku);
 			if(m_sku.getProductStatus() == 0 || m_sku.getStat() == 0){
 				SportMProductSkuDto skuDto =	BeanUtils.createBeanByTarget(m_sku, SportMProductSkuDto.class);
 				SportMProductSpuDto spuDto =    BeanUtils.createBeanByTarget(sportMProductSpuDao.selectByPrimaryKey(skuDto.getProductId()), SportMProductSpuDto.class); 
@@ -228,9 +232,9 @@ public class SportMOrderImpl implements ISportMOrderService{
 					sportMProductSkuDao.updateByPrimaryKeySelective(m_sku);
 					m_spu.setProductStock(m_spu.getProductStock()-Integer.valueOf(number[i]));
 					sportMProductSpuDao.updateByPrimaryKeySelective(m_spu);
-					if (m_sku.getProductStock() < Integer.valueOf(number[i])) {
+					/*if (m_sku.getProductStock() < Integer.valueOf(number[i])) {
 						return null;
-					}
+					}*/
 					if(stat<1){
 						return null;
 					}

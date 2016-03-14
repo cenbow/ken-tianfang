@@ -39,7 +39,8 @@
 			left join sport_m_order_info i on i.order_id = o.id
 			left join sport_m_product_sku s on s.id = i.product_sku_id
 			left join sport_m_product_spu p on p.id = s.product_id
-			where o.stat = 1 and i.stat = 1 and s.stat = 1 and p.stat = 1
+			where o.stat = 1 and i.stat = 1 
+			<!--and s.stat = 1 and p.stat = 1-->
 			<if test="userId != null and userId !='' ">
 				and o.user_id = #{userId} 
 			</if>

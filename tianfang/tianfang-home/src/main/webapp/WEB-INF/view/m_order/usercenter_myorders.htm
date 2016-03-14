@@ -368,6 +368,7 @@
 	//页码跳转 
 	function gotoPage(page){
 		var userId = "${(userId)!}";
+		
 		var show_num = 7;
 		$.ajax({
 			url:'/estore/detail/findUserOrderByPage.htm',
@@ -382,7 +383,7 @@
 				textAll += "<h5 id=\"info3\"><span class=\"info3\">我的订单</span><a class=\"edit\" status=\"off\" href=\"###\"></a></h5>";
 				textAll += "<div class=row_order_info>"
 				textAll += "<ul>"
-				for (var i = 0; i < result.length; i++) {					
+				for (var i = 0; i < result.length; i++) {
 					textAll += "<li>";
 					textAll += "<div class=tit>";
 					textAll += ""+result[i].createTimeStr+" 订单号："+result[i].orderNo+"";
@@ -402,7 +403,7 @@
 						textAll += "</li>";
 					}
 					textAll += "</ul>"
-					textAll += "<div class=\"price_box\"><p><span class=\"pr\">1198.00</span><br><span class=\"dl\">(含运费：0.00)</span><br><!--<span class=\"st\">手机订单</span>--></p></div>";
+					textAll += "<div class=\"price_box\"><p><span class=\"pr\">"+result[i].totalPrice+"</span><br><span class=\"dl\">(含运费：0.00)</span><br><!--<span class=\"st\">手机订单</span>--></p></div>";
 					/* textAll += "<div class=\"status_box\"><p><span class=\"rs\">交易成功</span><br><span><img src=\"/static/img/icon_ct.png\" border=0></span><br><a href=###>订单详情</a></p></div>"; */
 					if (result[i].orderStatus != null && result[i].orderStatus == 0) {
 						textAll += "<div class=\"status_box\"><p><span class=\"rs\">等待买家付款</span><br></p></div>";
@@ -439,7 +440,7 @@
 					textAll += "</li>";
 				}	
 				textAll += "</ul>"
-				textAll += "</div>"
+			
 			    var	results = data.data;
 				var show_num = 7;
 				if(results!= null && results.total>0){
@@ -503,8 +504,9 @@
 					}else{
 						textAll +="<a href=\"javascript:;\">末页</a>"
 					}
-				} 
-				textAll += "</div>";
+					textAll += "</div>";
+				}
+				textAll += "</div>"
 				$('.main_box').append(textAll);
 				setTable();
 			}
