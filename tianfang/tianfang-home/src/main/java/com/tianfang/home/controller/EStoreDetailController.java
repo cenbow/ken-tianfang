@@ -129,8 +129,13 @@ public class EStoreDetailController extends BaseController{
 	@RequestMapping(value = "/getProduct")
 	public ModelAndView findById(String id,ExtPageQuery page) {
 		ModelAndView mv = this.getModelAndView();
+		if (StringUtils.isBlank(id)) {
+			mv.addObject("msg", "很抱歉，您查看的宝贝不存在，可能已下架或者被转移。");
+			mv.setViewName("/m_order/pay-ready");
+			return mv;
+		}
 		SportMProductSpuDto sportMProductSpuDto = iSportMProductSpuService.findProductById(id);
-		if (null == sportMProductSpuDto) {
+		if (null == sportMProductSpuDto || StringUtils.isBlank(sportMProductSpuDto.getId())) {
 			mv.addObject("msg", "很抱歉，您查看的宝贝不存在，可能已下架或者被转移。");
 			mv.setViewName("/m_order/pay-ready");
 			return mv;
