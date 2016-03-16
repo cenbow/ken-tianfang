@@ -108,7 +108,7 @@ public class SportMProductSpuImpl implements ISportMProductSpuService{
 	}
 	
 	public SportMProductSpuDto findProductById(String id) {
-		SportMProductSpu sportMProductSpu = sportMProductSpuDao.selectByPrimaryKey(id);
+		SportMProductSpu sportMProductSpu = sportMProductSpuDao.findSpuByProductStat(id);
 		SportMProductSpuDto sportMProductSpuDto = BeanUtils.createBeanByTarget(sportMProductSpu, SportMProductSpuDto.class);
 		return sportMProductSpuDto;
 	}

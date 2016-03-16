@@ -128,14 +128,20 @@ public class EStoreDetailController extends BaseController{
 	
 	@RequestMapping(value = "/getProduct")
 	public ModelAndView findById(String id,ExtPageQuery page) {
+		ModelAndView mv = this.getModelAndView();
 		SportMProductSpuDto sportMProductSpuDto = iSportMProductSpuService.findProductById(id);
+		if (null == sportMProductSpuDto) {
+			mv.addObject("msg", "很抱歉，您查看的宝贝不存在，可能已下架或者被转移。");
+			mv.setViewName("/m_order/pay-ready");
+			return mv;
+		}
 		List<SportMSpecProductDto> sportMSpecProductDtos =  iSportMProductSkuService.findAllSkuByProductId(id);
 		PageResult<SportMOrderInfoDto>  sportMOrderInfoDtos = iSportMProductSpuService.selectOrderBySpu(id, page.changeToPageQuery());
 		PageResult<SportMEvaluateDto>  sportMEvaluateDtos = iSportMProductSpuService.selectEvaluate(id, null, null,page.changeToPageQuery());
 		PageResult<SportMEvaluateDto>  sportMEvaluateDtosGood = iSportMProductSpuService.selectEvaluate(id, 1,null, page.changeToPageQuery());
 		PageResult<SportMEvaluateDto>  sportMEvaluateDtosIn = iSportMProductSpuService.selectEvaluate(id, 2,null, page.changeToPageQuery());
 		PageResult<SportMEvaluateDto>  sportMEvaluateDtosPic = iSportMProductSpuService.selectEvaluate(id, null,"1", page.changeToPageQuery());
-		ModelAndView mv = this.getModelAndView();
+		
 		String[] pics = null;
 		if(null != sportMProductSpuDto && StringUtils.isNotBlank(sportMProductSpuDto.getPic())) {
 			pics = sportMProductSpuDto.getPic().split(",");
