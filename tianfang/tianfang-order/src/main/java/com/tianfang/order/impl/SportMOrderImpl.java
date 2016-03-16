@@ -125,8 +125,10 @@ public class SportMOrderImpl implements ISportMOrderService{
 						List<SportMOrderInfo> sportMOrderInfos = sportMOrderInfoDao.selectAll(orderInfoDto);
 						for (SportMOrderInfo sportMOrderInfoDto :sportMOrderInfos) {
 							SportMProductSku sportMProductSku = sportMProductSkuDao.selectByPrimaryKey(sportMOrderInfoDto.getProductSkuId());
-							sportMProductSku.setProductStock(sportMProductSku.getProductStock()+sportMOrderInfoDto.getNumber());
-							sportMProductSkuDao.updateByPrimaryKeySelective(sportMProductSku);
+							if (null != sportMProductSku) {
+								sportMProductSku.setProductStock(sportMProductSku.getProductStock()+sportMOrderInfoDto.getNumber());
+								sportMProductSkuDao.updateByPrimaryKeySelective(sportMProductSku);
+							}							
 							SportMProductSpu sportMProductSpu = sportMProductSpuDao.selectByPrimaryKey(sportMProductSku.getProductId());
 							sportMProductSpu.setProductStock(sportMProductSpu.getProductStock()+sportMOrderInfoDto.getNumber());
 							sportMProductSpuDao.updateByPrimaryKeySelective(sportMProductSpu);

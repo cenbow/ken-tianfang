@@ -41,7 +41,7 @@
 												${(page.createTimeStr)!} 订单号：${(page.orderNo)!}
 												<!-- <a class="share" href="###"></a>
 												<a class="flag" href="###"></a> -->
-												<a class="del" data-dete-order-id="${(page.id)!}" href="###"></a>
+												<a class="del" data-dete-order-id="${(page.id)!}"  href="###"></a>
 											</div>
 											<ul>
 												<#list page.sportMOrderInfoDtos as info>								
@@ -262,11 +262,15 @@
 						}							
 					}
 				});
-		}) 
-		$('.row_order_info ul').on('click','li .del',function(){
+		})
+		deleteOrderInfo();
+		/* $('.row_order_info ul').on('click','li .del',function(){
 			//$(this).closest('li').remove()
+			var id = $(this).attr("data-dete-order-id");
+		   	alert(id);
+		    return; 
+		    deleteOrder(id);
 			layer.confirm('确定要删除此订单信息吗？', {icon: 3}, function(index){
-				 var id = $(".del").attr("data-dete-order-id");
 				 $.ajax({
 						url:"/order/user/delete.htm",
 						type:"post",
@@ -295,8 +299,8 @@
 							}							
 						}
 					});
-			});
-		})
+			}); 
+		}) */
 		$('.cos ul').on('click','li',function(){
 			$('.cos ul li').removeClass('cur')
 			$(this).prevAll().andSelf().addClass('cur')
@@ -348,6 +352,43 @@
         });
 	});
 	
+	function deleteOrderInfo() {
+		$('.row_order_info ul').on('click','li .del',function(){
+			//$(this).closest('li').remove()
+			var id = $(this).attr("data-dete-order-id");
+			layer.confirm('确定要删除此订单信息吗？', {icon: 3}, function(index){
+				 $.ajax({
+						url:"/order/user/delete.htm",
+						type:"post",
+						dataType:"json",
+						data:{orderId:id},
+						async: false,
+						success:function(data){
+							if(data.success){								
+								layer.msg(data.msg, {
+		            				shade: [0.9, '#000'],
+		            			    icon: 1,
+		            			    time: 1 //2秒关闭（如果不配置，默认是3秒）
+		            			}, function(){
+		            			    //do something
+		            				window.location.reload();
+		            			});	 
+								
+							}else {
+								layer.msg(data.msg, {
+		            				shade: [0.9, '#000'],
+		            			    icon: 1,
+		            			    time: 1 //2秒关闭（如果不配置，默认是3秒）
+		            			},function(){
+		            				return;
+		            			});
+							}							
+						}
+					});
+			}); 
+		})
+	}	
+	
 	function setTable(){
 		var li = $('.row_order_info > ul > li')
 		for(var i=0;i<li.length;i++){
@@ -381,13 +422,13 @@
 				$('.row_order_info').remove();
 				var textAll = "";
 				textAll += "<h5 id=\"info3\"><span class=\"info3\">我的订单</span><a class=\"edit\" status=\"off\" href=\"###\"></a></h5>";
-				textAll += "<div class=row_order_info>"
+				textAll += "<div class=row_order_info >"
 				textAll += "<ul>"
 				for (var i = 0; i < result.length; i++) {
 					textAll += "<li>";
 					textAll += "<div class=tit>";
 					textAll += ""+result[i].createTimeStr+" 订单号："+result[i].orderNo+"";
-					textAll += "<a class=del data-dete-order-id=\""+result[i].id+"\" href=###></a>";
+					textAll += "<a class=del data-dete-order-id=\""+result[i].id+"\"  href=###></a>";
 					textAll += "</div>";
 					textAll += "<ul>";
 					var sportMOrderInfoDtos = result[i].sportMOrderInfoDtos;
@@ -509,6 +550,7 @@
 				textAll += "</div>"
 				$('.main_box').append(textAll);
 				setTable();
+				deleteOrderInfo();
 			}
 		})
 	}
