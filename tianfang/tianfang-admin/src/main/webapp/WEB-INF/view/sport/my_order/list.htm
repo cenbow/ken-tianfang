@@ -38,6 +38,7 @@
 <!-- PAGE CONTENT BEGINS HERE -->
 		<div class="row-fluid">
 			<form action="${base}/m/order/selectOrder.do" method="post" name="submitForm" id="submitForm">
+			<input type="hidden" id="currPage" name="page" value="${(pageList.currPage)!}"/>
 				<table border="0">
 					<tbody><tr>
 						<td>
@@ -148,7 +149,6 @@
 		</div>
  		<script type="text/javascript">
 		function search(){
-			$("#currPage").val(1);	
 			$("#submitForm").submit();
 		}
 		function gotoPage(pageType){

@@ -25,10 +25,10 @@
 			<if test="orderDto.orderNo != null and orderDto.orderNo !='' ">
 				and o.order_no = #{orderDto.orderNo} 
 			</if>
-			<if test="orderDto.userId != null and orderDto.userId !='' ">
+			<!--<if test="orderDto.userId != null and orderDto.userId !='' ">
 				and o.user_id = #{orderDto.userId} 
 			</if>
-			order by o.create_time desc
+			order by o.create_time desc-->
 	</select>
 	
 	<select id="selectOrderInfo" parameterType="java.lang.String" resultType="com.tianfang.order.dto.SportMOrderInfoDto">

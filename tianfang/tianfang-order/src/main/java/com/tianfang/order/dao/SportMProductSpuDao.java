@@ -227,7 +227,7 @@ public class SportMProductSpuDao extends MyBatisBaseDao<SportMProductSpu>{
 		SportMProductSpuExample example = new SportMProductSpuExample();
 		SportMProductSpuExample.Criteria criteria = example.createCriteria();
 		criteria.andIdEqualTo(productId);
-		criteria.andProductStatusEqualTo(DataStatus.ENABLED);
+//		criteria.andProductStatusEqualTo(DataStatus.ENABLED);
 		criteria.andStatEqualTo(DataStatus.ENABLED);
 		List<SportMProductSpu> sportMProductSpus = mappers.selectByExample(example);
 		SportMProductSpu sportMProductSpu = new SportMProductSpu();
