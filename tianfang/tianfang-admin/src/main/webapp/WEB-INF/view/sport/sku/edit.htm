@@ -92,27 +92,30 @@
 				 	<div class="control-group">
 						<div class="span6">
 							<label class="control-label" for="form-field-1" style="width: 100px;">规格名称</label>
-							<select  name="specId" id="specId" data-placeholder="规格名称" style="vertical-align:top;margin-left:20px;" onchange="changeSpecValue(this.value)">
+							<div class="controls" id="specId" style="margin:3px 0 0 110px; font-size:14px;">
+							</div>
+							<!-- <select  name="specId" id="specId" data-placeholder="规格名称" style="vertical-align:top;margin-left:20px;" onchange="changeSpecValue(this.value)">
 								<option value="">全部</option>
 								<#if spec??>
 									<#list spec as page>
 										<option value="${(page.id)!}">${(page.specName)!}</option>
 									</#list>
 								</#if>
-							</select>
+							</select> -->
 						</div>
-						<div class="span6">
+						<div class="span6" style="display: none;">
 							<label class="control-label" for="form-field-2" style="width: 100px;">规格值</label>
 							<select  name="specValueId" id="specValueId" data-placeholder="规格值" style="vertical-align:top;margin-left:20px;" >
 								<option value="">全部</option>
 								<#if specValues??>
 									<#list specValues as page>
+										<>
 										<option value="${(page.id)!}">${(page.specValue)!}</option>
 									</#list>
 								</#if>
 							</select>
 						</div>
-						<div style="float: right;">
+						<div style="float: right; display: none;">
 							<a id="addSpceInfo" class="btn btn-small btn-success">添加规格</a>
 						</div>
 						<br/>
@@ -127,8 +130,8 @@
 								<thead>
 									<tr>
 										<th>规格名称</th>
-										<th>规格值</th>
-										<th>操作</th>
+										<th style="width: 400px;">规格值</th>
+										<th style="display: none;">操作</th>
 									</tr>
 								</thead>
 								<tbody id="sku-spec">
@@ -136,12 +139,29 @@
 										<#list skuSpecValue as res >
 											<tr>
 												<td>${(res.specName)!}</td>
-												<td>${(res.specValue)!}</td>
 												<td>
+												<select  name="specValueId" id="${(res.specId)!}" data-obj-id="${(res.specId)!}*${(res.specValuesId)!}"  class="deleteObj2" data-placeholder="规格值" style="vertical-align:top;margin-left:20px;" onchange="changeSpecValue('${(res.specId)!}')"> 
+													<option value="">全部</option> 
+													<#if res.sportMSpecValuesDtos??>
+														<#list res.sportMSpecValuesDtos as sportMSpecValues>
+															<#if res.specValuesId??>
+																<#if res.specValuesId == sportMSpecValues.id>
+																	<option selected="selected" value="${(sportMSpecValues.id)!}">${(sportMSpecValues.specValue)!}</option>
+																<#else>
+																	<option value="${(sportMSpecValues.id)!}">${(sportMSpecValues.specValue)!}</option>
+																</#if>
+															<#else>
+																<option value="${(sportMSpecValues.id)!}">${(sportMSpecValues.specValue)!}</option>
+															</#if>
+														</#list>
+													</#if>
+												</select>
+												</td>
+												<!-- <td>
 													<div id="operation">		
 														<a id='deleteObj' data-obj-id="${(res.specId)!}*${(res.specValuesId)!}" class='btn btn-mini btn-danger deleteObj2' title="删除"><i class='icon-trash'></i></a>
 													</div>
-												</td>
+												</td> -->
 											</tr>
 										</#list>
 									</#if>
@@ -254,7 +274,7 @@
 			
 		});
 		
-		$(function() {			
+		$(function() {	
 			$("#specId").on('click',function(){
 				var typeId = $("#productId").val();
 				if (null == typeId || '' == typeId) {
@@ -408,6 +428,8 @@
 				//onchange:''
 				//
 			});
+			
+			setChangeSpec();
 		});
 		
 		$(document).on('click',"#savebutton",function(){
@@ -534,7 +556,179 @@
 			});
 		});	 */
 		
+		function setChangeSpec(){
+			$.ajax({
+				type : "POST",
+				url : "${base}/sport/sku/getSpecName.do?id=${(sku.id)!}",
+				data: {},
+				datatype : "json",
+				success : function(datas){
+					sportMSpecValuesDtos = datas.sportMSpecValuesDtos;
+					sportMProductSkuSpecValuesDto = datas.sportMProductSkuSpecValuesDto;
+					//console.log(data);
+					$("#specId").empty(); 
+					var textAll = "";
+					/* $("#specValueId").empty();
+					var specValueId = document.getElementById("specValueId");
+					specValueId[0] =new Option("全部",""); */
+				//	var specId = document.getElementById("specId");
+				//	specId[0] =new Option("全部","");
+					for (var i = 0; i < sportMSpecValuesDtos.length; i++){
+						var m = 0;
+						for (var j = 0; j<sportMProductSkuSpecValuesDto.length;j++) {
+							if (sportMSpecValuesDtos[i].id == sportMProductSkuSpecValuesDto[j].specId) {
+								m++;
+							}
+						}
+						if (m>0) {
+							textAll += "<input  onchange=\"addSpecValues('"+sportMSpecValuesDtos[i].id+"')\" checked=\"checked\" specIdName="+sportMSpecValuesDtos[i].specName+" value="+sportMSpecValuesDtos[i].id+" name=\"checkBoxId\" type=\"checkbox\" style=\"margin-left:10px;\"><span style=\"margin-left:10px;\"  class=\"lbl\">"+sportMSpecValuesDtos[i].specName+"</span>"
+						} else {
+							textAll += "<input  onchange=\"addSpecValues('"+sportMSpecValuesDtos[i].id+"')\" specIdName="+sportMSpecValuesDtos[i].specName+" value="+sportMSpecValuesDtos[i].id+" name=\"checkBoxId\" type=\"checkbox\" style=\"margin-left:10px;\"><span style=\"margin-left:10px;\"  class=\"lbl\">"+sportMSpecValuesDtos[i].specName+"</span>"
+						}
+						m = 0;
+					}
+					/* if (spec.length > 0) {
+						for(var o in spec){
+							if(spec[o].specName == undefined ||spec[o].specName == '' || spec[o].specName == null ){
+								continue;
+							}
+						//	j++;
+						//	specId[j] =new Option(spec[o].specName,spec[o].id);
+							textAll = "<p><input type=\"checkbox\" name=\""+spec[o].specName+"\" value=\""+spec[o].id+"\" />"+spec[o].specName+"</p>";
+						} */
+						$('#specId').append(textAll);
+					/* } else {
+						$("#specId").empty(); 
+						specId[0] =new Option("全部","");
+					} */
+				}
+			})
+		}
+		
 		function changeSpec(val){
+			if (val == undefined || val == '' || val == null) {
+				$("#specId").empty();
+				$("#sku-spec").empty(); 
+				return;
+			}			
+			$.ajax({
+				type : "POST",
+				url : "${base}/sport/sku/findSpecByProductId.do",
+				data: {productId:val},
+				datatype : "json",
+				success : function(datas){
+					//console.log(data);
+					$("#specId").empty(); 
+					var textAll = "";
+					/* $("#specValueId").empty();
+					var specValueId = document.getElementById("specValueId");
+					specValueId[0] =new Option("全部",""); */
+					spec = datas.spec;
+				//	var specId = document.getElementById("specId");
+				//	specId[0] =new Option("全部","");
+					var j=0
+					for (var i = 0; i < spec.length; i++){
+						textAll += "<input  onchange=\"addSpecValues('"+spec[i].id+"')\" specIdName="+spec[i].specName+" value="+spec[i].id+" name=\"checkBoxId\" type=\"checkbox\" style=\"margin-left:10px;\"><span style=\"margin-left:10px;\"  class=\"lbl\">"+spec[i].specName+"</span>"
+					}
+					/* if (spec.length > 0) {
+						for(var o in spec){
+							if(spec[o].specName == undefined ||spec[o].specName == '' || spec[o].specName == null ){
+								continue;
+							}
+						//	j++;
+						//	specId[j] =new Option(spec[o].specName,spec[o].id);
+							textAll = "<p><input type=\"checkbox\" name=\""+spec[o].specName+"\" value=\""+spec[o].id+"\" />"+spec[o].specName+"</p>";
+						} */
+						$('#specId').append(textAll);
+					/* } else {
+						$("#specId").empty(); 
+						specId[0] =new Option("全部","");
+					} */
+				}
+			})
+			var $chk = $("[name = checkBoxId]:checkbox").filter(":checked");
+			if ($chk.length<=0) {
+				$("#sku-spec").empty(); 
+			}
+			return;
+		}
+		
+		function changeSpecValue(val){				
+			var specValueId = $("#"+val+"").find("option:selected").val();
+			$("#"+val+"").attr("data-obj-id",val+'*'+specValueId);
+		}
+		
+		function addSpecValues(val) {
+			var $chk = $("[name = checkBoxId]:checkbox").filter(":checked");
+			if ($chk.length>0) {
+				//$("#sku-spec").empty();
+				var j=0;
+				var chkArray = new Array();
+				$chk.each(function() {
+					var value = $(this).attr("value");						
+					chkArray.push(value);
+					/* if (id == value) {
+						i++;
+						j++;
+						//$(".deleteObj2").parents('tr').remove();
+					} */
+				})
+				var deleteArray = new Array();
+				$(".deleteObj2").each(function(){
+					var id = $(this).attr("id");
+					deleteArray.push(id);
+					var reslutIn = $.inArray(id, chkArray);
+					if (reslutIn == -1) {
+						$(this).parents('tr').remove();
+					}else {
+						chkArray.splice(reslutIn,1);
+					}					
+				});	
+				$chk.each(function() {
+					var value = $(this).attr("value");
+					var reslutIn = $.inArray(value, chkArray);
+					var specIdName = $(this).attr("specIdName");
+					if (reslutIn != -1) {
+						$("#sku-spec").append("<tr>"
+								+"<td>"+specIdName+"</td>"
+								+"<td><select  name=\"specValueId\" id=\""+value+"\"  class=\"deleteObj2\" data-placeholder=\"规格值\" style=\"vertical-align:top;margin-left:20px;\" onchange=\"changeSpecValue('"+value+"')\"> <option value=\"\">全部</option> </select></td>"
+						+"</tr>"); 
+				    	//添加规格值
+				    	 $.ajax({
+							type : "POST",
+							url : "${base}/sport/sku/findValueBySpecId.do",
+							data: {specId:value},
+							datatype : "json",
+							success : function(data){
+								//console.log(data);
+								var specValueId = document.getElementById(value);
+								specValueId[0] =new Option("全部","");
+								var i=0;
+								if (data.length > 0) {
+									for(var o in data){
+										if(data[o].specValue == undefined ||data[o].specValue == '' || data[o].specValue == null ){
+											continue;
+										}
+										i++;
+										specValueId[i] =new Option(data[o].specValue,data[o].id);
+										
+									}
+								} else {
+									$("#specValueId").empty(); 
+									specValueId[0] =new Option("全部","");
+								}
+							}
+						}) 
+					}
+			    });		
+			}
+			else {
+				$("#sku-spec").empty(); 
+				j=0;
+			}
+			return;
+		}
+		/* function changeSpec(val){
 			if (null == val || '' == val) {
 				$("#specId").empty(); 
 				specId[0] =new Option("全部","");
@@ -571,9 +765,9 @@
 					}
 				}
 			})
-		}
+		} */
 		
-		function changeSpecValue(val){			
+		/* function changeSpecValue(val){			
 			$("#specValueId").empty(); 
 			$.ajax({
 				type : "POST",
@@ -600,7 +794,7 @@
 					}
 				}
 			})
-		}
+		} */
 		</script>
 	</body>
 </html>

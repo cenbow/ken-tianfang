@@ -2,6 +2,7 @@ package com.tianfang.order.dto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -46,4 +47,7 @@ public class SportMProductSkuSpecValuesDto implements Serializable{
 	@Getter
     private Integer stat;
 
+	@Setter
+	@Getter
+	private List<SportMSpecValuesDto> sportMSpecValuesDtos;
 }

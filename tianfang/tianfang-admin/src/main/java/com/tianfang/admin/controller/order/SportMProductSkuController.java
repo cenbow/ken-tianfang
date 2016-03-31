@@ -128,7 +128,12 @@ public class SportMProductSkuController extends BaseController{
 		List<SportMSpecValuesDto> sportmSpecValuesDtos = iSportMProductSkuService.findValueBySpecId(sportMProductSkuDto.getSpecId());
 		List<SportMSpecDto> sportMSpecValuesDtos = iSportMProductSkuService.findSpecByTypeId(sportMProductSkuDto.getTypeId());
 		List<SportMProductSkuSpecValuesDto> sportMProductSkuSpecValuesDto = iSportMProductSkuService.selectSkuSpecValues(id);
+		for (SportMProductSkuSpecValuesDto sportmProductSkuSpecValuesDto : sportMProductSkuSpecValuesDto) {
+			List<SportMSpecValuesDto> sportmspecValuesDtos = iSportMProductSkuService.findValueBySpecId(sportmProductSkuSpecValuesDto.getSpecId());
+			sportmProductSkuSpecValuesDto.setSportMSpecValuesDtos(sportmspecValuesDtos);
+		}
 		mv.addObject("spu", spu);
+		mv.addObject("sku", sportMProductSkuDto);
 		/*mv.addObject("brand", brand);
 		mv.addObject("type", type);
 		mv.addObject("category", categoryDtos);*/
@@ -139,6 +144,21 @@ public class SportMProductSkuController extends BaseController{
 		mv.addObject("skuSpecValue", sportMProductSkuSpecValuesDto);
 		mv.setViewName("/sport/sku/edit");
 		return mv;
+	}
+	
+	@RequestMapping("/getSpecName")
+	@ResponseBody
+	public Map<String, Object> getSpecName() {
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String id = pd.getString("id");
+		SportMProductSkuDto sportMProductSkuDto = iSportMProductSkuService.findById(id);
+		List<SportMSpecDto> sportMSpecValuesDtos = iSportMProductSkuService.findSpecByTypeId(sportMProductSkuDto.getTypeId());
+		List<SportMProductSkuSpecValuesDto> sportMProductSkuSpecValuesDto = iSportMProductSkuService.selectSkuSpecValues(id);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("sportMSpecValuesDtos", sportMSpecValuesDtos);
+		map.put("sportMProductSkuSpecValuesDto", sportMProductSkuSpecValuesDto);
+		return map;
 	}
 	
 	@SuppressWarnings("unchecked")
